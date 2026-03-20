@@ -35,7 +35,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 8%; /* Adjusted padding for larger logo */
+            padding: 15px 8%;
             background: rgba(255, 255, 255, 0.98);
             position: sticky;
             top: 0;
@@ -55,11 +55,10 @@
             font-size: 1.4rem;
         }
 
-        /* --- LOGO SIZE ADJUSTMENTS --- */
         .logo-container {
             position: relative;
-            width: 150px;  /* Increased from 50px */
-            height: 150px; /* Increased from 50px */
+            width: 150px;
+            height: 150px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -75,8 +74,8 @@
         }
 
         .logo-svg {
-            width: 120px;  /* Increased from 45px */
-            height: 120px; /* Increased from 45px */
+            width: 120px;
+            height: 120px;
             z-index: 2;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -152,24 +151,72 @@
         }
         .btn:hover { background: var(--earth); transform: translateY(-2px); }
 
-        /* --- Sections --- */
+        /* --- Evolution Infographic Section --- */
+        .evolution-viewport {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+
+        .evolution-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out, transform 1.2s ease-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            transform: scale(1.1);
+        }
+
+        .evolution-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slide-overlay {
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            width: 100%;
+            padding: 40px;
+            color: white;
+        }
+
+        .slide-overlay h3 { margin: 0; font-size: 1.8rem; color: var(--leaf-vibrant); }
+        .slide-overlay p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.9; }
+
+        .evolution-nav {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dot.active { background: var(--leaf-vibrant); transform: scale(1.3); }
+
+        /* --- Tabs --- */
         section { padding: 90px 12%; }
         .section-title { text-align: center; margin-bottom: 50px; font-size: 2.5rem; color: var(--earth); }
 
-        .infographic-placeholder {
-            width: 100%;
-            height: 400px;
-            background: #f9f9f9;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #bbb;
-            margin-bottom: 40px;
-            border: 2px dashed #ddd;
-        }
-
-        /* --- Tabs --- */
         .tabs-container { text-align: center; }
         .tab-btn { padding: 14px 30px; border: none; background: #e0e0e0; cursor: pointer; border-radius: 40px; font-weight: bold; margin: 8px; font-size: 1rem; transition: 0.3s;}
         .tab-btn.active { background: var(--leaf); color: white; }
@@ -183,7 +230,7 @@
         @media (max-width: 900px) { 
             nav { flex-direction: column; gap: 10px; padding: 20px; }
             .hero h1 { font-size: 2.8rem; }
-            .nav-links { display: flex; flex-wrap: wrap; justify-content: center; }
+            .evolution-viewport { height: 350px; }
         }
     </style>
 </head>
@@ -223,11 +270,44 @@
     </header>
 
     <section id="science">
-        <h2 class="section-title">Natural Technology</h2>
-        <div class="infographic-placeholder">
-            [ Interactive Science Infographic ]
+        <h2 class="section-title">The Evolution of Natural Technology</h2>
+        
+        <div class="evolution-viewport">
+            <div class="evolution-slide active" style="background-image: url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>01. Hadean Chaos</h3><p>The birth of Earth. A world of molten rock and cosmic fire.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1518066000714-58c45f1a2c0a?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>02. Primordial Waters</h3><p>Cooling crust allows the first oceans to form.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>03. Single-Cell Dawn</h3><p>Life emerges in the deep hydrothermal vents.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1533511195679-679905953503?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>04. The Oxygen Revolution</h3><p>Cyanobacteria begin the first great "hack"—creating our atmosphere.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>05. The First Forests</h3><p>Plants conquer the land, locking carbon into the soil.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>06. Animal Ancestry</h3><p>Diverse life forms maintain the planet's delicate equilibrium.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>07. Holocene Balance</h3><p>10,000 years of stable climate allowing civilization to flourish.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>08. The Industrial Shift</h3><p>The balance is tipped by rapid extraction and emissions.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>09. The Great Reclaim</h3><p>Current Day: Active reforestation to restore what was lost.</p></div>
+            </div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1444464666168-49d633b867ad?auto=format&fit=crop&w=1200&q=80')">
+                <div class="slide-overlay"><h3>10. Symbiotic Future</h3><p>A planet where humanity and nature thrive together.</p></div>
+            </div>
+
+            <div class="evolution-nav" id="dotNav"></div>
         </div>
-        <p style="text-align: center; max-width: 850px; margin: 0 auto; font-size: 1.1rem; color: #555;">Our research advocates for biological solutions with a 4-billion-year track record. Unlike Stratospheric Aerosol Injection, reforestation restores biodiversity and stabilizes weather patterns naturally.</p>
+
+        <p style="text-align: center; max-width: 850px; margin: 0 auto; font-size: 1.1rem; color: #555;">Our research advocates for biological solutions with a 4-billion-year track record. Nature has evolved the perfect carbon-capture systems; we just need to protect them.</p>
     </section>
 
     <section id="resources" style="background: var(--gray);">
@@ -254,12 +334,39 @@
     </footer>
 
     <script>
+        /* --- Evolution Slider Logic --- */
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.evolution-slide');
+        const dotNav = document.getElementById('dotNav');
+
+        // Create Dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotNav.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        // Auto play every 4 seconds
+        setInterval(() => goToSlide(currentSlide + 1), 4000);
+
+
         /* --- Logo Particles Logic --- */
         const pCanvas = document.getElementById('particleCanvas');
         const pCtx = pCanvas.getContext('2d');
         const logoGroup = document.querySelector('.logo-group');
         
-        // Match canvas size to container
         function setParticleCanvasSize() {
             pCanvas.width = 150; 
             pCanvas.height = 150;
