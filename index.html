@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Root & Reclaim | Action Over Innovation</title>
+    <title>Root & Reclaim | Nature AI</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
@@ -28,6 +28,7 @@
             color: var(--dark);
             background: var(--white);
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         /* --- Navigation --- */
@@ -66,21 +67,16 @@
 
         #particleCanvas {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             pointer-events: none;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
         }
 
         .logo-svg {
-            width: 120px;
-            height: 120px;
+            width: 120px; height: 120px;
             z-index: 2;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        .logo-group:hover .logo-svg { transform: scale(1.05); }
 
         .outer-ring {
             fill: none;
@@ -88,7 +84,6 @@
             stroke-width: 4;
             stroke-dasharray: 12, 12;
             opacity: 0.4;
-            transition: all 0.5s ease;
         }
 
         .logo-group:hover .outer-ring {
@@ -112,7 +107,6 @@
         .nav-links a { margin-left: 25px; text-decoration: none; color: var(--dark); font-size: 1rem; font-weight: 600; transition: 0.3s; }
         .nav-links a:hover { color: var(--leaf); }
 
-        /* --- Beautiful Bird Sounds Button --- */
         .sound-btn {
             background: var(--earth);
             color: white;
@@ -127,13 +121,12 @@
             gap: 10px;
             transition: 0.3s;
         }
-        .sound-btn:hover { background: var(--leaf); transform: translateY(-2px); }
 
-        /* --- Hero --- */
+        /* --- Hero with Rain & Deer --- */
         .hero {
             position: relative;
-            height: 75vh;
-            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -146,104 +139,91 @@
 
         #rainCanvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
+            z-index: 3;
         }
 
-        /* Beautiful Slow-Flying Bird */
-        .bird-fly {
+        .deer-container {
             position: absolute;
-            z-index: 5;
-            width: 40px;
-            opacity: 0.6;
-            animation: flyAcross 25s linear infinite;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
-        }
-        @keyframes flyAcross {
-            0% { left: -10%; top: 30%; transform: scale(0.5) rotate(5deg); }
-            50% { top: 15%; transform: scale(0.8) rotate(-5deg); }
-            100% { left: 110%; top: 25%; transform: scale(0.6) rotate(5deg); }
+            bottom: 0;
+            right: 15%;
+            width: 300px;
+            z-index: 4;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
         }
 
-        .hero-content { position: relative; z-index: 2; padding: 20px; }
-        .hero h1 { font-size: 4rem; margin-bottom: 15px; }
-        .hero p { font-size: 1.3rem; max-width: 750px; margin: 0 auto 35px; }
+        .hero-content { position: relative; z-index: 10; padding: 20px; }
+        .hero h1 { font-size: 4rem; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 
-        .btn {
-            padding: 18px 45px;
-            background: var(--leaf);
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 6px;
-            transition: 0.3s;
-            display: inline-block;
-        }
-        .btn:hover { background: var(--earth); transform: translateY(-2px); }
-
-        /* --- Nature AI Tips Section --- */
-        .ai-stewardship { background: var(--gray); padding: 80px 12%; }
-        .tips-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-        .tip-card { background: white; padding: 30px; border-radius: 15px; border-top: 4px solid var(--leaf); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .tip-card h4 { color: var(--earth); margin-top: 0; display: flex; align-items: center; gap: 10px; }
-
-        /* --- AI Terminal --- */
-        .ai-terminal {
-            background: #0d1b0a;
-            color: var(--leaf-vibrant);
-            padding: 20px;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            margin-top: 40px;
-            border: 1px solid var(--leaf-mid);
-            min-height: 60px;
-        }
-
-        /* --- Evolution Infographic Section --- */
+        /* --- Evolution Section --- */
         .evolution-viewport {
             width: 100%;
-            height: 500px;
+            height: 550px;
             background: #000;
             border-radius: 24px;
             position: relative;
             overflow: hidden;
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            margin-bottom: 40px;
+            margin-top: 30px;
         }
 
         .evolution-slide {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             opacity: 0;
-            transition: opacity 1s ease-in-out, transform 1.2s ease-out;
+            transition: opacity 1.5s ease;
             background-size: cover;
             background-position: center;
-            display: flex;
-            align-items: flex-end;
-            transform: scale(1.1);
         }
 
-        .evolution-slide.active { opacity: 1; transform: scale(1); }
-        .slide-overlay { background: linear-gradient(transparent, rgba(0,0,0,0.8)); width: 100%; padding: 40px; color: white; }
-        .slide-overlay h3 { margin: 0; font-size: 1.8rem; color: var(--leaf-vibrant); }
-        .slide-overlay p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.9; }
+        .evolution-slide.active { opacity: 1; animation: slowZoom 12s infinite alternate; }
+        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
 
-        .evolution-nav { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 10; }
-        .dot { width: 12px; height: 12px; background: rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; transition: 0.3s; }
-        .dot.active { background: var(--leaf-vibrant); transform: scale(1.3); }
+        .slide-overlay {
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            width: 100%; padding: 50px; color: white;
+            position: absolute; bottom: 0;
+        }
+
+        /* --- Nature AI Chatbox --- */
+        #ai-chat-container {
+            position: fixed;
+            bottom: 100px; right: 30px;
+            width: 320px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--leaf);
+        }
+
+        .chat-header { background: var(--dark-green); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
+        .chat-body { height: 250px; padding: 15px; overflow-y: auto; background: var(--gray); font-size: 0.9rem; }
+        .chat-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #eee; }
+        .chat-input-area input { flex: 1; border: none; outline: none; padding: 5px; }
+        .chat-toggle-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--earth); color: white;
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; cursor: pointer; z-index: 2001;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .chat-toggle-btn:hover { transform: scale(1.1); background: var(--leaf); }
 
         footer { background: var(--dark); color: #888; text-align: center; padding: 50px; }
     </style>
 </head>
 <body>
 
-    <audio id="natureSound" loop>
+    <audio id="parrotAudio" loop>
         <source src="https://assets.mixkit.co/active_storage/sfx/2418/2418-preview.mp3" type="audio/mpeg">
     </audio>
 
@@ -256,171 +236,175 @@
                     <g class="float-group">
                         <path d="M50 130 C 70 160, 130 160, 150 120 C 130 110, 100 130, 80 125 Z" fill="var(--dark-green)" />
                         <path d="M100 125 V 70 M100 100 L 80 80 M100 90 L 120 75" stroke="var(--wood-brown)" stroke-width="4" stroke-linecap="round" />
-                        <circle class="leaf" cx="100" cy="60" r="12" fill="var(--leaf-mid)" />
-                        <circle class="leaf" cx="75" cy="75" r="9" fill="var(--leaf-bright)" />
-                        <circle class="leaf" cx="125" cy="70" r="10" fill="var(--dark-green)" />
+                        <circle cx="100" cy="60" r="12" fill="var(--leaf-mid)" />
+                        <circle cx="75" cy="75" r="9" fill="var(--leaf-bright)" />
+                        <circle cx="125" cy="70" r="10" fill="var(--dark-green)" />
                     </g>
                 </svg>
             </div>
             <span>Root & Reclaim</span>
         </a>
         <div class="nav-links">
-            <a href="#science">Science</a>
-            <a href="#nature-ai">Nature AI</a>
+            <a href="#evolution">Evolution</a>
             <button class="sound-btn" onclick="toggleSound()">
-                <i id="soundIcon" class="fa-solid fa-dove"></i> <span id="soundTxt">Hear Nature</span>
+                <i id="soundIcon" class="fa-solid fa-feather"></i> <span id="soundTxt">Hear Nature</span>
             </button>
         </div>
     </nav>
 
     <header class="hero">
         <canvas id="rainCanvas"></canvas>
-        <svg class="bird-fly" viewBox="0 0 24 24" fill="white">
-            <path d="M21 5l-8.5 7.5L4 8l3 1.5L4 12l5 .5L11 18l1.5-5 5.5 1.5-2-3.5L21 5z"/>
-        </svg>
+        
+        <div class="deer-container">
+            <svg viewBox="0 0 200 200" fill="rgba(255,255,255,0.85)">
+                <path d="M100 180 L110 160 L105 140 L115 110 L100 90 L85 110 L95 140 L90 160 Z M100 90 C100 70 110 60 120 50 M100 90 C100 70 90 60 80 50 M120 50 L130 30 M120 50 L110 35 M80 50 L70 30 M80 50 L90 35" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M100 180 Q120 185 130 160 L140 140 Q150 110 130 100 L110 95" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M60 180 L70 140 L50 110 Q40 90 60 80 L70 60 Q75 50 85 60 L80 80 Q110 85 130 110 L150 140 L160 180" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+        </div>
+
         <div class="hero-content">
-            <h1>Nature Doesn't Need a Hack.</h1>
-            <p>We prioritize reforestation over risky geoengineering. Let the earth breathe.</p>
-            <a href="#nature-ai" class="btn">Consult Nature AI</a>
+            <h1>The Forest Remembers.</h1>
+            <p>Rain feeds the roots. AI listens to the soil. We reclaim the future.</p>
+            <a href="#evolution" class="btn">View Evolution</a>
         </div>
     </header>
 
-    <section id="nature-ai" class="ai-stewardship">
-        <h2 class="section-title">Nature AI Protection Tips</h2>
-        <div class="tips-container">
-            <div class="tip-card">
-                <h4><i class="fa-solid fa-seedling"></i> Restore the Soil</h4>
-                <p>Plant native species that create deep root systems. This stabilizes the water table and sequesters carbon 3x faster than lawns.</p>
-            </div>
-            <div class="tip-card">
-                <h4><i class="fa-solid fa-wind"></i> Air Filtration</h4>
-                <p>One mature tree can provide oxygen for two people. Prioritize planting near urban corridors to filter particulate matter.</p>
-            </div>
-            <div class="tip-card">
-                <h4><i class="fa-solid fa-water"></i> Water Wisdom</h4>
-                <p>Protecting wetlands is Nature AI's #1 recommendation. They act as the planet's kidneys, filtering pollutants naturally.</p>
-            </div>
-        </div>
-        
-        <div class="ai-terminal">
-            <span id="ai-msg">> Nature AI: Initializing biological equilibrium analysis...</span>
-        </div>
-    </section>
-
-    <section id="science">
-        <h2 class="section-title">The Evolution of Natural Technology</h2>
+    <section id="evolution" style="padding: 90px 8%;">
+        <h2 style="text-align:center; color: var(--earth); font-size: 2.5rem;">The Evolution of Natural Technology</h2>
         
         <div class="evolution-viewport">
-            <div class="evolution-slide active" style="background-image: url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1200&q=80')">
-                <div class="slide-overlay"><h3>01. Hadean Chaos</h3><p>The birth of Earth. A world of molten rock and cosmic fire.</p></div>
+            <div class="evolution-slide active" style="background-image: url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1200')">
+                <div class="slide-overlay"><h3>The Primordial Fire</h3><p>Before the first leaf, the Earth was a molten canvas of raw potential.</p></div>
             </div>
-            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80')">
-                <div class="slide-overlay"><h3>09. The Great Reclaim</h3><p>Current Day: Active reforestation to restore what was lost.</p></div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1200')">
+                <div class="slide-overlay"><h3>The Green Revolution</h3><p>Plants evolved the most complex solar panels ever known: The Leaf.</p></div>
             </div>
-
-            <div class="evolution-nav" id="dotNav"></div>
+            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200')">
+                <div class="slide-overlay"><h3>The Balanced Future</h3><p>Reforestation is the ultimate AI—Auto-Intelligence designed by Nature.</p></div>
+            </div>
         </div>
     </section>
 
+    <div class="chat-toggle-btn" onclick="toggleChat()"><i class="fa-solid fa-leaf"></i></div>
+    <div id="ai-chat-container">
+        <div class="chat-header">
+            <span>Nature AI Assistant</span>
+            <i class="fa-solid fa-xmark" style="cursor:pointer" onclick="toggleChat()"></i>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div style="margin-bottom:10px"><b>Nature AI:</b> The rain is falling, and the deer are quiet. How can I help you support our forest today?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ask Nature AI...">
+            <button class="chat-toggle-btn" style="position:static; width:40px; height:40px; font-size:1rem;" onclick="askAI()">></button>
+        </div>
+    </div>
+
     <footer>
-        <p>&copy; 2026 Root & Reclaim. Optimized by Nature AI.</p>
+        <p>&copy; 2026 Root & Reclaim. <br> Protected by Nature AI Systems.</p>
     </footer>
 
     <script>
-        /* --- Restore All Original Particle/Rain Logic --- */
-        const pCanvas = document.getElementById('particleCanvas');
-        const pCtx = pCanvas.getContext('2d');
-        const logoGroup = document.querySelector('.logo-group');
-        function setParticleCanvasSize() { pCanvas.width = 150; pCanvas.height = 150; }
-        setParticleCanvasSize();
-        let particles = [];
-        let isHovering = false;
+        /* --- Medium Rainfall Effect --- */
+        const rCanvas = document.getElementById('rainCanvas');
+        const rCtx = rCanvas.getContext('2d');
+        let rWidth, rHeight, drops = [];
 
-        class Particle {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * pCanvas.width;
-                this.y = pCanvas.height + 10;
-                this.size = Math.random() * 3 + 1;
-                this.speedY = Math.random() * 0.6 + 0.3;
-                this.speedX = (Math.random() - 0.5) * 0.8;
-                this.opacity = Math.random() * 0.6 + 0.2;
-            }
-            update() {
-                this.y -= isHovering ? this.speedY * 2.8 : this.speedY;
-                this.x += this.speedX;
-                if (this.y < -10) this.reset();
-            }
-            draw() {
-                pCtx.fillStyle = isHovering ? '#a4c639' : '#84a95c';
-                pCtx.globalAlpha = this.opacity;
-                pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); pCtx.fill();
-            }
+        function initRain() {
+            rWidth = rCanvas.width = window.innerWidth;
+            rHeight = rCanvas.height = window.innerHeight;
+            drops = Array.from({ length: 100 }, () => ({
+                x: Math.random() * rWidth,
+                y: Math.random() * rHeight,
+                l: Math.random() * 20 + 10,
+                s: Math.random() * 4 + 4
+            }));
         }
 
-        function initParticles() { for (let i = 0; i < 30; i++) particles.push(new Particle()); }
+        function drawRain() {
+            rCtx.clearRect(0, 0, rWidth, rHeight);
+            rCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            rCtx.lineWidth = 1;
+            drops.forEach(d => {
+                rCtx.beginPath();
+                rCtx.moveTo(d.x, d.y);
+                rCtx.lineTo(d.x + 1, d.y + d.l);
+                rCtx.stroke();
+                d.y += d.s;
+                if (d.y > rHeight) { d.y = -d.l; d.x = Math.random() * rWidth; }
+            });
+            requestAnimationFrame(drawRain);
+        }
+
+        /* --- Logo Particles --- */
+        const pCanvas = document.getElementById('particleCanvas');
+        const pCtx = pCanvas.getContext('2d');
+        let isHovering = false;
+        pCanvas.width = 150; pCanvas.height = 150;
+        let particles = [];
+        class Particle {
+            constructor() { this.reset(); }
+            reset() { this.x = Math.random() * 150; this.y = 160; this.size = Math.random() * 2 + 1; this.speedY = Math.random() * 0.5 + 0.2; }
+            update() { this.y -= isHovering ? this.speedY * 4 : this.speedY; if (this.y < -10) this.reset(); }
+            draw() { pCtx.fillStyle = '#76ba1b'; pCtx.globalAlpha = 0.4; pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI*2); pCtx.fill(); }
+        }
+        for(let i=0; i<20; i++) particles.push(new Particle());
         function animateParticles() {
-            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            pCtx.clearRect(0,0,150,150);
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
-        logoGroup.addEventListener('mouseenter', () => isHovering = true);
-        logoGroup.addEventListener('mouseleave', () => isHovering = false);
+        document.querySelector('.logo-group').onmouseenter = () => isHovering = true;
+        document.querySelector('.logo-group').onmouseleave = () => isHovering = false;
 
-        /* --- Audio Logic --- */
-        const natureAudio = document.getElementById('natureSound');
-        const sIcon = document.getElementById('soundIcon');
-        const sTxt = document.getElementById('soundTxt');
+        /* --- Audio & Slider & Chat Logic --- */
+        const audio = document.getElementById('parrotAudio');
         let playing = false;
-
         function toggleSound() {
-            if(!playing) {
-                natureAudio.play();
-                sIcon.className = "fa-solid fa-volume-high";
-                sTxt.innerText = "Listening...";
-            } else {
-                natureAudio.pause();
-                sIcon.className = "fa-solid fa-dove";
-                sTxt.innerText = "Hear Nature";
-            }
+            if(!playing) { audio.play(); document.getElementById('soundTxt').innerText = "Nature Active"; }
+            else { audio.pause(); document.getElementById('soundTxt').innerText = "Hear Nature"; }
             playing = !playing;
         }
 
-        /* --- Nature AI Typewriter --- */
-        const aiMsg = document.getElementById('ai-msg');
-        const messages = [
-            "> Nature AI: Biological carbon capture at 98% efficiency.",
-            "> Nature AI: Analyzing 400 million year old forest code...",
-            "> Nature AI: Recommendation: Increase native canopy by 15%."
-        ];
-        let mIdx = 0;
-        function cycleAI() {
-            aiMsg.innerText = messages[mIdx];
-            mIdx = (mIdx + 1) % messages.length;
-            setTimeout(cycleAI, 4000);
-        }
-
-        /* --- Evolution Slider --- */
         let currentSlide = 0;
         const slides = document.querySelectorAll('.evolution-slide');
-        const dotNav = document.getElementById('dotNav');
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if(i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => {
-                slides[currentSlide].classList.remove('active');
-                document.querySelectorAll('.dot')[currentSlide].classList.remove('active');
-                currentSlide = i;
-                slides[currentSlide].classList.add('active');
-                document.querySelectorAll('.dot')[currentSlide].classList.add('active');
-            });
-            dotNav.appendChild(dot);
-        });
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 6000);
 
-        initParticles();
+        function toggleChat() {
+            const chat = document.getElementById('ai-chat-container');
+            chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function askAI() {
+            const input = document.getElementById('chatInput');
+            const body = document.getElementById('chatBody');
+            if(!input.value) return;
+            body.innerHTML += `<div style="text-align:right; margin: 10px 0;"><b>You:</b> ${input.value}</div>`;
+            
+            const responses = [
+                "I am monitoring the rainfall levels. The deer are safe under the canopy.",
+                "To help the forest, we must protect the native soil algorithms.",
+                "Reforestation is the most logical step for planetary stabilization.",
+                "Nature AI suggests planting 10 native trees to balance your local carbon footprint."
+            ];
+            
+            setTimeout(() => {
+                body.innerHTML += `<div style="margin: 10px 0;"><b>Nature AI:</b> ${responses[Math.floor(Math.random()*responses.length)]}</div>`;
+                body.scrollTop = body.scrollHeight;
+            }, 700);
+            input.value = "";
+        }
+
+        /* --- Init --- */
+        window.addEventListener('resize', initRain);
+        initRain();
+        drawRain();
         animateParticles();
-        cycleAI();
     </script>
 </body>
 </html>
