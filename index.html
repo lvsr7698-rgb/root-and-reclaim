@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta property="og:title" content="Root & Reclaim">
-<meta property="og:description" content="Nature doesn't need a hack; it needs a protector.">
-<meta property="og:image" content="logo.png">
-
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Root & Reclaim | Action Over Innovation</title>
+    
+    <meta property="og:title" content="Root & Reclaim">
+    <meta property="og:description" content="Nature doesn't need a hack; it needs a protector.">
+    <meta property="og:image" content="logo.png">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -44,8 +44,8 @@
 
         .logo { font-size: 1.5rem; font-weight: bold; color: var(--earth); text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; }
         .logo img { height: 40px; margin-right: 10px; border-radius: 5px; }
-        nav a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.3s; font-weight: 600; }
-        nav a:hover { color: var(--leaf); }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.3s; font-weight: 600; }
+        .nav-links a:hover { color: var(--leaf); }
 
         /* --- Hero --- */
         .hero {
@@ -82,38 +82,29 @@
         /* --- Sections --- */
         section { padding: 80px 10%; }
         .about-section { display: flex; gap: 50px; flex-wrap: wrap; align-items: center; }
-        .news-section { background: var(--gray); }
         .section-title { text-align: center; margin-bottom: 50px; font-size: 2rem; color: var(--earth); }
 
-        /* --- Grid & Cards --- */
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .news-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .news-img { height: 200px; background-size: cover; background-position: center; }
-        .news-content { padding: 20px; }
-        .news-tag { color: var(--leaf); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
-
-        /* --- Science Comparison --- */
+        /* --- Compare Grid --- */
         .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px; }
         .compare-card { padding: 30px; border-radius: 15px; }
         .natural { border: 2px solid var(--leaf); background: #f9fff8; }
         .risk { border: 2px solid #e74c3c; background: #fff5f5; }
 
         /* --- Tabs --- */
-        .tab-btn { padding: 12px 25px; border: none; background: #e0e0e0; cursor: pointer; border-radius: 30px; font-weight: bold; transition: 0.3s; color: var(--dark); margin: 5px; }
+        .tab-btn { padding: 12px 25px; border: none; background: #d0d0d0; cursor: pointer; border-radius: 30px; font-weight: bold; transition: 0.3s; color: var(--dark); margin: 5px; }
         .tab-btn.active { background: var(--leaf); color: white; }
         .tab-content { display: none; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: fadeIn 0.5s ease; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Contact --- */
-        .contact-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-        form { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .counter-box { margin-top: 30px; padding: 30px; background: var(--earth); color: white; border-radius: 10px; text-align: center; }
-        #tree-counter { font-size: 3rem; font-weight: bold; display: block; }
-
+        /* --- Footer --- */
         footer { background: var(--dark); color: #777; text-align: center; padding: 40px; font-size: 0.8rem; }
 
-        @media (max-width: 768px) { .contact-section, .about-section { flex-direction: column; grid-template-columns: 1fr; } .hero h1 { font-size: 2.5rem; } }
+        @media (max-width: 768px) { 
+            .about-section { flex-direction: column; } 
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* Simplified for demo, usually a hamburger menu */
+        }
     </style>
 </head>
 <body>
@@ -123,7 +114,7 @@
             <img src="logo.png" alt="Root & Reclaim Logo">
             Root & Reclaim
         </div>
-        <div>
+        <div class="nav-links">
             <a href="#about-founder">Founder</a>
             <a href="#science">Science</a>
             <a href="#resources">Repository</a>
@@ -140,27 +131,25 @@
     <section id="about-founder" class="about-section">
         <div style="flex: 1; min-width: 300px; position: relative;">
             <div style="position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: var(--leaf); opacity: 0.1; border-radius: 50%; z-index: 0;"></div>
-            <img src="logo.png" alt="Founder of Root & Reclaim" style="width: 100%; max-width: 450px; border-radius: 30px; box-shadow: 20px 20px 60px rgba(0,0,0,0.08); position: relative; z-index: 1;">
+            <img src="logo.png" alt="Founder" style="width: 100%; max-width: 450px; border-radius: 30px; box-shadow: 20px 20px 60px rgba(0,0,0,0.08); position: relative; z-index: 1;">
         </div>
 
         <div style="flex: 1.5; min-width: 300px;">
             <h4 style="color: var(--leaf); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 10px;">The Voice Behind the Movement</h4>
             <h2 style="color: var(--earth); font-size: 2.8rem; margin-bottom: 25px; line-height: 1.2;">Protecting the Earth, <br>Not Hacking It.</h2>
-            
             <p style="font-size: 1.1rem; color: #555; margin-bottom: 25px;">
                 I founded <strong>Root & Reclaim</strong> because nature is not a broken machine that needs "fixing" with chemicals. It is a living system that needs our respect and restoration.
             </p>
-
             <div style="background: var(--gray); padding: 30px; border-radius: 20px; border-left: 6px solid var(--leaf); margin-bottom: 30px;">
                 <p style="font-size: 1.3rem; font-style: italic; color: var(--dark); margin: 0; line-height: 1.5;">
-                    "Nature doesn't need a hack; it needs a protector. I’m building a future where human change drives climate restoration, not experimental science."
+                    "Nature doesn't need a hack; it needs a protector."
                 </p>
             </div>
             <a href="#contact" class="btn" style="background: var(--dark);">Connect With Me</a>
         </div>
     </section>
 
-    <section id="science" style="background: var(--white);">
+    <section id="science">
         <h2 class="section-title">Natural Tech vs. Sky Hacking</h2>
         <div class="compare-grid">
             <div class="compare-card natural">
@@ -174,19 +163,17 @@
         </div>
     </section>
 
-    <section id="resources" style="padding: 80px 10%; background: var(--gray);">
+    <section id="resources" style="background: var(--gray);">
         <h2 class="section-title">The Repository</h2>
         <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
             <button class="tab-btn active" onclick="openTab(event, 'info')">Information</button>
             <button class="tab-btn" onclick="openTab(event, 'docs')">Documents</button>
             <button class="tab-btn" onclick="openTab(event, 'images')">Images</button>
-            <button class="tab-btn" onclick="openTab(event, 'links')">Links</button>
-            <button class="tab-btn" onclick="openTab(event, 'videos')">Videos</button>
         </div>
 
         <div id="info" class="tab-content" style="display: block;">
             <h3>Core Mission Data</h3>
-            <p>Our goal is to restore 1 million hectares of native forest by 2030. We focus on "High-Density Planting" which captures 3x more carbon than industrial monocultures.</p>
+            <p>Our goal is to restore 1 million hectares of native forest by 2030.</p>
         </div>
 
         <div id="docs" class="tab-content">
@@ -194,4 +181,37 @@
             <ul style="list-style: none; padding: 0;">
                 <li style="margin-bottom:15px;">
                     <a href="Welcome-Letter.pdf" target="_blank" style="color: var(--leaf); font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 10px;">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="lightgreen" stroke="green" stroke-width="10"/><g transform="translate(100, 100)" style="fill:brown;"><path d="M -15 0 L 15 -30 L 5 0 Z"/><path d="M -5 0 L 5 30 L 15 0 Z"/><path d="M -25 10 L -15 40 L -5 10 Z"/><path d="M 5 10 L 15 40 L 25 10 Z"/></g><circle cx="100" cy="100" r="10" fill="gold"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="lightgreen" stroke="green" stroke-width="10"/><path d="M 100 60 L 100 140 M 70 110 L 100 140 L 130 110" fill="none" stroke="green" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Welcome-Letter.pdf
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div id="images" class="tab-content">
+            <h3>Gallery</h3>
+            <p>Coming soon: Visualizing reforestation projects.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Root & Reclaim. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+</html>
