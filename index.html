@@ -1,4 +1,4 @@
-no<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,7 +37,8 @@ no<!DOCTYPE html>
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--earth); text-transform: uppercase; letter-spacing: 2px; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--earth); text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; }
+        .logo img { height: 40px; margin-right: 10px; }
         nav a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.3s; }
         nav a:hover { color: var(--leaf); }
 
@@ -71,94 +72,74 @@ no<!DOCTYPE html>
         }
         .btn:hover { background: var(--earth); transform: translateY(-2px); }
 
-        /* --- Latest News Section --- */
+        /* --- About Section --- */
+        .about-section { padding: 80px 10%; display: flex; gap: 50px; flex-wrap: wrap; align-items: center; }
+
+        /* --- News Section --- */
         .news-section { padding: 80px 10%; background: var(--gray); }
         .section-title { text-align: center; margin-bottom: 50px; font-size: 2rem; color: var(--earth); }
-
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .news-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .news-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .news-img { height: 200px; background-size: cover; background-position: center; }
-
         .news-content { padding: 20px; }
         .news-tag { color: var(--leaf); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
-        .news-content h3 { margin: 10px 0; font-size: 1.2rem; }
 
-        /* --- Contact Form --- */
+        /* --- Contact --- */
         .contact-section { padding: 80px 10%; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-        
         form { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
         input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        
-        .contact-info h2 { color: var(--earth); }
         .counter-box { margin-top: 30px; padding: 20px; background: var(--earth); color: white; border-radius: 10px; text-align: center; }
         #tree-counter { font-size: 2.5rem; font-weight: bold; display: block; }
 
         footer { background: var(--dark); color: #777; text-align: center; padding: 40px; font-size: 0.8rem; }
 
-        @media (max-width: 768px) {
-            .contact-section { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2.5rem; }
-        }
+        @media (max-width: 768px) { .contact-section, .about-section { grid-template-columns: 1fr; } .hero h1 { font-size: 2.5rem; } }
     </style>
 </head>
 <body>
 
     <nav>
-        <nav>
-    <div class="logo">
-        <img src="logo.png" alt="Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
-        Root & Reclaim
-    </div>
-    <div>
-        <a href="#news">Latest News</a>
-        <a href="#contact">Join Us</a>
-    </div>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+            Root & Reclaim
+        </div>
+        <div>
+            <a href="#about-me">The Visionary</a>
+            <a href="#news">Latest News</a>
+            <a href="#contact">Join Us</a>
+        </div>
+    </nav>
 
-</nav>
-
-    <section class="hero">
+    <header class="hero">
         <h1>Nature Doesn't Need a Hack.</h1>
         <p>Human change is the only sustainable way forward. Join us in stopping experimental geoengineering and starting real-world restoration.</p>
         <a href="#contact" class="btn">Get Your Toolkit</a>
+    </header>
+
+    <section id="about-me" class="about-section">
+        <div style="flex: 1; min-width: 300px;">
+            <div style="background: #fdfdfd; border-left: 5px solid var(--leaf); padding: 25px; margin-bottom: 30px; border-radius: 0 15px 15px 0; box-shadow: 5px 5px 15px rgba(0,0,0,0.02);">
+                <p style="font-size: 1.4rem; font-style: italic; color: var(--earth); line-height: 1.4; margin: 0;">
+                    "Nature doesn't need a hack; it needs a protector. I’m building a future where human change drives climate restoration, not experimental science. Join me in reclaiming the wild."
+                </p>
+                <p style="margin-top: 15px; font-weight: bold; color: var(--dark); text-transform: uppercase; letter-spacing: 1px;">
+                    — Founder, Root & Reclaim
+                </p>
+            </div>
+            <h2 style="color: var(--earth); font-size: 2.5rem; margin-bottom: 20px;">The Visionary</h2>
+            <p style="font-size: 1.1rem; color: #555; line-height: 1.8;">
+                I founded <strong>Root & Reclaim</strong> because I believe the Earth doesn't need a "hack"—it needs a protector. My mission is to shift the global conversation away from risky atmospheric experiments and back to the soil beneath our feet.
+            </p>
+            <div style="margin-top: 30px;">
+                <a href="#contact" class="btn" style="background: var(--dark);">Connect With Me</a>
+            </div>
+        </div>
+        <div style="flex: 1; min-width: 300px; text-align: center;">
+            <img src="logo.png" alt="Founder" style="width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+        </div>
     </section>
 
-    <section id="about-me" <div style="background: #fdfdfd; border-left: 5px solid var(--leaf); padding: 25px; margin: 30px 0; border-radius: 0 15px 15px 0; box-shadow: 5px 5px 15px rgba(0,0,0,0.02);">
-    <p style="font-size: 1.4rem; font-style: italic; color: var(--earth); line-height: 1.4; margin: 0;">
-        "Nature doesn't need a hack; it needs a protector. I’m building a future where human change drives climate restoration, not experimental science. Join me in reclaiming the wild."
-    </p>
-    <p style="margin-top: 15px; font-weight: bold; color: var(--dark); text-transform: uppercase; letter-spacing: 1px;">
-        — Founder, Root & Reclaim
-    </p>
-</div>
-
-    <div style="flex: 1; min-width: 300px;">
-        <h2 style="color: var(--earth); font-size: 2.5rem; margin-bottom: 20px;">The Visionary</h2>
-        <p style="font-size: 1.1rem; color: #555; line-height: 1.8;">
-            I founded <strong>Root & Reclaim</strong> because I believe the Earth doesn't need a "hack"—it needs a protector. My mission is to shift the global conversation away from risky atmospheric experiments and back to the soil beneath our feet.
-        </p>
-        <p style="font-size: 1.1rem; color: #555; line-height: 1.8;">
-            As an environmental advocate, I am dedicated to empowering individuals and corporations to take real-world action through reforestation and sustainable living. This isn't just a website; it’s a call to reclaim our natural future.
-        </p>
-        <div style="margin-top: 30px;">
-            <a href="#contact" class="btn" style="background: var(--dark);">Connect With Me</a>
-        </div>
-    </div>
-    <div style="flex: 1; min-width: 300px; text-align: center;">
-        <img src="logo.png" alt="Founder" style="width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
-    </div>
-</section>
-
+    <section id="news" class="news-section">
         <h2 class="section-title">Field Reports</h2>
         <div class="news-grid">
             <div class="news-card">
@@ -213,7 +194,6 @@ no<!DOCTYPE html>
     </footer>
 
     <script>
-        // A simple script to make the tree counter look "live"
         let count = 142890;
         setInterval(() => {
             count += Math.floor(Math.random() * 3);
@@ -223,4 +203,3 @@ no<!DOCTYPE html>
 
 </body>
 </html>
-
