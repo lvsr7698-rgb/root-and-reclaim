@@ -232,19 +232,63 @@
     </style>
 </head>
 <body>
-    <!DOCTYPE html>
-<html>
+    
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Rotating Earth GIF</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Rotating Earth</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #050505; /* Space black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* The container that creates the sphere shape */
+        .earth {
+            width: 300px;
+            height: 300px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Solarsystemscope_texture_2k_earth_daymap.jpg/1200px-Solarsystemscope_texture_2k_earth_daymap.jpg');
+            background-size: cover;
+            border-radius: 50%;
+            position: relative;
+            
+            /* Realistic lighting: Inner shadow for depth and outer glow for atmosphere */
+            box-shadow: inset -40px -40px 50px 2px rgba(0, 0, 0, 0.9), 
+                        0 0 20px rgba(52, 152, 219, 0.4);
+            
+            /* Animation for rotation */
+            animation: rotate 20s linear infinite;
+        }
+
+        /* The rotation logic: scrolling the background image horizontally */
+        @keyframes rotate {
+            from { background-position: 0 0; }
+            to { background-position: 630px 0; }
+        }
+
+        /* Optional: Adding a subtle star background */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 10vw 20vh #fff, 30vw 50vh #fff, 70vw 10vh #fff, 85vw 80vh #fff, 40vw 90vh #fff;
+            opacity: 0.5;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Look at the Earth Rotate!</h1>
-    
-    <!-- Using a sample rotating globe GIF from Wikimedia Commons -->
-    <img src="https://wikimedia.org" alt="Rotating Earth" style="width:200px; height:200px;">
-    
-    <p>This image is an animated GIF, which handles its own rotation.</p>
+    <div class="earth"></div>
 
 </body>
 </html>
