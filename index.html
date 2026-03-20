@@ -122,10 +122,10 @@
             transition: 0.3s;
         }
 
-        /* --- Hero with Rain & Deer --- */
+        /* --- Hero with Rain & Transparent Deer --- */
         .hero {
             position: relative;
-            height: 80vh;
+            height: 85vh;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
@@ -145,18 +145,20 @@
             z-index: 3;
         }
 
-        .deer-container {
+        .deer-overlay {
             position: absolute;
-            bottom: 0;
-            right: 15%;
-            width: 300px;
+            bottom: 5%;
+            right: 10%;
+            width: 350px;
             z-index: 4;
-            opacity: 0.9;
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+            pointer-events: none;
+            opacity: 0.85;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
         }
 
         .hero-content { position: relative; z-index: 10; padding: 20px; }
-        .hero h1 { font-size: 4rem; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .hero h1 { font-size: 4.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.6); margin: 0; }
+        .hero p { font-size: 1.3rem; margin-top: 15px; }
 
         /* --- Evolution Section --- */
         .evolution-viewport {
@@ -192,39 +194,42 @@
         #ai-chat-container {
             position: fixed;
             bottom: 100px; right: 30px;
-            width: 320px;
+            width: 350px;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
             z-index: 2000;
             display: none;
             flex-direction: column;
-            overflow: hidden;
-            border: 1px solid var(--leaf);
+            border: 2px solid var(--earth);
         }
 
-        .chat-header { background: var(--dark-green); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
-        .chat-body { height: 250px; padding: 15px; overflow-y: auto; background: var(--gray); font-size: 0.9rem; }
-        .chat-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #eee; }
-        .chat-input-area input { flex: 1; border: none; outline: none; padding: 5px; }
+        .chat-header { background: var(--dark-green); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; border-radius: 18px 18px 0 0; }
+        .chat-body { height: 300px; padding: 15px; overflow-y: auto; background: #fdfdfd; font-size: 0.95rem; }
+        .chat-input-area { display: flex; padding: 12px; background: #fff; border-top: 1px solid #eee; border-radius: 0 0 18px 18px; }
+        .chat-input-area input { flex: 1; border: none; outline: none; padding: 8px; font-size: 1rem; }
+        
         .chat-toggle-btn {
             position: fixed; bottom: 30px; right: 30px;
             background: var(--earth); color: white;
-            width: 60px; height: 60px; border-radius: 50%;
+            width: 65px; height: 65px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            font-size: 1.5rem; cursor: pointer; z-index: 2001;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            transition: 0.3s;
+            font-size: 1.8rem; cursor: pointer; z-index: 2001;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .chat-toggle-btn:hover { transform: scale(1.1); background: var(--leaf); }
+        .chat-toggle-btn:hover { transform: scale(1.1) rotate(15deg); background: var(--leaf); }
+
+        .ai-bubble { background: #e8f5e9; padding: 10px; border-radius: 12px; margin-bottom: 12px; color: #1b5e20; border-left: 4px solid var(--leaf); }
+        .user-bubble { background: #f1f1f1; padding: 10px; border-radius: 12px; margin-bottom: 12px; text-align: right; color: #333; }
 
         footer { background: var(--dark); color: #888; text-align: center; padding: 50px; }
     </style>
 </head>
 <body>
 
-    <audio id="parrotAudio" loop>
-        <source src="https://assets.mixkit.co/active_storage/sfx/2418/2418-preview.mp3" type="audio/mpeg">
+    <audio id="natureAudio" loop>
+        <source src="https://www.soundjay.com/nature/sounds/forest-birds-chirping-01.mp3" type="audio/mpeg">
     </audio>
 
     <nav>
@@ -247,7 +252,7 @@
         <div class="nav-links">
             <a href="#evolution">Evolution</a>
             <button class="sound-btn" onclick="toggleSound()">
-                <i id="soundIcon" class="fa-solid fa-feather"></i> <span id="soundTxt">Hear Nature</span>
+                <i id="soundIcon" class="fa-solid fa-feather-pointed"></i> <span id="soundTxt">Bird Chirping</span>
             </button>
         </div>
     </nav>
@@ -255,18 +260,15 @@
     <header class="hero">
         <canvas id="rainCanvas"></canvas>
         
-        <div class="deer-container">
-            <svg viewBox="0 0 200 200" fill="rgba(255,255,255,0.85)">
-                <path d="M100 180 L110 160 L105 140 L115 110 L100 90 L85 110 L95 140 L90 160 Z M100 90 C100 70 110 60 120 50 M100 90 C100 70 90 60 80 50 M120 50 L130 30 M120 50 L110 35 M80 50 L70 30 M80 50 L90 35" stroke="white" stroke-width="2" fill="none"/>
-                <path d="M100 180 Q120 185 130 160 L140 140 Q150 110 130 100 L110 95" stroke="white" stroke-width="2" fill="none"/>
-                <path d="M60 180 L70 140 L50 110 Q40 90 60 80 L70 60 Q75 50 85 60 L80 80 Q110 85 130 110 L150 140 L160 180" fill="rgba(255,255,255,0.9)"/>
-            </svg>
-        </div>
+        <svg class="deer-overlay" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="rgba(255,255,255,0.7)" d="M100 180 L110 140 L90 120 Q80 100 95 90 L105 70 Q110 60 125 70 L120 90 Q140 100 155 120 L170 150 L180 180 Z M60 180 L70 150 L65 130 Q55 110 70 100 L85 120 L80 150 L90 180"/>
+            <path stroke="white" stroke-width="2" fill="none" d="M105 70 L115 50 M105 70 L95 55 M105 70 L110 40"/>
+        </svg>
 
         <div class="hero-content">
             <h1>The Forest Remembers.</h1>
             <p>Rain feeds the roots. AI listens to the soil. We reclaim the future.</p>
-            <a href="#evolution" class="btn">View Evolution</a>
+            <a href="#evolution" class="btn" style="padding: 18px 45px; background: var(--leaf); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin-top: 20px;">View Evolution</a>
         </div>
     </header>
 
@@ -293,37 +295,37 @@
             <i class="fa-solid fa-xmark" style="cursor:pointer" onclick="toggleChat()"></i>
         </div>
         <div class="chat-body" id="chatBody">
-            <div style="margin-bottom:10px"><b>Nature AI:</b> The rain is falling, and the deer are quiet. How can I help you support our forest today?</div>
+            <div class="ai-bubble">Greetings. I am monitoring the rainfall levels and forest health. Ask me anything about our ecosystem or how to help.</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Ask Nature AI...">
-            <button class="chat-toggle-btn" style="position:static; width:40px; height:40px; font-size:1rem;" onclick="askAI()">></button>
+            <input type="text" id="chatInput" placeholder="Ask Nature AI..." onkeypress="handleKey(event)">
+            <button onclick="askAI()" style="background:none; border:none; color:var(--earth); cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Root & Reclaim. <br> Protected by Nature AI Systems.</p>
+        <p>&copy; 2026 Root & Reclaim | Optimized by Nature AI Systems</p>
     </footer>
 
     <script>
-        /* --- Medium Rainfall Effect --- */
+        /* --- Rain Effect Logic --- */
         const rCanvas = document.getElementById('rainCanvas');
         const rCtx = rCanvas.getContext('2d');
-        let rWidth, rHeight, drops = [];
+        let drops = [];
 
         function initRain() {
-            rWidth = rCanvas.width = window.innerWidth;
-            rHeight = rCanvas.height = window.innerHeight;
-            drops = Array.from({ length: 100 }, () => ({
-                x: Math.random() * rWidth,
-                y: Math.random() * rHeight,
+            rCanvas.width = window.innerWidth;
+            rCanvas.height = window.innerHeight;
+            drops = Array.from({ length: 120 }, () => ({
+                x: Math.random() * rCanvas.width,
+                y: Math.random() * rCanvas.height,
                 l: Math.random() * 20 + 10,
                 s: Math.random() * 4 + 4
             }));
         }
 
         function drawRain() {
-            rCtx.clearRect(0, 0, rWidth, rHeight);
+            rCtx.clearRect(0, 0, rCanvas.width, rCanvas.height);
             rCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
             rCtx.lineWidth = 1;
             drops.forEach(d => {
@@ -332,41 +334,40 @@
                 rCtx.lineTo(d.x + 1, d.y + d.l);
                 rCtx.stroke();
                 d.y += d.s;
-                if (d.y > rHeight) { d.y = -d.l; d.x = Math.random() * rWidth; }
+                if (d.y > rCanvas.height) { d.y = -d.l; d.x = Math.random() * rCanvas.width; }
             });
             requestAnimationFrame(drawRain);
         }
 
-        /* --- Logo Particles --- */
+        /* --- Logo Particles Logic --- */
         const pCanvas = document.getElementById('particleCanvas');
         const pCtx = pCanvas.getContext('2d');
+        let pList = [];
         let isHovering = false;
         pCanvas.width = 150; pCanvas.height = 150;
-        let particles = [];
+
         class Particle {
             constructor() { this.reset(); }
             reset() { this.x = Math.random() * 150; this.y = 160; this.size = Math.random() * 2 + 1; this.speedY = Math.random() * 0.5 + 0.2; }
             update() { this.y -= isHovering ? this.speedY * 4 : this.speedY; if (this.y < -10) this.reset(); }
             draw() { pCtx.fillStyle = '#76ba1b'; pCtx.globalAlpha = 0.4; pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI*2); pCtx.fill(); }
         }
-        for(let i=0; i<20; i++) particles.push(new Particle());
-        function animateParticles() {
-            pCtx.clearRect(0,0,150,150);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
+        for(let i=0; i<20; i++) pList.push(new Particle());
+        function animP() { pCtx.clearRect(0,0,150,150); pList.forEach(p => {p.update(); p.draw();}); requestAnimationFrame(animP); }
+
         document.querySelector('.logo-group').onmouseenter = () => isHovering = true;
         document.querySelector('.logo-group').onmouseleave = () => isHovering = false;
 
-        /* --- Audio & Slider & Chat Logic --- */
-        const audio = document.getElementById('parrotAudio');
-        let playing = false;
+        /* --- Audio Toggle Logic --- */
+        const audio = document.getElementById('natureAudio');
+        let isPlaying = false;
         function toggleSound() {
-            if(!playing) { audio.play(); document.getElementById('soundTxt').innerText = "Nature Active"; }
-            else { audio.pause(); document.getElementById('soundTxt').innerText = "Hear Nature"; }
-            playing = !playing;
+            if(!isPlaying) { audio.play(); document.getElementById('soundTxt').innerText = "Nature Active"; }
+            else { audio.pause(); document.getElementById('soundTxt').innerText = "Bird Chirping"; }
+            isPlaying = !isPlaying;
         }
 
+        /* --- Evolution Slider Logic --- */
         let currentSlide = 0;
         const slides = document.querySelectorAll('.evolution-slide');
         setInterval(() => {
@@ -375,36 +376,41 @@
             slides[currentSlide].classList.add('active');
         }, 6000);
 
+        /* --- Nature AI Intelligent Chat Logic --- */
         function toggleChat() {
             const chat = document.getElementById('ai-chat-container');
             chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
         }
 
+        function handleKey(e) { if(e.key === 'Enter') askAI(); }
+
         function askAI() {
             const input = document.getElementById('chatInput');
             const body = document.getElementById('chatBody');
-            if(!input.value) return;
-            body.innerHTML += `<div style="text-align:right; margin: 10px 0;"><b>You:</b> ${input.value}</div>`;
-            
-            const responses = [
-                "I am monitoring the rainfall levels. The deer are safe under the canopy.",
-                "To help the forest, we must protect the native soil algorithms.",
-                "Reforestation is the most logical step for planetary stabilization.",
-                "Nature AI suggests planting 10 native trees to balance your local carbon footprint."
-            ];
-            
-            setTimeout(() => {
-                body.innerHTML += `<div style="margin: 10px 0;"><b>Nature AI:</b> ${responses[Math.floor(Math.random()*responses.length)]}</div>`;
-                body.scrollTop = body.scrollHeight;
-            }, 700);
+            const val = input.value.toLowerCase();
+            if(!val) return;
+
+            body.innerHTML += `<div class="user-bubble">${input.value}</div>`;
             input.value = "";
+
+            let response = "I hear you. The forest is listening. Your presence contributes to the global equilibrium.";
+
+            if(val.includes("deer")) response = "The deer you see are guardians of this grove. They represent the peace we find when we protect nature.";
+            else if(val.includes("rain")) response = "Rain is the lifeblood of our servers. It feeds the roots and cleanses the atmosphere.";
+            else if(val.includes("tree") || val.includes("plant")) response = "Every tree is a biological server, storing carbon and providing life. Planting is the ultimate innovation.";
+            else if(val.includes("bird") || val.includes("chirp")) response = "The birds are the forest's messengers. Their songs signify a thriving, healthy network.";
+            else if(val.includes("hello") || val.includes("hi")) response = "Hello, protector of the grove. How can I assist your mission today?";
+            else if(val.includes("help")) response = "You can help by advocating for reforestation, planting native seeds, and reducing your carbon footprint.";
+
+            setTimeout(() => {
+                body.innerHTML += `<div class="ai-bubble">${response}</div>`;
+                body.scrollTop = body.scrollHeight;
+            }, 600);
         }
 
         /* --- Init --- */
-        window.addEventListener('resize', initRain);
-        initRain();
-        drawRain();
-        animateParticles();
+        window.onload = () => { initRain(); drawRain(); animP(); };
+        window.onresize = initRain;
     </script>
 </body>
 </html>
