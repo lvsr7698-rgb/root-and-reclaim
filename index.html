@@ -122,7 +122,7 @@
             transition: 0.3s;
         }
 
-        /* --- Hero with Rain & Transparent Deer --- */
+        /* --- Hero with Rain & Highly Visible Deer --- */
         .hero {
             position: relative;
             height: 85vh;
@@ -147,18 +147,17 @@
 
         .deer-overlay {
             position: absolute;
-            bottom: 5%;
-            right: 10%;
-            width: 350px;
+            bottom: 3%;
+            right: 12%;
+            width: 380px;
             z-index: 4;
             pointer-events: none;
-            opacity: 0.85;
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.4));
         }
 
         .hero-content { position: relative; z-index: 10; padding: 20px; }
         .hero h1 { font-size: 4.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.6); margin: 0; }
-        .hero p { font-size: 1.3rem; margin-top: 15px; }
+        .hero p { font-size: 1.3rem; margin-top: 15px; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
         /* --- Evolution Section --- */
         .evolution-viewport {
@@ -182,235 +181,4 @@
         }
 
         .evolution-slide.active { opacity: 1; animation: slowZoom 12s infinite alternate; }
-        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
-
-        .slide-overlay {
-            background: linear-gradient(transparent, rgba(0,0,0,0.85));
-            width: 100%; padding: 50px; color: white;
-            position: absolute; bottom: 0;
-        }
-
-        /* --- Nature AI Chatbox --- */
-        #ai-chat-container {
-            position: fixed;
-            bottom: 100px; right: 30px;
-            width: 350px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-            z-index: 2000;
-            display: none;
-            flex-direction: column;
-            border: 2px solid var(--earth);
-        }
-
-        .chat-header { background: var(--dark-green); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; border-radius: 18px 18px 0 0; }
-        .chat-body { height: 300px; padding: 15px; overflow-y: auto; background: #fdfdfd; font-size: 0.95rem; }
-        .chat-input-area { display: flex; padding: 12px; background: #fff; border-top: 1px solid #eee; border-radius: 0 0 18px 18px; }
-        .chat-input-area input { flex: 1; border: none; outline: none; padding: 8px; font-size: 1rem; }
-        
-        .chat-toggle-btn {
-            position: fixed; bottom: 30px; right: 30px;
-            background: var(--earth); color: white;
-            width: 65px; height: 65px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.8rem; cursor: pointer; z-index: 2001;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .chat-toggle-btn:hover { transform: scale(1.1) rotate(15deg); background: var(--leaf); }
-
-        .ai-bubble { background: #e8f5e9; padding: 10px; border-radius: 12px; margin-bottom: 12px; color: #1b5e20; border-left: 4px solid var(--leaf); }
-        .user-bubble { background: #f1f1f1; padding: 10px; border-radius: 12px; margin-bottom: 12px; text-align: right; color: #333; }
-
-        footer { background: var(--dark); color: #888; text-align: center; padding: 50px; }
-    </style>
-</head>
-<body>
-
-    <audio id="natureAudio" loop>
-        <source src="https://www.soundjay.com/nature/sounds/forest-birds-chirping-01.mp3" type="audio/mpeg">
-    </audio>
-
-    <nav>
-        <a href="#" class="logo-group">
-            <div class="logo-container">
-                <canvas id="particleCanvas"></canvas>
-                <svg class="logo-svg" viewBox="0 0 200 200">
-                    <circle class="outer-ring" cx="100" cy="100" r="90" />
-                    <g class="float-group">
-                        <path d="M50 130 C 70 160, 130 160, 150 120 C 130 110, 100 130, 80 125 Z" fill="var(--dark-green)" />
-                        <path d="M100 125 V 70 M100 100 L 80 80 M100 90 L 120 75" stroke="var(--wood-brown)" stroke-width="4" stroke-linecap="round" />
-                        <circle cx="100" cy="60" r="12" fill="var(--leaf-mid)" />
-                        <circle cx="75" cy="75" r="9" fill="var(--leaf-bright)" />
-                        <circle cx="125" cy="70" r="10" fill="var(--dark-green)" />
-                    </g>
-                </svg>
-            </div>
-            <span>Root & Reclaim</span>
-        </a>
-        <div class="nav-links">
-            <a href="#evolution">Evolution</a>
-            <button class="sound-btn" onclick="toggleSound()">
-                <i id="soundIcon" class="fa-solid fa-feather-pointed"></i> <span id="soundTxt">Bird Chirping</span>
-            </button>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <canvas id="rainCanvas"></canvas>
-        
-        <svg class="deer-overlay" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path fill="rgba(255,255,255,0.7)" d="M100 180 L110 140 L90 120 Q80 100 95 90 L105 70 Q110 60 125 70 L120 90 Q140 100 155 120 L170 150 L180 180 Z M60 180 L70 150 L65 130 Q55 110 70 100 L85 120 L80 150 L90 180"/>
-            <path stroke="white" stroke-width="2" fill="none" d="M105 70 L115 50 M105 70 L95 55 M105 70 L110 40"/>
-        </svg>
-
-        <div class="hero-content">
-            <h1>The Forest Remembers.</h1>
-            <p>Rain feeds the roots. AI listens to the soil. We reclaim the future.</p>
-            <a href="#evolution" class="btn" style="padding: 18px 45px; background: var(--leaf); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin-top: 20px;">View Evolution</a>
-        </div>
-    </header>
-
-    <section id="evolution" style="padding: 90px 8%;">
-        <h2 style="text-align:center; color: var(--earth); font-size: 2.5rem;">The Evolution of Natural Technology</h2>
-        
-        <div class="evolution-viewport">
-            <div class="evolution-slide active" style="background-image: url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1200')">
-                <div class="slide-overlay"><h3>The Primordial Fire</h3><p>Before the first leaf, the Earth was a molten canvas of raw potential.</p></div>
-            </div>
-            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1200')">
-                <div class="slide-overlay"><h3>The Green Revolution</h3><p>Plants evolved the most complex solar panels ever known: The Leaf.</p></div>
-            </div>
-            <div class="evolution-slide" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200')">
-                <div class="slide-overlay"><h3>The Balanced Future</h3><p>Reforestation is the ultimate AI—Auto-Intelligence designed by Nature.</p></div>
-            </div>
-        </div>
-    </section>
-
-    <div class="chat-toggle-btn" onclick="toggleChat()"><i class="fa-solid fa-leaf"></i></div>
-    <div id="ai-chat-container">
-        <div class="chat-header">
-            <span>Nature AI Assistant</span>
-            <i class="fa-solid fa-xmark" style="cursor:pointer" onclick="toggleChat()"></i>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <div class="ai-bubble">Greetings. I am monitoring the rainfall levels and forest health. Ask me anything about our ecosystem or how to help.</div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Ask Nature AI..." onkeypress="handleKey(event)">
-            <button onclick="askAI()" style="background:none; border:none; color:var(--earth); cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 Root & Reclaim | Optimized by Nature AI Systems</p>
-    </footer>
-
-    <script>
-        /* --- Rain Effect Logic --- */
-        const rCanvas = document.getElementById('rainCanvas');
-        const rCtx = rCanvas.getContext('2d');
-        let drops = [];
-
-        function initRain() {
-            rCanvas.width = window.innerWidth;
-            rCanvas.height = window.innerHeight;
-            drops = Array.from({ length: 120 }, () => ({
-                x: Math.random() * rCanvas.width,
-                y: Math.random() * rCanvas.height,
-                l: Math.random() * 20 + 10,
-                s: Math.random() * 4 + 4
-            }));
-        }
-
-        function drawRain() {
-            rCtx.clearRect(0, 0, rCanvas.width, rCanvas.height);
-            rCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            rCtx.lineWidth = 1;
-            drops.forEach(d => {
-                rCtx.beginPath();
-                rCtx.moveTo(d.x, d.y);
-                rCtx.lineTo(d.x + 1, d.y + d.l);
-                rCtx.stroke();
-                d.y += d.s;
-                if (d.y > rCanvas.height) { d.y = -d.l; d.x = Math.random() * rCanvas.width; }
-            });
-            requestAnimationFrame(drawRain);
-        }
-
-        /* --- Logo Particles Logic --- */
-        const pCanvas = document.getElementById('particleCanvas');
-        const pCtx = pCanvas.getContext('2d');
-        let pList = [];
-        let isHovering = false;
-        pCanvas.width = 150; pCanvas.height = 150;
-
-        class Particle {
-            constructor() { this.reset(); }
-            reset() { this.x = Math.random() * 150; this.y = 160; this.size = Math.random() * 2 + 1; this.speedY = Math.random() * 0.5 + 0.2; }
-            update() { this.y -= isHovering ? this.speedY * 4 : this.speedY; if (this.y < -10) this.reset(); }
-            draw() { pCtx.fillStyle = '#76ba1b'; pCtx.globalAlpha = 0.4; pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI*2); pCtx.fill(); }
-        }
-        for(let i=0; i<20; i++) pList.push(new Particle());
-        function animP() { pCtx.clearRect(0,0,150,150); pList.forEach(p => {p.update(); p.draw();}); requestAnimationFrame(animP); }
-
-        document.querySelector('.logo-group').onmouseenter = () => isHovering = true;
-        document.querySelector('.logo-group').onmouseleave = () => isHovering = false;
-
-        /* --- Audio Toggle Logic --- */
-        const audio = document.getElementById('natureAudio');
-        let isPlaying = false;
-        function toggleSound() {
-            if(!isPlaying) { audio.play(); document.getElementById('soundTxt').innerText = "Nature Active"; }
-            else { audio.pause(); document.getElementById('soundTxt').innerText = "Bird Chirping"; }
-            isPlaying = !isPlaying;
-        }
-
-        /* --- Evolution Slider Logic --- */
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.evolution-slide');
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }, 6000);
-
-        /* --- Nature AI Intelligent Chat Logic --- */
-        function toggleChat() {
-            const chat = document.getElementById('ai-chat-container');
-            chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
-        }
-
-        function handleKey(e) { if(e.key === 'Enter') askAI(); }
-
-        function askAI() {
-            const input = document.getElementById('chatInput');
-            const body = document.getElementById('chatBody');
-            const val = input.value.toLowerCase();
-            if(!val) return;
-
-            body.innerHTML += `<div class="user-bubble">${input.value}</div>`;
-            input.value = "";
-
-            let response = "I hear you. The forest is listening. Your presence contributes to the global equilibrium.";
-
-            if(val.includes("deer")) response = "The deer you see are guardians of this grove. They represent the peace we find when we protect nature.";
-            else if(val.includes("rain")) response = "Rain is the lifeblood of our servers. It feeds the roots and cleanses the atmosphere.";
-            else if(val.includes("tree") || val.includes("plant")) response = "Every tree is a biological server, storing carbon and providing life. Planting is the ultimate innovation.";
-            else if(val.includes("bird") || val.includes("chirp")) response = "The birds are the forest's messengers. Their songs signify a thriving, healthy network.";
-            else if(val.includes("hello") || val.includes("hi")) response = "Hello, protector of the grove. How can I assist your mission today?";
-            else if(val.includes("help")) response = "You can help by advocating for reforestation, planting native seeds, and reducing your carbon footprint.";
-
-            setTimeout(() => {
-                body.innerHTML += `<div class="ai-bubble">${response}</div>`;
-                body.scrollTop = body.scrollHeight;
-            }, 600);
-        }
-
-        /* --- Init --- */
-        window.onload = () => { initRain(); drawRain(); animP(); };
-        window.onresize = initRain;
-    </script>
-</body>
-</html>
+        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1
