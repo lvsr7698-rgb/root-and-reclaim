@@ -93,6 +93,12 @@
         .natural { border: 2px solid var(--leaf); background: #f9fff8; }
         .risk { border: 2px solid #e74c3c; background: #fff5f5; }
 
+        /* --- Tabs --- */
+        .tab-btn { padding: 12px 25px; border: none; background: #e0e0e0; cursor: pointer; border-radius: 30px; font-weight: bold; transition: 0.3s; color: var(--dark); margin: 5px; }
+        .tab-btn.active { background: var(--leaf); color: white; }
+        .tab-content { display: none; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         /* --- Contact --- */
         .contact-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
         form { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
@@ -113,9 +119,9 @@
             Root & Reclaim
         </div>
         <div>
-            <a href="#about-me">The Vision</a>
+            <a href="#about-founder">Founder</a>
             <a href="#science">Science</a>
-            <a href="#news">Updates</a>
+            <a href="#resources">Repository</a>
             <a href="#contact">Join Us</a>
         </div>
     </nav>
@@ -126,27 +132,30 @@
         <a href="#contact" class="btn">Get Your Toolkit</a>
     </header>
 
-    <section id="about-me" class="about-section">
-        <div style="flex: 1; min-width: 300px;">
-            <div style="background: #fdfdfd; border-left: 5px solid var(--leaf); padding: 25px; margin-bottom: 30px; border-radius: 0 15px 15px 0; box-shadow: 5px 5px 15px rgba(0,0,0,0.02);">
-                <p style="font-size: 1.4rem; font-style: italic; color: var(--earth); line-height: 1.4; margin: 0;">
+    <section id="about-founder" class="about-section">
+        <div style="flex: 1; min-width: 300px; position: relative;">
+            <div style="position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: var(--leaf); opacity: 0.1; border-radius: 50%; z-index: 0;"></div>
+            <img src="logo.png" alt="Founder of Root & Reclaim" style="width: 100%; max-width: 450px; border-radius: 30px; box-shadow: 20px 20px 60px rgba(0,0,0,0.08); position: relative; z-index: 1;">
+        </div>
+
+        <div style="flex: 1.5; min-width: 300px;">
+            <h4 style="color: var(--leaf); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 10px;">The Voice Behind the Movement</h4>
+            <h2 style="color: var(--earth); font-size: 2.8rem; margin-bottom: 25px; line-height: 1.2;">Protecting the Earth, <br>Not Hacking It.</h2>
+            
+            <p style="font-size: 1.1rem; color: #555; margin-bottom: 25px;">
+                I founded <strong>Root & Reclaim</strong> because nature is not a broken machine that needs "fixing" with chemicals. It is a living system that needs our respect and restoration.
+            </p>
+
+            <div style="background: var(--gray); padding: 30px; border-radius: 20px; border-left: 6px solid var(--leaf); margin-bottom: 30px;">
+                <p style="font-size: 1.3rem; font-style: italic; color: var(--dark); margin: 0; line-height: 1.5;">
                     "Nature doesn't need a hack; it needs a protector. I’m building a future where human change drives climate restoration, not experimental science."
                 </p>
-                <p style="margin-top: 15px; font-weight: bold; color: var(--dark); text-transform: uppercase; letter-spacing: 1px;">
-                    — Founder, Root & Reclaim
-                </p>
             </div>
-            <h2 style="color: var(--earth); font-size: 2.5rem; margin-bottom: 20px;">The Visionary</h2>
-            <p style="font-size: 1.1rem; color: #555;">
-                I founded <strong>Root & Reclaim</strong> to shift the global conversation away from risky atmospheric experiments and back to the soil beneath our feet. We empower individuals to take real-world action through reforestation and sustainable living.
-            </p>
-        </div>
-        <div style="flex: 1; min-width: 300px; text-align: center;">
-            <img src="logo.png" alt="Founder" style="width: 100%; max-width: 350px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+            <a href="#contact" class="btn" style="background: var(--dark);">Connect With Me</a>
         </div>
     </section>
 
-    <section id="science">
+    <section id="science" style="background: var(--white);">
         <h2 class="section-title">Natural Tech vs. Sky Hacking</h2>
         <div class="compare-grid">
             <div class="compare-card natural">
@@ -160,134 +169,23 @@
         </div>
     </section>
 
-    <section id="news" class="news-section">
-        <h2 class="section-title">Field Reports</h2>
-        <div class="news-grid">
-            <div class="news-card">
-                <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=500&q=80')"></div>
-                <div class="news-content">
-                    <span class="news-tag">Victory</span>
-                    <h3>Project Sky-Shield Blocked</h3>
-                    <p>Local activists halted the release of sulfate
-
-<section id="resources" style="padding: 80px 10%; background: var(--gray);">
-    <h2 class="section-title">The Repository</h2>
-    
-    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
-        <button class="tab-btn active" onclick="openTab(event, 'info')"><i class="fas fa-info-circle"></i> Information</button>
-        <button class="tab-btn" onclick="openTab(event, 'docs')"><i class="fas fa-file-alt"></i> Documents</button>
-        <button class="tab-btn" onclick="openTab(event, 'images')"><i class="fas fa-image"></i> Images</button>
-        <button class="tab-btn" onclick="openTab(event, 'links')"><i class="fas fa-link"></i> Links</button>
-        <button class="tab-btn" onclick="openTab(event, 'videos')"><i class="fas fa-play-circle"></i> Videos</button>
-    </div>
-
-    <div id="info" class="tab-content" style="display: block;">
-        <h3>Core Mission Data</h3>
-        <p>Our goal is to restore 1 million hectares of native forest by 2030. We focus on "High-Density Planting" which captures 3x more carbon than industrial monocultures.</p>
-    </div>
-
-    <div id="docs" class="tab-content">
-        <h3>Action Toolkits</h3>
-        <ul style="list-style: none; padding: 0;">
-            <li><a href="#" style="color: var(--leaf);"><i class="fas fa-download"></i> Reforestation Guide (PDF)</a></li>
-            <li><a href="#" style="color: var(--leaf);"><i class="fas fa-download"></i> Policy Petition Template</a></li>
-        </ul>
-    </div>
-
-    <div id="images" class="tab-content">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-            <img src="logo.png" style="width: 100%; border-radius: 10px;" alt="Gallery 1">
-            <div style="background: #ddd; height: 150px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">Gallery Image 2</div>
-        </div>
-    </div>
-
-    <div id="links" class="tab-content">
-        <h3>External Resources</h3>
-        <p><i class="fas fa-external-link-alt"></i> <a href="https://reforestation.app" target="_blank">Global Forest Watch</a></p>
-        <p><i class="fas fa-external-link-alt"></i> <a href="#">Local Community Partners</a></p>
-    </div>
-
-    <div id="videos" class="tab-content">
-        <h3>Featured Content</h3>
-        <div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 15px; overflow: hidden; background: #000;">
-            <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen title="Movement Video"></iframe>
-        </div>
-    </div>
-</section>
-
-<style>
-    /* Styling for the Tabs */
-    .tab-btn {
-        padding: 12px 25px;
-        border: none;
-        background: #e0e0e0;
-        cursor: pointer;
-        border-radius: 30px;
-        font-weight: bold;
-        transition: 0.3s;
-        color: var(--dark);
-    }
-    .tab-btn.active { background: var(--leaf); color: white; }
-    .tab-btn:hover { background: var(--earth); color: white; }
-    
-    .tab-content {
-        display: none;
-        background: white;
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        animation: fadeIn 0.5s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-</style>
-
-<script>
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tab-content");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tab-btn");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-</script>
-<li>
-    <a href="Welcome-Letter.pdf" target="_blank" style="color: var(--leaf); font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-        <i class="fas fa-file-pdf" style="font-size: 1.5rem;"></i> Founder's Welcome Letter (PDF)
-    </a>
-</li>
-
-<section id="about-founder" style="padding: 80px 10%; background: var(--white); border-bottom: 1px solid #eee;">
-    <div style="display: flex; align-items: center; gap: 60px; flex-wrap: wrap;">
-        
-        <div style="flex: 1; min-width: 300px; position: relative;">
-            <div style="position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: var(--leaf); opacity: 0.1; border-radius: 50%; z-index: 0;"></div>
-            <img src="logo.png" alt="Founder of Root & Reclaim" style="width: 100%; max-width: 450px; border-radius: 30px; box-shadow: 20px 20px 60px rgba(0,0,0,0.08); position: relative; z-index: 1;">
+    <section id="resources" style="padding: 80px 10%; background: var(--gray);">
+        <h2 class="section-title">The Repository</h2>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
+            <button class="tab-btn active" onclick="openTab(event, 'info')">Information</button>
+            <button class="tab-btn" onclick="openTab(event, 'docs')">Documents</button>
+            <button class="tab-btn" onclick="openTab(event, 'images')">Images</button>
+            <button class="tab-btn" onclick="openTab(event, 'links')">Links</button>
+            <button class="tab-btn" onclick="openTab(event, 'videos')">Videos</button>
         </div>
 
-        <div style="flex: 1.5; min-width: 300px;">
-            <h4 style="color: var(--leaf); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 10px;">The Voice Behind the Movement</h4>
-            <h2 style="color: var(--earth); font-size: 2.8rem; margin-bottom: 25px; line-height: 1.2;">Protecting the Earth, <br>Not Hacking It.</h2>
-            
-            <p style="font-size: 1.1rem; color: #555; margin-bottom: 25px;">
-                I founded <strong>Root & Reclaim</strong> out of a simple necessity: to remind the world that nature is not a broken machine that needs "fixing" with chemicals and mirrors. It is a living system that needs our respect.
-            </p>
-
-            <div style="background: var(--gray); padding: 30px; border-radius: 20px; border-left: 6px solid var(--leaf); margin-bottom: 30px;">
-                <p style="font-size: 1.3rem; font-style: italic; color: var(--dark); margin: 0; line-height: 1.5;">
-                    "Nature doesn't need a hack; it needs a protector. I’m building a future where human change drives climate restoration, not experimental science. Join me in reclaiming the wild."
-                </p>
-            </div>
-
-            <p style="font-size: 1.1rem; color: #555;">
-                My work focuses on bridging the gap between scientific reforestation and corporate accountability. We aren't just planting trees; we are rooting a new way of living.
-            </p>
+        <div id="info" class="tab-content" style="display: block;">
+            <h3>Core Mission Data</h3>
+            <p>Our goal is to restore 1 million hectares of native forest by 2030. We focus on "High-Density Planting" which captures 3x more carbon than industrial monocultures.</p>
         </div>
-    </div>
-</section>
 
+        <div id="docs" class="tab-content">
+            <h3>Action Toolkits</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom:15px;">
+                    <a href="Welcome-Letter.pdf" target="_blank" style="color: var(--leaf); font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 10px;">
