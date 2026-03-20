@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Root & Reclaim | My Nature AI Project</title>
+    <title>Root & Reclaim | Mother Nature AI</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
@@ -50,84 +50,83 @@
             color: var(--earth);
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
         }
 
         .logo-container {
             position: relative;
-            width: 80px; height: 80px;
+            width: 60px; height: 60px;
             display: flex; justify-content: center; align-items: center;
         }
 
         #particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .logo-svg { width: 60px; height: 60px; z-index: 2; transition: 0.5s; }
+        .logo-svg { width: 50px; height: 50px; z-index: 2; }
 
         .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--leaf); }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.9rem; }
 
-        .sound-btn {
-            background: var(--earth);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-        }
-
-        .seed-counter {
-            background: var(--dark-green);
-            color: var(--leaf-vibrant);
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-family: monospace;
-            font-weight: bold;
-            border: 1px solid var(--leaf);
-        }
-
-        /* --- Dynamic Hero Atmosphere --- */
+        /* --- Rapid Mother Nature Slider --- */
         .hero {
             position: relative;
-            height: 85vh;
-            background-size: cover;
-            background-position: center;
+            height: 90vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            color: white;
-            transition: background-image 1.5s ease-in-out;
-            overflow: hidden;
         }
 
-        #rainCanvas {
+        .mother-nature-slide {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .mother-nature-slide.active {
+            opacity: 1;
             z-index: 2;
-            opacity: 0;
-            transition: opacity 1s;
         }
 
-        #stormOverlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            opacity: 0;
+        /* "SAVE NATURE" Emergency Alert */
+        .save-nature-overlay {
+            position: relative;
+            z-index: 10;
+            color: white;
             pointer-events: none;
-            z-index: 5;
         }
 
-        .hero-content { position: relative; z-index: 10; padding: 20px; }
-        .hero h1 { font-size: 4.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.6); margin: 0; }
-        .hero p { font-size: 1.3rem; background: rgba(0,0,0,0.4); display: inline-block; padding: 8px 20px; border-radius: 5px; margin-top: 15px; }
+        .save-nature-overlay h1 {
+            font-size: 5rem;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: 10px;
+            text-shadow: 0 0 20px rgba(0,255,0,0.8);
+            animation: pulse 1s infinite;
+        }
 
-        /* --- About Section --- */
-        .about-box {
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .save-nature-overlay p {
+            font-size: 1.5rem;
+            background: rgba(0,0,0,0.6);
+            padding: 10px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 20px;
+            border: 2px solid var(--leaf-vibrant);
+        }
+
+        /* --- About/Founder Section --- */
+        .founder-section {
             padding: 80px 12%;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -135,48 +134,27 @@
             gap: 50px;
             background: var(--white);
         }
-        
+
         .founder-img {
             width: 100%; height: 450px;
-            background: url('https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80');
+            background: url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80');
             background-size: cover;
             background-position: center;
             border-radius: 20px;
-            box-shadow: -20px 20px 0 var(--leaf);
+            box-shadow: 20px 20px 0 var(--leaf);
         }
 
-        /* --- Global Nature Timeline (Begining to Now) --- */
-        .timeline-section { padding: 80px 12%; background: var(--dark); color: var(--white); }
-        .timeline-container { border-left: 2px solid var(--leaf); padding-left: 30px; margin-top: 40px; }
-        .timeline-item { margin-bottom: 40px; position: relative; }
-        .timeline-item::before { 
-            content: ''; position: absolute; left: -41px; top: 5px; 
-            width: 20px; height: 20px; background: var(--leaf); 
-            border-radius: 50%; border: 4px solid var(--dark); 
-        }
-        .timeline-item h3 { color: var(--leaf-vibrant); margin: 0; font-family: monospace; font-size: 1.4rem; }
-        .timeline-item p { color: #ccc; margin-top: 10px; line-height: 1.6; }
-
-        /* --- Algorithm Section --- */
-        .algorithm-block {
-            padding: 80px 12%;
-            background: var(--gray);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
+        /* --- Algorithm & World Data --- */
+        .data-block { padding: 60px 12%; background: var(--gray); }
         .algo-terminal {
             background: var(--terminal-bg);
             color: var(--leaf-vibrant);
-            padding: 25px;
-            border-radius: 12px;
-            font-family: 'Courier New', monospace;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            height: 220px;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            height: 150px;
             overflow: hidden;
-            border-left: 4px solid var(--leaf);
+            border-left: 5px solid var(--leaf);
         }
 
         /* --- Nature AI Assistant --- */
@@ -187,9 +165,7 @@
             justify-content: center; align-items: center;
             cursor: pointer; z-index: 2000; font-size: 1.8rem;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            transition: 0.3s;
         }
-        .ai-toggle:hover { transform: scale(1.1); background: var(--leaf); }
 
         #ai-window {
             position: fixed; bottom: 110px; right: 30px;
@@ -200,23 +176,12 @@
             overflow: hidden;
         }
 
-        .ai-header { background: var(--dark-green); color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; }
-        .ai-body { height: 250px; padding: 15px; overflow-y: auto; font-size: 0.85rem; background: #fafafa; }
-        .ai-input { display: flex; padding: 12px; border-top: 1px solid #eee; background: white; }
+        .ai-header { background: var(--dark-green); color: white; padding: 12px; font-weight: bold; }
+        .ai-body { height: 200px; padding: 15px; overflow-y: auto; font-size: 0.85rem; }
+        .ai-input { display: flex; padding: 10px; border-top: 1px solid #eee; }
 
         footer { background: var(--dark); color: #888; text-align: center; padding: 40px; }
 
-        @keyframes lightningStrike {
-            0%, 95%, 100% { opacity: 0; }
-            96% { opacity: 0.8; }
-            98% { opacity: 0.2; }
-        }
-
-        @media (max-width: 900px) {
-            .about-box, .algorithm-block { grid-template-columns: 1fr; }
-            .founder-img { width: 100%; height: 350px; }
-            .hero h1 { font-size: 2.5rem; }
-        }
     </style>
 </head>
 <body>
@@ -230,140 +195,93 @@
             <div class="logo-container">
                 <canvas id="particleCanvas"></canvas>
                 <svg class="logo-svg" viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="var(--leaf-bright)" stroke-width="4" stroke-dasharray="10 5" />
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="var(--leaf-bright)" stroke-width="4" />
                     <path d="M100 140 V 80 M70 110 L 100 90 L 130 110" stroke="var(--wood-brown)" stroke-width="8" fill="none" />
-                    <circle cx="100" cy="70" r="15" fill="var(--leaf-vibrant)" />
                 </svg>
             </div>
-            <span>Root & Reclaim</span>
+            <span>Mother Nature AI</span>
         </a>
         <div class="nav-links">
-            <div class="seed-counter"><i class="fa-solid fa-seedling"></i> Digital Seeds: <span id="countVal">0</span></div>
-            <button class="sound-btn" onclick="toggleAudio()">
-                <i id="audioIcon" class="fa-solid fa-volume-xmark"></i> <span id="audioTxt">Hear Parrot</span>
+            <a href="#about">The Founder</a>
+            <button class="sound-btn" onclick="toggleAudio()" style="background:var(--earth); color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer;">
+                <i id="audioIcon" class="fa-solid fa-volume-xmark"></i> <span id="audioTxt">Hear Nature</span>
             </button>
         </div>
     </nav>
 
-    <header class="hero" id="heroEnv">
-        <div id="stormOverlay"></div>
-        <canvas id="rainCanvas"></canvas>
-        <div class="hero-content">
-            <h1 id="envTitle">Nature AI</h1>
-            <p id="envSub">Analyzing Biological Context...</p>
+    <header class="hero" id="motherNatureHero">
+        <div class="mother-nature-slide active" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80')"></div>
+        <div class="mother-nature-slide" style="background-image: url('https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1920&q=80')"></div>
+        <div class="mother-nature-slide" style="background-image: url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1920&q=80')"></div>
+        <div class="mother-nature-slide" style="background-image: url('https://images.unsplash.com/photo-1470252649358-96947c03388f?auto=format&fit=crop&w=1920&q=80')"></div>
+        <div class="mother-nature-slide" style="background-image: url('https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1920&q=80')"></div>
+
+        <div class="save-nature-overlay">
+            <h1>Save Nature</h1>
+            <p>Listen to the Mother of Nature. Reclaim the Earth.</p>
         </div>
     </header>
 
-    <section id="about" class="about-box">
+    <section id="about" class="founder-section">
         <div class="founder-img"></div>
         <div class="about-content">
-            <h2>The Creator</h2>
-            <p>I am the founder of <strong>Root & Reclaim</strong>. This project was born from the belief that Artificial Intelligence can be the greatest tool in our ecological arsenal.</p>
-            <p>By processing billions of years of nature's data, I've developed this algorithm to help guide us back to a balanced planet. We are listening to the Earth's code.</p>
-            <span style="font-family: cursive; font-size: 2.2rem; color: var(--earth); display: block; margin-top: 15px;">[Your Name Here]</span>
+            <h2>The Visionary</h2>
+            <p>I am the creator of this Nature AI. Every second, Mother Nature reminds us of what we are losing. My algorithm serves as a wake-up call to protect the biological data of our planet.</p>
+            <p>Join me in planting the digital seeds of reforestation.</p>
+            <span style="font-family: cursive; font-size: 2.2rem; color: var(--earth);">[Your Name]</span>
         </div>
     </section>
 
-    <section class="timeline-section">
-        <h2 style="font-size: 2.5rem; text-align: center; color: var(--leaf-vibrant); margin-bottom: 50px;">World History: The Deep Time Data</h2>
-        <div class="timeline-container">
-            <div class="timeline-item">
-                <h3>4.5 Billion Years Ago: Genesis</h3>
-                <p>Earth is born from cosmic dust. Surface temperature exceeds 2000°C. First data entry: Molten rocks and a toxic atmosphere of CO2 and steam.</p>
-            </div>
-            <div class="timeline-item">
-                <h3>3.8 Billion Years Ago: The Spark</h3>
-                <p>First water oceans form as the crust cools. Microscopic life emerges in deep-sea vents. The planet's biological "Operating System" is installed.</p>
-            </div>
-            <div class="timeline-item">
-                <h3>2.4 Billion Years Ago: Oxygen 1.0</h3>
-                <p>Cyanobacteria begin photosynthesis. They "hack" the atmosphere, replacing methane with oxygen—the first Great Oxidation Event.</p>
-            </div>
-            <div class="timeline-item">
-                <h3>450 Million Years Ago: Land Reclaim</h3>
-                <p>Plants evolve to live on land. Ancient ferns and mosses form the first forests, creating a global carbon-capture network.</p>
-            </div>
-            <div class="timeline-item">
-                <h3>66 Million Years Ago: System Reset</h3>
-                <p>Mass extinction event. Nature recalibrates. Mammals and modern flowering plants begin to dominate the landscape.</p>
-            </div>
-            <div class="timeline-item">
-                <h3>Today: Nature AI Integration</h3>
-                <p>We use technology to heal the damage of the industrial era. Current status: Active reforestation and AI-guided biological restoration.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="algorithm" class="algorithm-block">
-        <div>
-            <h2 style="color: var(--earth)">Master Growth Algorithm</h2>
-            <p>Recalibrating every <strong>3 seconds</strong>. Our system processes planetary history alongside real-time soil data to optimize the survival rate of new forests.</p>
-        </div>
+    <section class="data-block">
+        <h2 style="color: var(--earth)">World Nature History: 4.5bn Years of Data</h2>
         <div class="algo-terminal" id="terminalLog">
-            [SYSTEM]: Initializing Deep Time Dataset...<br>
-            [SCAN]: 4.5BN years of Earth history synced.
+            [SYSTEM]: Initializing Deep Time Analysis...<br>
+            [DATA]: Genesis phase loaded...
         </div>
     </section>
 
     <div class="ai-toggle" onclick="toggleAI()"><i class="fa-solid fa-leaf"></i></div>
     <div id="ai-window">
-        <div class="ai-header">
-            <span>Nature AI</span>
-            <i class="fa-solid fa-xmark" onclick="toggleAI()" style="cursor:pointer"></i>
-        </div>
-        <div class="ai-body" id="aiBody">I am the voice of the algorithm. I contain the data of Earth from its beginning until this very second. How can I help?</div>
+        <div class="ai-header">Nature AI Assistant</div>
+        <div class="ai-body" id="aiBody">I am the voice of Mother Nature. We must save her. How can I help?</div>
         <div class="ai-input">
-            <input type="text" id="aiIn" placeholder="Ask about Earth's history..." style="flex:1; border:none; outline:none;" onkeypress="if(event.key==='Enter') askAI()">
-            <button onclick="askAI()" style="border:none; background:none; color:var(--earth); cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
+            <input type="text" id="aiIn" placeholder="Type 'Save Nature'..." style="flex:1; border:none; outline:none;" onkeypress="if(event.key==='Enter') askAI()">
+            <button onclick="askAI()" style="border:none; background:none; color:var(--earth)"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Root & Reclaim | Data Synthesis: Beginning to Till</p>
+        <p>&copy; 2026 Root & Reclaim | SAVE NATURE ALGORITHM</p>
     </footer>
 
     <script>
-        /* --- The 3-Second Atmosphere Algorithm --- */
-        let totalSeeds = 0;
-        const envStates = [
-            { name: "The Rain", img: "https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1200", title: "Hydration Protocol", log: "[ALGO]: Rain detected. Recharging groundwater data." },
-            { name: "The Storm", img: "https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1200", title: "Nitrogen Fixation", log: "[SYSTEM]: Static charge high. Converting atmosphere to fertilizer." },
-            { name: "The Jungle", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200", title: "Deep Biodiversity", log: "[INFO]: Peak canopy health. Synced with Holocene levels." },
-            { name: "The Mist", img: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1200", title: "Evaporation Loop", log: "[ALGO]: Analyzing humidity. Nutrients are stable." },
-            { name: "The Dawn", img: "https://images.unsplash.com/photo-1470252649358-96947c03388f?auto=format&fit=crop&w=1200", title: "Solar Processing", log: "[INFO]: Sunlight detected. Photosynthetic engines active." }
+        /* --- 1-Second Mother Nature Algorithm --- */
+        const slides = document.querySelectorAll('.mother-nature-slide');
+        const term = document.getElementById('terminalLog');
+        const logLines = [
+            "[ALGO]: Scanning forests...", "[ALGO]: Analyzing water purity...", 
+            "[ALGO]: Biodiversity check: CRITICAL.", "[SYSTEM]: Oxygen levels stable.",
+            "[INFO]: 1 hectare of forest reclaimed."
         ];
+        let currentIdx = 0;
 
-        let stateIdx = 0;
-        function runAlgorithm() {
-            const s = envStates[stateIdx];
-            const hero = document.getElementById('heroEnv');
-            const term = document.getElementById('terminalLog');
-            
-            // Background Shift
-            hero.style.backgroundImage = `url('${s.img}')`;
-            document.getElementById('envTitle').innerText = s.name;
-            document.getElementById('envSub').innerText = s.title;
+        function runMasterAlgorithm() {
+            // Background Animation
+            slides[currentIdx].classList.remove('active');
+            currentIdx = (currentIdx + 1) % slides.length;
+            slides[currentIdx].classList.add('active');
 
-            // Update Counter
-            totalSeeds += Math.floor(Math.random() * 8) + 1;
-            document.getElementById('countVal').innerText = totalSeeds;
-
-            // Update Terminal Log
+            // Terminal Animation
             let logs = term.innerHTML.split('<br>');
-            if(logs.length > 5) logs.shift();
-            logs.push(s.log);
+            if(logs.length > 4) logs.shift();
+            logs.push(logLines[Math.floor(Math.random()*logLines.length)]);
             term.innerHTML = logs.join('<br>');
-
-            // Particle Effects
-            document.getElementById('rainCanvas').style.opacity = (s.name.includes("Rain")) ? "1" : "0";
-            document.getElementById('stormOverlay').style.animation = (s.name.includes("Storm")) ? "lightningStrike 3s infinite" : "none";
-
-            stateIdx = (stateIdx + 1) % envStates.length;
         }
 
-        setInterval(runAlgorithm, 3000);
+        // SET TO 1 SECOND (1000ms)
+        setInterval(runMasterAlgorithm, 1000);
 
-        /* --- Audio & UI Interaction --- */
+        /* --- UI Logic --- */
         const audio = document.getElementById('natureAudio');
         function toggleAudio() {
             if(audio.paused) { 
@@ -372,61 +290,37 @@
                 document.getElementById('audioIcon').className = "fa-solid fa-volume-high"; 
             } else { 
                 audio.pause(); 
-                document.getElementById('audioTxt').innerText = "Hear Parrot"; 
+                document.getElementById('audioTxt').innerText = "Hear Nature"; 
                 document.getElementById('audioIcon').className = "fa-solid fa-volume-xmark"; 
             }
         }
 
-        function toggleAI() { 
-            const w = document.getElementById('ai-window'); 
-            w.style.display = (w.style.display === 'flex') ? 'none' : 'flex'; 
-        }
-
+        function toggleAI() { const w = document.getElementById('ai-window'); w.style.display = (w.style.display === 'flex') ? 'none' : 'flex'; }
         function askAI() {
-            const i = document.getElementById('aiIn'); 
-            const b = document.getElementById('aiBody');
+            const i = document.getElementById('aiIn'); const b = document.getElementById('aiBody');
             const val = i.value.toLowerCase();
             if(!val) return;
-            b.innerHTML += `<div style="margin-top:10px;"><b>You:</b> ${i.value}</div>`;
+            b.innerHTML += `<div><b>You:</b> ${i.value}</div>`;
             
-            let resp = "I have scanned the deep time timeline. Currently, we are in the 'Nature AI' phase of planetary history.";
-            if(val.includes("beginning") || val.includes("history") || val.includes("time")) {
-                resp = "The Earth began 4.5 billion years ago. My data shows it has survived asteroid strikes and ice ages. We are currently restoring its core balance.";
-            } else if (val.includes("founder") || val.includes("creator")) {
-                resp = "I was built by the founder of Root & Reclaim to act as a voice for the forest's ancient data.";
-            }
+            let resp = "Mother Nature is watching. To save her, we must plant and protect.";
+            if(val.includes("save nature")) resp = "YES. That is the primary command. We are using AI to restore the balance!";
 
             setTimeout(() => { 
-                b.innerHTML += `<div style="color:var(--earth); margin-top:5px;"><b>AI:</b> ${resp}</div>`; 
+                b.innerHTML += `<div style="color:var(--earth)"><b>AI:</b> ${resp}</div>`; 
                 b.scrollTop = b.scrollHeight; 
             }, 600);
             i.value = "";
         }
 
-        /* --- Visual Background Canvas --- */
-        const rC = document.getElementById('rainCanvas'); const rCtx = rC.getContext('2d');
-        rC.width = window.innerWidth; rC.height = window.innerHeight;
-        function drawR() {
-            rCtx.clearRect(0,0,rC.width,rC.height); rCtx.strokeStyle = "rgba(255,255,255,0.25)";
-            for(let i=0; i<35; i++) {
-                let x = Math.random()*rC.width; let y = Math.random()*rC.height;
-                rCtx.beginPath(); rCtx.moveTo(x,y); rCtx.lineTo(x,y+25); rCtx.stroke();
-            }
-            requestAnimationFrame(drawR);
-        }
-        drawR();
-
+        /* --- Particle Canvas --- */
         const pC = document.getElementById('particleCanvas'); const pCtx = pC.getContext('2d');
-        pC.width = 80; pC.height = 80;
+        pC.width = 60; pC.height = 60;
         function animP() {
-            pCtx.clearRect(0,0,80,80); pCtx.fillStyle = '#76ba1b'; pCtx.globalAlpha = 0.3;
-            pCtx.beginPath(); pCtx.arc(Math.random()*80, Math.random()*80, 2, 0, Math.PI*2); pCtx.fill();
+            pCtx.clearRect(0,0,60,60); pCtx.fillStyle = '#76ba1b'; pCtx.globalAlpha = 0.4;
+            pCtx.beginPath(); pCtx.arc(Math.random()*60, Math.random()*60, 2, 0, Math.PI*2); pCtx.fill();
             requestAnimationFrame(animP);
         }
         animP();
-
-        window.onload = runAlgorithm;
-        window.onresize = () => { rC.width = window.innerWidth; rC.height = window.innerHeight; };
     </script>
 </body>
 </html>
