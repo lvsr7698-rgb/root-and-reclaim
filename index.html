@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root & Reclaim | Action Over Innovation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --dark: #1a1a1a;
+            --earth: #2d5a27;
+            --leaf: #76ba1b;
+            --accent: #f39c12;
+            --white: #ffffff;
+            --gray: #f4f4f4;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+            scroll-behavior: smooth;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            background: rgba(255, 255, 255, 0.98);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--earth); text-transform: uppercase; letter-spacing: 2px; }
+        nav a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.3s; }
+        nav a:hover { color: var(--leaf); }
+
+        /* --- Hero --- */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin-bottom: 30px; opacity: 0.9; }
+
+        .btn {
+            padding: 15px 35px;
+            background: var(--leaf);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .btn:hover { background: var(--earth); transform: translateY(-2px); }
+
+        /* --- Latest News Section --- */
+        .news-section { padding: 80px 10%; background: var(--gray); }
+        .section-title { text-align: center; margin-bottom: 50px; font-size: 2rem; color: var(--earth); }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .news-img { height: 200px; background-size: cover; background-position: center; }
+
+        .news-content { padding: 20px; }
+        .news-tag { color: var(--leaf); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+        .news-content h3 { margin: 10px 0; font-size: 1.2rem; }
+
+        /* --- Contact Form --- */
+        .contact-section { padding: 80px 10%; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        
+        form { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        
+        .contact-info h2 { color: var(--earth); }
+        .counter-box { margin-top: 30px; padding: 20px; background: var(--earth); color: white; border-radius: 10px; text-align: center; }
+        #tree-counter { font-size: 2.5rem; font-weight: bold; display: block; }
+
+        footer { background: var(--dark); color: #777; text-align: center; padding: 40px; font-size: 0.8rem; }
+
+        @media (max-width: 768px) {
+            .contact-section { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Root & Reclaim</div>
+        <div>
+            <a href="#news">Latest News</a>
+            <a href="#contact">Join Us</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Nature Doesn't Need a Hack.</h1>
+        <p>Human change is the only sustainable way forward. Join us in stopping experimental geoengineering and starting real-world restoration.</p>
+        <a href="#contact" class="btn">Get Your Toolkit</a>
+    </section>
+
+    <section class="news-section" id="news">
+        <h2 class="section-title">Field Reports</h2>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=500&q=80')"></div>
+                <div class="news-content">
+                    <span class="news-tag">Victory</span>
+                    <h3>Project Sky-Shield Blocked</h3>
+                    <p>Local activists successfully petitioned to halt the release of sulfate aerosols in the stratosphere.</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=500&q=80')"></div>
+                <div class="news-content">
+                    <span class="news-tag">Growth</span>
+                    <h3>10,000 Saplings Planted</h3>
+                    <p>Our community just finished the largest reforestation project of the year in the Amazon basin.</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1495556650867-99590cea3657?auto=format&fit=crop&w=500&q=80')"></div>
+                <div class="news-content">
+                    <span class="news-tag">Action</span>
+                    <h3>The Plastic Ban Policy</h3>
+                    <p>New corporate guidelines are being drafted to eliminate single-use plastics from major supply chains.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <div class="contact-info">
+            <h2>Join the Frontline</h2>
+            <p>Don't just watch the news—be the news. Sign up to receive alerts on local planting events and policy petitions.</p>
+            
+            <div class="counter-box">
+                <span id="tree-counter">142,890</span>
+                <p>Trees Reclaimed This Year</p>
+            </div>
+        </div>
+
+        <form>
+            <h3>Get Involved</h3>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <textarea rows="5" placeholder="Tell us how you want to help..."></textarea>
+            <button type="submit" class="btn" style="width:100%; border:none; cursor:pointer;">Send Message</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Root & Reclaim. Human Change, Not Sky Hacking.</p>
+    </footer>
+
+    <script>
+        // A simple script to make the tree counter look "live"
+        let count = 142890;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 3);
+            document.getElementById('tree-counter').innerText = count.toLocaleString();
+        }, 5000);
+    </script>
+
+</body>
+</html>
