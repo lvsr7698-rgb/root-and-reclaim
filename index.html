@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Root & Reclaim | Master Algorithm</title>
+    <title>Root & Reclaim | Founder Profile</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
@@ -24,6 +24,7 @@
             background-color: var(--dark);
             color: var(--white);
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         /* --- Navigation --- */
@@ -32,7 +33,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 8%;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(10, 10, 10, 0.98);
             border-bottom: 2px solid var(--accent-gold);
             position: sticky;
             top: 0;
@@ -43,19 +44,14 @@
         .logo-svg { width: 50px; height: 50px; }
         .logo-text { color: var(--accent-gold); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
 
-        .seed-counter {
-            background: var(--earth);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-family: monospace;
-            font-weight: bold;
-            color: var(--leaf);
-        }
+        .nav-links { display: flex; align-items: center; gap: 25px; }
+        .nav-links a { text-decoration: none; color: var(--white); font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--leaf); }
 
-        /* --- FIXED BACKGROUND SLIDER ALGORITHM --- */
+        /* --- Master Background Algorithm (5 Sec Cycle) --- */
         .hero {
             position: relative;
-            height: 85vh;
+            height: 80vh;
             width: 100%;
             overflow: hidden;
             display: flex;
@@ -71,85 +67,82 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            animation: crossFade 15s infinite; /* 3 images x 5 seconds = 15s total */
+            animation: crossFade 15s infinite;
         }
 
-        /* Set different delays for each background image */
-        .bg1 { 
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80'); 
-            animation-delay: 0s; 
-        }
-        .bg2 { 
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1920&q=80'); 
-            animation-delay: 5s; 
-        }
-        .bg3 { 
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1920&q=80'); 
-            animation-delay: 10s; 
-        }
+        /* Staggered backgrounds */
+        .bg1 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
+        .bg2 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1470252649358-96947c03388f?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
+        .bg3 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
 
         @keyframes crossFade {
-            0% { opacity: 0; transform: scale(1); }
-            5% { opacity: 1; }
-            33% { opacity: 1; }
-            38% { opacity: 0; transform: scale(1.1); }
-            100% { opacity: 0; }
-        }
-
-        #rainCanvas {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 5;
-            pointer-events: none;
+            0%, 100% { opacity: 0; transform: scale(1); }
+            5%, 33% { opacity: 1; }
+            38% { opacity: 0; transform: scale(1.05); }
         }
 
         .hero-content { position: relative; z-index: 10; }
-        .hero h1 { font-size: 4rem; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
-        .hero p { font-size: 1.2rem; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 5px; }
+        .hero h1 { font-size: 4.5rem; text-shadow: 0 4px 20px rgba(0,0,0,0.8); margin: 0; }
+        .hero p { font-size: 1.4rem; color: var(--leaf); margin-top: 10px; font-weight: bold; }
 
-        /* --- Founder Section --- */
+        /* --- Founder Section (With Your Picture) --- */
         .founder-section {
-            padding: 80px 10%;
+            padding: 100px 10%;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
             align-items: center;
             background: #111;
         }
 
-        .founder-img-container {
+        .founder-img-box {
             width: 100%;
-            height: 400px;
-            background: url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80');
+            height: 550px;
+            /* YOUR UPLOADED IMAGE */
+            background: url('1000004667.jpg'); 
             background-size: cover;
-            background-position: center;
-            border-radius: 20px;
-            border: 4px solid var(--accent-gold);
-            box-shadow: 0 0 30px rgba(118, 186, 27, 0.3);
+            background-position: center top;
+            border-radius: 25px;
+            border: 5px solid var(--accent-gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: 0.5s;
         }
 
-        .founder-text h2 { color: var(--accent-gold); font-size: 2.5rem; }
-        .founder-text p { line-height: 1.8; color: #ccc; }
+        .founder-img-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(118, 186, 27, 0.2);
+        }
 
-        /* --- Terminal Algorithm --- */
-        .terminal {
+        .founder-text h2 { color: var(--accent-gold); font-size: 3rem; margin-bottom: 25px; }
+        .founder-text p { line-height: 1.9; color: #ddd; font-size: 1.15rem; margin-bottom: 20px; }
+        .founder-text strong { color: var(--leaf); }
+
+        /* --- Terminal Log Algorithm --- */
+        .terminal-block {
             background: #050505;
-            padding: 30px 10%;
+            padding: 40px 10%;
             font-family: 'Courier New', monospace;
             color: var(--terminal-green);
-            border-top: 1px solid #333;
+            border-top: 2px solid #222;
         }
 
         /* --- Footer --- */
-        footer { padding: 40px; text-align: center; background: #000; border-top: 1px solid #222; color: #555; }
+        footer { padding: 50px; text-align: center; background: #000; color: #666; border-top: 1px solid #1a1a1a; }
 
-        /* --- AI Toggle --- */
-        .ai-btn {
+        /* --- AI Toggle Bubble --- */
+        .ai-bubble {
             position: fixed; bottom: 30px; right: 30px;
-            width: 60px; height: 60px; background: var(--leaf);
+            width: 70px; height: 70px; background: var(--earth);
             color: white; border-radius: 50%; display: flex;
             justify-content: center; align-items: center;
-            cursor: pointer; z-index: 1000; box-shadow: 0 0 20px var(--leaf);
+            cursor: pointer; z-index: 2000; box-shadow: 0 0 30px var(--earth);
+            font-size: 1.8rem;
+        }
+
+        @media (max-width: 900px) {
+            .founder-section { grid-template-columns: 1fr; text-align: center; }
+            .founder-img-box { height: 400px; }
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -165,7 +158,9 @@
             <span class="logo-text">Root & Reclaim</span>
         </a>
         <div class="nav-links">
-            <div class="seed-counter"><i class="fa-solid fa-seedling"></i> Seeds: <span id="seedVal">0</span></div>
+            <a href="#about">The Founder</a>
+            <a href="#algorithm">Data Logs</a>
+            <div style="color: var(--accent-gold); font-family: monospace;">[ALGO: ACTIVE]</div>
         </div>
     </nav>
 
@@ -174,84 +169,58 @@
         <div class="bg-layer bg2"></div>
         <div class="bg-layer bg3"></div>
 
-        <canvas id="rainCanvas"></canvas>
-
         <div class="hero-content">
-            <h1>Nature AI Algorithm</h1>
-            <p>Processing 4.5 Billion Years of biological data in real-time.</p>
+            <h1>Save Nature</h1>
+            <p>Syncing Humanity with Biological Intelligence.</p>
         </div>
     </header>
 
-    <section class="terminal">
-        <p><strong>[SYSTEM LOG]:</strong> Algorithm cycling every 5 seconds...</p>
-        <div id="logBody">> Initializing reforestation protocol...<br>> Securing deep-time data synthesis...</div>
-    </section>
-
-    <section class="founder-section">
-        <div class="founder-img-container"></div>
+    <section id="about" class="founder-section">
+        <div class="founder-img-box"></div>
         <div class="founder-text">
-            <h2>The Visionary Founder</h2>
-            <p>Welcome to Root & Reclaim. I built this AI system to prove that technology is not the enemy of nature—it is its most powerful observer. By translating Earth's needs into code, we can reclaim what has been lost.</p>
-            <p>Every seed we plant digitally is a commitment to a physical forest. Join the mission.</p>
-            <p><em>— The Creator of Nature AI</em></p>
+            <h2>About the Founder</h2>
+            <p>I created <strong>Root & Reclaim</strong> to serve as a digital bridge between our industrial world and the ancient wisdom of the forest.</p>
+            <p>I believe that to save nature, we must first learn to listen to it. My AI algorithm doesn't just process code; it processes <strong>4.5 billion years of biological success</strong> to find the fastest path back to a green earth.</p>
+            <p>Every digital seed we count here is a promise for a cleaner, wilder future. Thank you for standing with me.</p>
+            <p><em>— The Architect of Root & Reclaim</em></p>
         </div>
     </section>
 
-    <div class="ai-btn" onclick="alert('Nature AI: I am monitoring the cross-fade algorithm. System is 100% stable.')">
-        <i class="fa-solid fa-robot"></i>
+    <section id="algorithm" class="terminal-block">
+        <h3>[SYSTEM LOGS]: Growth Algorithm V.1.0</h3>
+        <div id="logBody">
+            > Initializing forest-density analysis...<br>
+            > Synchronizing with Deep Time Timeline...<br>
+            > <strong>Mother Nature Status:</strong> Online & Optimizing.
+        </div>
+    </section>
+
+    <div class="ai-bubble" onclick="alert('Nature AI: I am monitoring the 5-second crossfade. Atmosphere is stable.')">
+        <i class="fa-solid fa-leaf"></i>
     </div>
 
     <footer>
-        <p>&copy; 2026 Root & Reclaim | Data Synthesis: Genesis to Now</p>
+        <p>&copy; 2026 Root & Reclaim | Data Mastery: World Beginning to Now</p>
     </footer>
 
     <script>
-        /* --- Terminal Log Algorithm --- */
+        /* --- Terminal Log Update Algorithm --- */
         const logs = [
-            "> [ALGO]: Precipitation levels: 12% optimal.",
-            "> [INFO]: Scanning nitrogen levels in soil...",
-            "> [SYSTEM]: Cross-fade engine synchronized.",
-            "> [ALGO]: Root-network conductivity: Secure.",
-            "> [DATA]: Processing 4.5bn year history logs..."
+            "> [ALGO]: Calculating root-network conductivity...",
+            "> [INFO]: Photosynthesis sensors calibrated at 98.4%.",
+            "> [DATA]: 4.5bn year planetary history synced.",
+            "> [SYSTEM]: Cross-fade engine operating at peak efficiency.",
+            "> [MESSAGE]: Plant a native tree to help the system."
         ];
         let logIdx = 0;
         const logBody = document.getElementById('logBody');
 
         function updateLogs() {
             const lines = logBody.innerHTML.split('<br>');
-            if(lines.length > 4) lines.shift();
+            if(lines.length > 5) lines.shift();
             lines.push(logs[logIdx]);
             logBody.innerHTML = lines.join('<br>');
             logIdx = (logIdx + 1) % logs.length;
-            
-            // Increment seed counter
-            document.getElementById('seedVal').innerText = parseInt(document.getElementById('seedVal').innerText) + 5;
         }
-        setInterval(updateLogs, 5000);
-
-        /* --- Rain Visuals --- */
-        const rCanvas = document.getElementById('rainCanvas');
-        const rCtx = rCanvas.getContext('2d');
-        let drops = [];
-
-        function initRain() {
-            rCanvas.width = window.innerWidth; rCanvas.height = window.innerHeight;
-            drops = Array.from({ length: 80 }, () => ({ x: Math.random() * rCanvas.width, y: Math.random() * rCanvas.height, l: 20, s: 7 }));
-        }
-
-        function drawRain() {
-            rCtx.clearRect(0, 0, rCanvas.width, rCanvas.height);
-            rCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            drops.forEach(d => {
-                rCtx.beginPath(); rCtx.moveTo(d.x, d.y); rCtx.lineTo(d.x, d.y + d.l); rCtx.stroke();
-                d.y += d.s; if (d.y > rCanvas.height) d.y = -20;
-            });
-            requestAnimationFrame(drawRain);
-        }
-
-        window.addEventListener('resize', initRain);
-        initRain();
-        drawRain();
-    </script>
-</body>
-</html>
+        setInterval(updateLogs, 4000);
+    </script
