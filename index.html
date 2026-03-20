@@ -38,14 +38,14 @@
         }
 
         .logo { font-size: 1.5rem; font-weight: bold; color: var(--earth); text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; }
-        .logo img { height: 40px; margin-right: 10px; }
-        nav a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.3s; }
+        .logo img { height: 40px; margin-right: 10px; border-radius: 5px; }
+        nav a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.3s; font-weight: 600; }
         nav a:hover { color: var(--leaf); }
 
         /* --- Hero --- */
         .hero {
             height: 80vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1920&q=80');
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -69,50 +69,60 @@
             border-radius: 5px;
             transition: 0.3s;
             display: inline-block;
+            border: none;
+            cursor: pointer;
         }
         .btn:hover { background: var(--earth); transform: translateY(-2px); }
 
-        /* --- About Section --- */
-        .about-section { padding: 80px 10%; display: flex; gap: 50px; flex-wrap: wrap; align-items: center; }
-
-        /* --- News Section --- */
-        .news-section { padding: 80px 10%; background: var(--gray); }
+        /* --- Sections --- */
+        section { padding: 80px 10%; }
+        .about-section { display: flex; gap: 50px; flex-wrap: wrap; align-items: center; }
+        .news-section { background: var(--gray); }
         .section-title { text-align: center; margin-bottom: 50px; font-size: 2rem; color: var(--earth); }
+
+        /* --- Grid & Cards --- */
         .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
         .news-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .news-img { height: 200px; background-size: cover; background-position: center; }
         .news-content { padding: 20px; }
         .news-tag { color: var(--leaf); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
 
+        /* --- Science Comparison --- */
+        .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px; }
+        .compare-card { padding: 30px; border-radius: 15px; }
+        .natural { border: 2px solid var(--leaf); background: #f9fff8; }
+        .risk { border: 2px solid #e74c3c; background: #fff5f5; }
+
         /* --- Contact --- */
-        .contact-section { padding: 80px 10%; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .contact-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
         form { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
         input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .counter-box { margin-top: 30px; padding: 20px; background: var(--earth); color: white; border-radius: 10px; text-align: center; }
-        #tree-counter { font-size: 2.5rem; font-weight: bold; display: block; }
+        .counter-box { margin-top: 30px; padding: 30px; background: var(--earth); color: white; border-radius: 10px; text-align: center; }
+        #tree-counter { font-size: 3rem; font-weight: bold; display: block; }
 
         footer { background: var(--dark); color: #777; text-align: center; padding: 40px; font-size: 0.8rem; }
 
-        @media (max-width: 768px) { .contact-section, .about-section { grid-template-columns: 1fr; } .hero h1 { font-size: 2.5rem; } }
+        @media (max-width: 768px) { .contact-section, .about-section { flex-direction: column; grid-template-columns: 1fr; } .hero h1 { font-size: 2.5rem; } }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo">
-            <img src="logo.png" alt="Logo">
+            <img src="logo.png" alt="Root & Reclaim Logo">
             Root & Reclaim
         </div>
         <div>
-            <a href="#about-me">The Visionary</a>
-            <a href="#news">Latest News</a>
+            <a href="#about-me">The Vision</a>
+            <a href="#science">Science</a>
+            <a href="#news">Updates</a>
             <a href="#contact">Join Us</a>
         </div>
     </nav>
 
     <header class="hero">
         <h1>Nature Doesn't Need a Hack.</h1>
-        <p>Human change is the only sustainable way forward. Join us in stopping experimental geoengineering and starting real-world restoration.</p>
+        <p>Human change is the only sustainable way forward. We prioritize reforestation over risky geoengineering experiments.</p>
         <a href="#contact" class="btn">Get Your Toolkit</a>
     </header>
 
@@ -120,22 +130,33 @@
         <div style="flex: 1; min-width: 300px;">
             <div style="background: #fdfdfd; border-left: 5px solid var(--leaf); padding: 25px; margin-bottom: 30px; border-radius: 0 15px 15px 0; box-shadow: 5px 5px 15px rgba(0,0,0,0.02);">
                 <p style="font-size: 1.4rem; font-style: italic; color: var(--earth); line-height: 1.4; margin: 0;">
-                    "Nature doesn't need a hack; it needs a protector. I’m building a future where human change drives climate restoration, not experimental science. Join me in reclaiming the wild."
+                    "Nature doesn't need a hack; it needs a protector. I’m building a future where human change drives climate restoration, not experimental science."
                 </p>
                 <p style="margin-top: 15px; font-weight: bold; color: var(--dark); text-transform: uppercase; letter-spacing: 1px;">
                     — Founder, Root & Reclaim
                 </p>
             </div>
             <h2 style="color: var(--earth); font-size: 2.5rem; margin-bottom: 20px;">The Visionary</h2>
-            <p style="font-size: 1.1rem; color: #555; line-height: 1.8;">
-                I founded <strong>Root & Reclaim</strong> because I believe the Earth doesn't need a "hack"—it needs a protector. My mission is to shift the global conversation away from risky atmospheric experiments and back to the soil beneath our feet.
+            <p style="font-size: 1.1rem; color: #555;">
+                I founded <strong>Root & Reclaim</strong> to shift the global conversation away from risky atmospheric experiments and back to the soil beneath our feet. We empower individuals to take real-world action through reforestation and sustainable living.
             </p>
-            <div style="margin-top: 30px;">
-                <a href="#contact" class="btn" style="background: var(--dark);">Connect With Me</a>
-            </div>
         </div>
         <div style="flex: 1; min-width: 300px; text-align: center;">
-            <img src="logo.png" alt="Founder" style="width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+            <img src="logo.png" alt="Founder" style="width: 100%; max-width: 350px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+        </div>
+    </section>
+
+    <section id="science">
+        <h2 class="section-title">Natural Tech vs. Sky Hacking</h2>
+        <div class="compare-grid">
+            <div class="compare-card natural">
+                <h3 style="color: var(--earth);"><i class="fa-solid fa-tree"></i> The Natural Way</h3>
+                <p>✅ 4 billion years of success.<br>✅ Safe for the atmosphere.<br>✅ Restores biodiversity.</p>
+            </div>
+            <div class="compare-card risk">
+                <h3 style="color: #c0392b;"><i class="fa-solid fa-flask-vial"></i> The Geo-Risk</h3>
+                <p>❌ Unpredictable weather shifts.<br>❌ Risk of ozone depletion.<br>❌ Artificial "band-aid" fix.</p>
+            </div>
         </div>
     </section>
 
@@ -147,59 +168,4 @@
                 <div class="news-content">
                     <span class="news-tag">Victory</span>
                     <h3>Project Sky-Shield Blocked</h3>
-                    <p>Local activists successfully petitioned to halt the release of sulfate aerosols in the stratosphere.</p>
-                </div>
-            </div>
-            <div class="news-card">
-                <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=500&q=80')"></div>
-                <div class="news-content">
-                    <span class="news-tag">Growth</span>
-                    <h3>10,000 Saplings Planted</h3>
-                    <p>Our community just finished the largest reforestation project of the year in the Amazon basin.</p>
-                </div>
-            </div>
-            <div class="news-card">
-                <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1495556650867-99590cea3657?auto=format&fit=crop&w=500&q=80')"></div>
-                <div class="news-content">
-                    <span class="news-tag">Action</span>
-                    <h3>The Plastic Ban Policy</h3>
-                    <p>New corporate guidelines are being drafted to eliminate single-use plastics from major supply chains.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="contact-section" id="contact">
-        <div class="contact-info">
-            <h2>Join the Frontline</h2>
-            <p>Don't just watch the news—be the news. Sign up to receive alerts on local planting events and policy petitions.</p>
-            
-            <div class="counter-box">
-                <span id="tree-counter">142,890</span>
-                <p>Trees Reclaimed This Year</p>
-            </div>
-        </div>
-
-        <form>
-            <h3>Get Involved</h3>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Email Address" required>
-            <textarea rows="5" placeholder="Tell us how you want to help..."></textarea>
-            <button type="submit" class="btn" style="width:100%; border:none; cursor:pointer;">Send Message</button>
-        </form>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 Root & Reclaim. Human Change, Not Sky Hacking.</p>
-    </footer>
-
-    <script>
-        let count = 142890;
-        setInterval(() => {
-            count += Math.floor(Math.random() * 3);
-            document.getElementById('tree-counter').innerText = count.toLocaleString();
-        }, 5000);
-    </script>
-
-</body>
-</html>
+                    <p>Local activists halted the release of sulfate
