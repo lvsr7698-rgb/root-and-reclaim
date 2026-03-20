@@ -5,24 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Root & Reclaim | Action Over Innovation</title>
     
-    <meta property="og:title" content="Root & Reclaim">
-    <meta property="og:description" content="Nature doesn't need a hack; it needs a protector.">
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         :root {
             --dark: #1a1a1a;
             --earth: #2d5a27;
             --leaf: #76ba1b;
-            --accent: #f39c12;
             --white: #ffffff;
             --gray: #f4f4f4;
             --danger: #e74c3c;
-            /* Logo Palette */
-            --dark-green: #1b3d2f;
-            --leaf-green: #4a7c44;
-            --accent-gold: #c5a059;
-            --trunk-brown: #5d4037;
         }
 
         body {
@@ -47,13 +39,13 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--earth); text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--earth); text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
         .logo-svg-small { height: 40px; width: 40px; }
 
-        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.3s; font-weight: 600; }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; font-weight: 600; transition: 0.3s; }
         .nav-links a:hover { color: var(--leaf); }
 
-        /* --- Hero with Rain --- */
+        /* --- Hero with Rain Animation --- */
         .hero {
             position: relative;
             height: 85vh;
@@ -80,13 +72,9 @@
             z-index: 1;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
+        .hero-content { position: relative; z-index: 2; }
         .hero h1 { font-size: 3.5rem; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .hero p { font-size: 1.2rem; max-width: 700px; margin-bottom: 30px; opacity: 0.9; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin-bottom: 30px; }
 
         .btn {
             padding: 15px 35px;
@@ -98,40 +86,42 @@
             transition: 0.3s;
             display: inline-block;
             border: none;
-            cursor: pointer;
         }
         .btn:hover { background: var(--earth); transform: translateY(-2px); }
 
         /* --- Sections --- */
         section { padding: 80px 10%; }
-        .about-section { display: flex; gap: 50px; flex-wrap: wrap; align-items: center; }
-        .section-title { text-align: center; margin-bottom: 50px; font-size: 2rem; color: var(--earth); }
+        .section-title { text-align: center; margin-bottom: 50px; font-size: 2.2rem; color: var(--earth); }
 
-        .founder-img-container {
-            flex: 1; min-width: 300px; padding: 20px; border-radius: 30px; 
-            background: white; box-shadow: 20px 20px 60px rgba(0,0,0,0.08);
+        /* --- Infographic Styling --- */
+        .infographic-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto 40px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+            border: 1px solid #eee;
         }
 
-        /* --- Compare Grid --- */
-        .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px; }
-        .compare-card { padding: 30px; border-radius: 15px; }
-        .natural { border: 2px solid var(--leaf); background: #f9fff8; }
-        .risk { border: 2px solid var(--danger); background: #fff5f5; }
+        .infographic-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
 
         /* --- Tabs --- */
         .tabs-container { text-align: center; }
-        .tab-btn { padding: 12px 25px; border: none; background: #d0d0d0; cursor: pointer; border-radius: 30px; font-weight: bold; transition: 0.3s; color: var(--dark); margin: 5px; }
+        .tab-btn { padding: 12px 25px; border: none; background: #d0d0d0; cursor: pointer; border-radius: 30px; font-weight: bold; margin: 5px; transition: 0.3s; }
         .tab-btn.active { background: var(--leaf); color: white; }
-        
         .tab-content { display: none; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 20px; text-align: left; }
         .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
-        
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         footer { background: var(--dark); color: #bbb; text-align: center; padding: 40px; font-size: 0.9rem; }
 
         @media (max-width: 768px) { 
-            .about-section { flex-direction: column; text-align: center; } 
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; } 
         }
@@ -155,7 +145,6 @@
             Root & Reclaim
         </div>
         <div class="nav-links">
-            <a href="#about-founder">Founder</a>
             <a href="#science">Science</a>
             <a href="#resources">Repository</a>
             <a href="mailto:contact@rootreclaim.com">Contact</a>
@@ -166,64 +155,38 @@
         <canvas id="rainCanvas"></canvas>
         <div class="hero-content">
             <h1>Nature Doesn't Need a Hack.</h1>
-            <p>Human change is the only sustainable way forward. We prioritize reforestation over risky geoengineering experiments.</p>
+            <p>We prioritize reforestation over risky geoengineering experiments.</p>
             <a href="#resources" class="btn">Get Your Toolkit</a>
         </div>
     </header>
 
-    <section id="about-founder" class="about-section">
-        <div class="founder-img-container">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 100%;">
-                <path d="M50 75 Q50 85 40 90 M50 75 Q50 85 60 90 M50 75 Q45 80 35 85" stroke="#5d4037" stroke-width="2" fill="none" />
-                <path d="M30 65 Q45 55 70 55 Q65 65 50 75 L30 75 Z" fill="#1b3d2f" />
-                <circle cx="50" cy="35" r="5" fill="#4a7c44" />
-                <circle cx="40" cy="45" r="4" fill="#4a7c44" />
-                <circle cx="60" cy="45" r="4" fill="#c5a059" />
-                <circle cx="35" cy="30" r="3" fill="#1b3d2f" />
-                <circle cx="65" cy="30" r="3" fill="#4a7c44" />
-                <circle cx="50" cy="20" r="4" fill="#4a7c44" />
-                <path d="M50 55 L50 40 M50 55 L40 45 M50 55 L60 45" stroke="#5d4037" stroke-width="1.5" />
-            </svg>
-        </div>
-        <div style="flex: 1.5; min-width: 300px;">
-            <h4 style="color: var(--leaf); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 10px;">The Voice</h4>
-            <h2 style="color: var(--earth); font-size: 2.8rem; margin-bottom: 25px;">Protecting the Earth.</h2>
-            <p style="font-size: 1.1rem; color: #555;">Nature is not a machine to be fixed; it is a system to be respected.</p>
-            <div style="background: var(--gray); padding: 25px; border-left: 6px solid var(--leaf); border-radius: 10px;">
-                <p style="font-style: italic; margin: 0;">"Action is the antidote to climate anxiety."</p>
-            </div>
-        </div>
-    </section>
-
     <section id="science">
-        <h2 class="section-title">Natural Tech vs. Geoengineering</h2>
-        <div class="compare-grid">
-            <div class="compare-card natural">
-                <h3 style="color: var(--earth);"><i class="fa-solid fa-tree"></i> Natural Success</h3>
-                <p>✅ Safely sequesters carbon<br>✅ Restores local rainfall<br>✅ High success rate</p>
-            </div>
-            <div class="compare-card risk">
-                <h3 style="color: var(--danger);"><i class="fa-solid fa-flask-vial"></i> Geo-Risk</h3>
-                <p>❌ Chemical interference<br>❌ Ozone damage risk<br>❌ Unpredictable side effects</p>
-            </div>
+        <h2 class="section-title">Natural Technology vs. Climate Hacking</h2>
+        
+        <div class="infographic-container">
+            <img src="science-infographic.jpg" alt="Natural Technology vs Climate Hacking Infographic">
+        </div>
+
+        <div style="text-align: center; max-width: 800px; margin: 0 auto; color: #555;">
+            <p>Our research advocates for biological solutions with a 4-billion-year track record. Unlike Stratospheric Aerosol Injection (SAI), reforestation restores biodiversity and stabilizes weather patterns naturally.</p>
         </div>
     </section>
 
     <section id="resources" style="background: var(--gray);">
         <h2 class="section-title">The Repository</h2>
         <div class="tabs-container">
-            <button class="tab-btn active" onclick="openTab(event, 'info')">Information</button>
-            <button class="tab-btn" onclick="openTab(event, 'docs')">Documents</button>
+            <button class="tab-btn active" onclick="openTab(event, 'info')">Mission Data</button>
+            <button class="tab-btn" onclick="openTab(event, 'docs')">Action Toolkits</button>
         </div>
 
         <div id="info" class="tab-content active">
-            <h3>Our Mission</h3>
-            <p>We aim to secure 1 million hectares of forest by 2030 through direct community action.</p>
+            <h3>Our 2030 Goal</h3>
+            <p>Restoring 1 million hectares of native forest to capture atmospheric carbon and protect global water cycles.</p>
         </div>
 
         <div id="docs" class="tab-content">
-            <h3>Files</h3>
-            <p><i class="fa-solid fa-file-pdf"></i> Welcome-Letter.pdf</p>
+            <h3>Files & Toolkits</h3>
+            <p><i class="fa-solid fa-file-pdf"></i> Welcome-Letter.pdf (Available soon)</p>
         </div>
     </section>
 
@@ -232,7 +195,7 @@
     </footer>
 
     <script>
-        // Tab switching
+        // Tab switching logic
         function openTab(evt, tabName) {
             document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -240,7 +203,7 @@
             evt.currentTarget.classList.add("active");
         }
 
-        // Rain Animation
+        // Rain Animation logic
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         let width, height, drops = [];
@@ -260,13 +223,17 @@
             ctx.clearRect(0, 0, width, height);
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
             ctx.lineWidth = 1;
+            ctx.lineCap = 'round';
             drops.forEach(d => {
                 ctx.beginPath();
                 ctx.moveTo(d.x, d.y);
                 ctx.lineTo(d.x, d.y + d.l);
                 ctx.stroke();
                 d.y += d.s;
-                if (d.y > height) d.y = -d.l, d.x = Math.random() * width;
+                if (d.y > height) {
+                    d.y = -d.l;
+                    d.x = Math.random() * width;
+                }
             });
             requestAnimationFrame(drawRain);
         }
