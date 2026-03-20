@@ -9,17 +9,17 @@
     
     <style>
         :root {
-            /* Combined Color Palette */
             --dark: #1a1a1a;
-            --dark-green: #1a4314;
             --earth: #2d5a27;
             --leaf: #76ba1b;
-            --leaf-bright: #84a95c;
-            --leaf-vibrant: #a4c639;
-            --leaf-mid: #4a7c44; /* Added missing variable */
-            --wood-brown: #4a3728;
             --white: #ffffff;
             --gray: #f4f4f4;
+            /* Logo Specific Colors */
+            --dark-green: #1a4314;
+            --leaf-bright: #84a95c;
+            --leaf-vibrant: #a4c639;
+            --leaf-mid: #4a7c44;
+            --wood-brown: #4a3728;
         }
 
         body {
@@ -29,7 +29,6 @@
             color: var(--dark);
             background: var(--white);
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
         /* --- Navigation --- */
@@ -45,60 +44,87 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .logo-container {
+        .logo-group {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             text-decoration: none;
             color: var(--earth);
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 1.2rem;
+            letter-spacing: 1px;
         }
 
-        /* Animated Logo Styling for Nav */
-        .logo-svg-small {
+        /* Integrated Animated Logo */
+        .logo-container {
+            position: relative;
             width: 50px;
             height: 50px;
-            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .logo-svg {
+            width: 45px;
+            height: 45px;
+            z-index: 2;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .logo-group:hover .logo-svg { transform: scale(1.1); }
 
         .outer-ring {
             fill: none;
             stroke: var(--leaf-bright);
-            stroke-width: 4;
-            stroke-dasharray: 5, 5;
+            stroke-width: 6;
+            stroke-dasharray: 10, 10;
             opacity: 0.5;
+            transition: all 0.5s ease;
         }
 
-        .logo-container:hover .outer-ring {
+        .logo-group:hover .outer-ring {
             animation: rotate 8s linear infinite;
             stroke: var(--leaf-vibrant);
             opacity: 1;
         }
+
+        .leaf { transition: fill 0.5s ease; transform-origin: center; }
+        .logo-group:hover .leaf { fill: var(--leaf-vibrant); }
 
         @keyframes rotate {
             from { transform: rotate(0deg); transform-origin: center; }
             to { transform: rotate(360deg); transform-origin: center; }
         }
 
+        .float-group { animation: floating 4s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
         .nav-links a { margin-left: 20px; text-decoration: none; color: var(--dark); font-size: 0.9rem; font-weight: 600; transition: 0.3s; }
         .nav-links a:hover { color: var(--leaf); }
 
-        /* --- Hero with Rain Animation --- */
+        /* --- Hero --- */
         .hero {
             position: relative;
-            height: 85vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             color: white;
-            padding: 0 20px;
             overflow: hidden;
         }
 
@@ -109,12 +135,11 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
         }
 
-        .hero-content { position: relative; z-index: 2; }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .hero p { font-size: 1.2rem; max-width: 700px; margin-bottom: 30px; }
+        .hero-content { position: relative; z-index: 2; padding: 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px; }
 
         .btn {
             padding: 15px 35px;
@@ -124,61 +149,58 @@
             font-weight: bold;
             border-radius: 5px;
             transition: 0.3s;
-            display: inline-block;
-            border: none;
         }
-        .btn:hover { background: var(--earth); transform: translateY(-2px); }
+        .btn:hover { background: var(--earth); }
 
-        /* --- Sections --- */
+        /* --- Content Sections --- */
         section { padding: 80px 10%; }
         .section-title { text-align: center; margin-bottom: 50px; font-size: 2.2rem; color: var(--earth); }
 
-        .infographic-container {
+        .infographic-placeholder {
             width: 100%;
-            max-width: 1100px;
-            margin: 0 auto 40px auto;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+            height: 400px;
             background: #eee;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 300px;
+            color: #999;
+            margin-bottom: 40px;
+            border: 2px dashed #ccc;
         }
 
         /* --- Tabs --- */
         .tabs-container { text-align: center; }
-        .tab-btn { padding: 12px 25px; border: none; background: #d0d0d0; cursor: pointer; border-radius: 30px; font-weight: bold; margin: 5px; transition: 0.3s; }
+        .tab-btn { padding: 12px 25px; border: none; background: #d0d0d0; cursor: pointer; border-radius: 30px; font-weight: bold; margin: 5px; }
         .tab-btn.active { background: var(--leaf); color: white; }
-        .tab-content { display: none; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 20px; text-align: left; }
+        .tab-content { display: none; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 20px; }
         .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        footer { background: var(--dark); color: #bbb; text-align: center; padding: 40px; font-size: 0.9rem; }
+        footer { background: var(--dark); color: #bbb; text-align: center; padding: 40px; }
 
-        @media (max-width: 768px) { 
-            .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; } 
-        }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .nav-links { display: none; } }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#" class="logo-container">
-            <svg class="logo-svg-small" viewBox="0 0 200 200">
-                <circle class="outer-ring" cx="100" cy="100" r="90" />
-                <g class="float-group">
-                    <path d="M50 130 C 70 160, 130 160, 150 120 C 130 110, 100 130, 80 125 Z" fill="var(--dark-green)" />
-                    <path d="M100 125 V 70 M100 100 L 80 80 M100 90 L 120 75" stroke="var(--wood-brown)" stroke-width="4" stroke-linecap="round" />
-                    <circle class="leaf" cx="100" cy="60" r="12" fill="var(--leaf-mid)" />
-                    <circle class="leaf" cx="75" cy="75" r="9" fill="var(--leaf-bright)" />
-                    <circle class="leaf" cx="125" cy="70" r="10" fill="var(--dark-green)" />
-                </g>
-            </svg>
-            Root & Reclaim
+        <a href="#" class="logo-group">
+            <div class="logo-container">
+                <canvas id="particleCanvas"></canvas>
+                <svg class="logo-svg" viewBox="0 0 200 200">
+                    <circle class="outer-ring" cx="100" cy="100" r="90" />
+                    <g class="float-group">
+                        <path d="M50 130 C 70 160, 130 160, 150 120 C 130 110, 100 130, 80 125 Z" fill="var(--dark-green)" />
+                        <path d="M100 125 V 70 M100 100 L 80 80 M100 90 L 120 75" stroke="var(--wood-brown)" stroke-width="4" stroke-linecap="round" />
+                        <circle class="leaf" cx="100" cy="60" r="12" fill="var(--leaf-mid)" />
+                        <circle class="leaf" cx="75" cy="75" r="9" fill="var(--leaf-bright)" />
+                        <circle class="leaf" cx="125" cy="70" r="10" fill="var(--dark-green)" />
+                    </g>
+                </svg>
+            </div>
+            <span>Root & Reclaim</span>
         </a>
         <div class="nav-links">
             <a href="#science">Science</a>
@@ -197,15 +219,11 @@
     </header>
 
     <section id="science">
-        <h2 class="section-title">Natural Technology vs. Climate Hacking</h2>
-        
-        <div class="infographic-container">
-            <p style="color: #999;">[ Science Infographic Placeholder ]</p>
+        <h2 class="section-title">Natural Technology</h2>
+        <div class="infographic-placeholder">
+            [ Interactive Science Infographic ]
         </div>
-
-        <div style="text-align: center; max-width: 800px; margin: 0 auto; color: #555;">
-            <p>Our research advocates for biological solutions with a 4-billion-year track record. Unlike Stratospheric Aerosol Injection (SAI), reforestation restores biodiversity and stabilizes weather patterns naturally.</p>
-        </div>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto;">Our research advocates for biological solutions with a 4-billion-year track record. Unlike Stratospheric Aerosol Injection, reforestation restores biodiversity and stabilizes weather patterns naturally.</p>
     </section>
 
     <section id="resources" style="background: var(--gray);">
@@ -221,8 +239,8 @@
         </div>
 
         <div id="docs" class="tab-content">
-            <h3>Files & Toolkits</h3>
-            <p><i class="fa-solid fa-file-pdf"></i> Welcome-Letter.pdf (Available soon)</p>
+            <h3>Downloadable Resources</h3>
+            <p><i class="fa-solid fa-file-pdf"></i> Community-Planting-Guide.pdf (Coming Soon)</p>
         </div>
     </section>
 
@@ -231,7 +249,79 @@
     </footer>
 
     <script>
-        // Tab switching logic
+        /* --- Logo Particles Logic --- */
+        const pCanvas = document.getElementById('particleCanvas');
+        const pCtx = pCanvas.getContext('2d');
+        const logoGroup = document.querySelector('.logo-group');
+        pCanvas.width = 50; pCanvas.height = 50;
+        let particles = [];
+        let isHovering = false;
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * pCanvas.width;
+                this.y = pCanvas.height + 5;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedY = Math.random() * 0.5 + 0.2;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.y -= isHovering ? this.speedY * 2 : this.speedY;
+                this.x += this.speedX;
+                if (this.y < -5) this.reset();
+            }
+            draw() {
+                pCtx.fillStyle = isHovering ? '#a4c639' : '#84a95c';
+                pCtx.globalAlpha = this.opacity;
+                pCtx.beginPath();
+                pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                pCtx.fill();
+            }
+        }
+
+        function initParticles() { for (let i = 0; i < 15; i++) particles.push(new Particle()); }
+        function animateParticles() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        logoGroup.addEventListener('mouseenter', () => isHovering = true);
+        logoGroup.addEventListener('mouseleave', () => isHovering = false);
+
+        /* --- Hero Rain Logic --- */
+        const rCanvas = document.getElementById('rainCanvas');
+        const rCtx = rCanvas.getContext('2d');
+        let rWidth, rHeight, drops = [];
+
+        function initRain() {
+            rWidth = rCanvas.width = rCanvas.parentElement.offsetWidth;
+            rHeight = rCanvas.height = rCanvas.parentElement.offsetHeight;
+            drops = Array.from({ length: 100 }, () => ({
+                x: Math.random() * rWidth,
+                y: Math.random() * rHeight,
+                l: Math.random() * 15 + 5,
+                s: Math.random() * 4 + 4
+            }));
+        }
+
+        function drawRain() {
+            rCtx.clearRect(0, 0, rWidth, rHeight);
+            rCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            rCtx.lineWidth = 1;
+            drops.forEach(d => {
+                rCtx.beginPath();
+                rCtx.moveTo(d.x, d.y);
+                rCtx.lineTo(d.x, d.y + d.l);
+                rCtx.stroke();
+                d.y += d.s;
+                if (d.y > rHeight) { d.y = -d.l; d.x = Math.random() * rWidth; }
+            });
+            requestAnimationFrame(drawRain);
+        }
+
+        /* --- Tab Logic --- */
         function openTab(evt, tabName) {
             document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -239,45 +329,9 @@
             evt.currentTarget.classList.add("active");
         }
 
-        // Rain Animation logic
-        const canvas = document.getElementById('rainCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, drops = [];
-
-        function initRain() {
-            // Get the actual hero dimensions
-            const hero = document.querySelector('.hero');
-            width = canvas.width = hero.offsetWidth;
-            height = canvas.height = hero.offsetHeight;
-            
-            drops = Array.from({ length: 150 }, () => ({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                l: Math.random() * 20 + 10,
-                s: Math.random() * 5 + 6
-            }));
-        }
-
-        function drawRain() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            ctx.lineWidth = 1;
-            ctx.lineCap = 'round';
-            drops.forEach(d => {
-                ctx.beginPath();
-                ctx.moveTo(d.x, d.y);
-                ctx.lineTo(d.x, d.y + d.l);
-                ctx.stroke();
-                d.y += d.s;
-                if (d.y > height) {
-                    d.y = -d.l;
-                    d.x = Math.random() * width;
-                }
-            });
-            requestAnimationFrame(drawRain);
-        }
-
         window.addEventListener('resize', initRain);
+        initParticles();
+        animateParticles();
         initRain();
         drawRain();
     </script>
