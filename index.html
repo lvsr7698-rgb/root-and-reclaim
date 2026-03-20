@@ -3,607 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Root & Reclaim | Data Synthesis</title>
+    <title>Root & Reclaim | Master Algorithm</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
         :root {
-            --dark-bg: #121212;
-            --terminal-bg: #1a1a1a;
-            --accent-green: #3fb73f;
-            --accent-gold: #c5a059;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
+            --dark: #0a0a0a;
+            --earth: #2d5a27;
+            --leaf: #76ba1b;
             --white: #ffffff;
-            --shadow-light: 0 4px 15px rgba(0,0,0,0.5);
+            --accent-gold: #c5a059;
+            --terminal-green: #3fb73f;
         }
 
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+        body, html {
             margin: 0;
-            background-color: var(--dark-bg);
-            color: var(--text-main);
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark);
+            color: var(--white);
             overflow-x: hidden;
-        }
-
-        /* --- Global Grid Layout --- */
-        .page-container {
-            display: grid;
-            grid-template-areas: 
-                "nav"
-                "hero"
-                "terminal"
-                "founder-timeline"
-                "footer";
-            grid-template-rows: auto auto auto auto auto;
-            gap: 0;
         }
 
         /* --- Navigation --- */
         nav {
-            grid-area: nav;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
-            background-color: #1a1a1a;
+            padding: 15px 8%;
+            background: rgba(10, 10, 10, 0.95);
             border-bottom: 2px solid var(--accent-gold);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
-        .logo-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        #particleCanvas {
-            position: absolute;
-            top: 0; left: 0;
-            pointer-events: none;
-            width: 150px; height: 150px;
-        }
-
-        .logo-svg {
-            width: 60px; height: 60px;
-            z-index: 2;
-        }
-
-        .outer-ring {
-            fill: none;
-            stroke: var(--accent-gold);
-            stroke-width: 3;
-            stroke-dasharray: 10, 5;
-        }
-
-        .logo-text {
-            color: var(--accent-gold);
-            font-size: 1.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-main);
-            font-size: 1rem;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-green);
-        }
+        .logo-group { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .logo-svg { width: 50px; height: 50px; }
+        .logo-text { color: var(--accent-gold); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
 
         .seed-counter {
-            background-color: var(--accent-gold);
-            color: var(--dark-bg);
-            padding: 8px 15px;
+            background: var(--earth);
+            padding: 5px 15px;
             border-radius: 20px;
+            font-family: monospace;
             font-weight: bold;
+            color: var(--leaf);
         }
 
-        /* --- Hero Slider --- */
+        /* --- FIXED BACKGROUND SLIDER ALGORITHM --- */
         .hero {
-            grid-area: hero;
-            height: 80vh;
             position: relative;
+            height: 85vh;
+            width: 100%;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: var(--white);
             text-align: center;
         }
 
-        .hero-slide {
+        .bg-layer {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 1s ease-in-out, transform 6s linear;
-            z-index: 1;
+            animation: crossFade 15s infinite; /* 3 images x 5 seconds = 15s total */
         }
 
-        .hero-slide.active {
-            opacity: 1;
-            z-index: 2;
-            transform: scale(1.1);
+        /* Set different delays for each background image */
+        .bg1 { 
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80'); 
+            animation-delay: 0s; 
+        }
+        .bg2 { 
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1920&q=80'); 
+            animation-delay: 5s; 
+        }
+        .bg3 { 
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1920&q=80'); 
+            animation-delay: 10s; 
         }
 
-        .rain-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3);
-            pointer-events: none;
-            z-index: 3;
+        @keyframes crossFade {
+            0% { opacity: 0; transform: scale(1); }
+            5% { opacity: 1; }
+            33% { opacity: 1; }
+            38% { opacity: 0; transform: scale(1.1); }
+            100% { opacity: 0; }
         }
 
         #rainCanvas {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5;
             pointer-events: none;
-            z-index: 4;
-            opacity: 0.5;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 10;
-        }
+        .hero-content { position: relative; z-index: 10; }
+        .hero h1 { font-size: 4rem; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+        .hero p { font-size: 1.2rem; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 5px; }
 
-        .hero h1 {
-            font-size: 4rem;
-            text-transform: uppercase;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
-            margin: 0;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            background-color: rgba(0,0,0,0.5);
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-
-        /* --- Terminal Log --- */
-        .terminal {
-            grid-area: terminal;
-            padding: 30px 5%;
-            background-color: var(--terminal-bg);
-            border-top: 1px solid #333;
-            font-family: 'Courier New', monospace;
-            color: var(--accent-green);
-            font-size: 1rem;
-        }
-
-        .log-lines {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        /* --- Founder and Timeline Section --- */
-        .founder-timeline {
-            grid-area: founder-timeline;
+        /* --- Founder Section --- */
+        .founder-section {
+            padding: 80px 10%;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 50px;
-            padding: 80px 5%;
-            background-color: var(--dark-bg);
+            align-items: center;
+            background: #111;
         }
 
-        /* Founder Left Card */
-        .founder-card {
-            background-color: #2a2a2a;
-            border-radius: 15px;
-            padding: 50px;
-            box-shadow: var(--shadow-light);
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .founder-logo-img {
+        .founder-img-container {
             width: 100%;
-            height: 350px;
-            background: url('image_0.png'); /* The Tree of Life logo */
+            height: 400px;
+            background: url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80');
             background-size: cover;
             background-position: center;
-            border-radius: 15px;
-            border: 3px solid var(--accent-gold);
-            transition: 0.5s;
+            border-radius: 20px;
+            border: 4px solid var(--accent-gold);
+            box-shadow: 0 0 30px rgba(118, 186, 27, 0.3);
         }
 
-        .founder-logo-img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
-        }
+        .founder-text h2 { color: var(--accent-gold); font-size: 2.5rem; }
+        .founder-text p { line-height: 1.8; color: #ccc; }
 
-        .founder-text {
-            color: var(--text-muted);
-            line-height: 1.8;
-            font-size: 1.1rem;
-        }
-
-        .founder-text strong {
-            color: var(--accent-gold);
-        }
-
-        /* Timeline Right Area */
-        .timeline-area {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .timeline-area h2 {
-            font-size: 2.5rem;
-            color: var(--accent-gold);
-            margin: 0;
-            text-align: left;
-        }
-
-        .timeline-scroll {
-            border-left: 2px solid var(--accent-gold);
-            padding-left: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .timeline-item {
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -42px;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            border: 4px solid var(--dark-bg);
-        }
-
-        .timeline-item h3 {
-            color: var(--accent-green);
+        /* --- Terminal Algorithm --- */
+        .terminal {
+            background: #050505;
+            padding: 30px 10%;
             font-family: 'Courier New', monospace;
-            margin: 0;
-        }
-
-        .timeline-item p {
-            color: var(--text-muted);
-            margin-top: 10px;
-            line-height: 1.6;
+            color: var(--terminal-green);
+            border-top: 1px solid #333;
         }
 
         /* --- Footer --- */
-        footer {
-            grid-area: footer;
-            padding: 30px;
-            text-align: center;
-            background-color: var(--terminal-bg);
-            color: var(--text-muted);
-            border-top: 1px solid #333;
-        }
+        footer { padding: 40px; text-align: center; background: #000; border-top: 1px solid #222; color: #555; }
 
-        /* --- Interactive Windows --- */
-        #ai-window {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 320px;
-            background-color: #2a2a2a;
-            border-radius: 15px;
-            box-shadow: var(--shadow-light);
-            z-index: 2000;
-            border: 2px solid var(--accent-gold);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .ai-header {
-            background-color: #1a1a1a;
-            padding: 10px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .ai-body {
-            height: 200px;
-            padding: 15px;
-            overflow-y: auto;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .ai-input {
-            display: flex;
-            padding: 10px;
-            background-color: #2a2a2a;
-            border-top: 1px solid #333;
-        }
-
-        .ai-input input {
-            flex: 1;
-            border: none;
-            outline: none;
-            background: transparent;
-            color: var(--white);
-            font-size: 1rem;
-        }
-
-        .sound-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: var(--terminal-bg);
-            color: var(--text-muted);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 2000;
-            box-shadow: var(--shadow-light);
-            transition: 0.3s;
-        }
-
-        .sound-btn:hover {
-            background-color: #333;
-            color: var(--white);
-        }
-
-        /* --- Special Effects CSS --- */
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .logo-group:hover .logo-svg {
-            animation: floating 4s ease-in-out infinite;
+        /* --- AI Toggle --- */
+        .ai-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px; background: var(--leaf);
+            color: white; border-radius: 50%; display: flex;
+            justify-content: center; align-items: center;
+            cursor: pointer; z-index: 1000; box-shadow: 0 0 20px var(--leaf);
         }
     </style>
 </head>
 <body>
 
-    <div class="page-container">
-        <nav>
-            <div class="logo-group">
-                <div class="logo-container">
-                    <canvas id="particleCanvas"></canvas>
-                    <svg class="logo-svg" viewBox="0 0 200 200">
-                        <circle class="outer-ring" cx="100" cy="100" r="90" />
-                        <path d="M100 140 V 80 M70 110 L 100 90 L 130 110" stroke="#4a3728" stroke-width="8" fill="none" stroke-linecap="round" />
-                        <circle cx="100" cy="70" r="15" fill="#a4c639" />
-                        <path d="M100 180 L110 160 L105 140 L115 110 L100 90 L85 110 L95 140 L90 160 Z M100 90 Q110 60 120 50 M100 90 Q90 60 80 50" stroke="var(--white)" stroke-width="2" fill="none" />
-                    </svg>
-                </div>
-                <div class="logo-text">Root & Reclaim</div>
-            </div>
-            <div class="nav-links">
-                <a href="#genesis">Genesis</a>
-                <a href="#firstforests">Forests</a>
-                <a href="#founder">Founder</a>
-                <div class="seed-counter"><i class="fa-solid fa-seedling"></i> <span id="countVal">0</span></div>
-                <div class="nav-btn sound-btn" onclick="toggleAudio()"><i class="fa-solid fa-volume-xmark"></i></div>
-            </div>
-        </nav>
-
-        <header class="hero" id="heroSlider">
-            <div class="rain-overlay"></div>
-            <canvas id="rainCanvas"></canvas>
-            
-            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80')"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1920&q=80')"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1920&q=80')"></div>
-            
-            <div class="hero-content">
-                <h1 id="envTitle">Forest Rain</h1>
-                <p id="envSub">Analyzing Transparent Falling Overlay.</p>
-            </div>
-        </header>
-
-        <section class="terminal">
-            <p><strong>Terminal leg:</strong> Cycles every 3 seconds.</p>
-            <div class="log-lines" id="algoLog">
-                [ALGO]: Precipitation detected...<br>
-                [ALGO]: Securing root-network conductivity...
-            </div>
-        </section>
-
-        <main class="founder-timeline">
-            <section id="founder" class="founder-card">
-                <div class="founder-logo-img"></div>
-                <div class="founder-text">
-                    <h2>Meeting the Founder</h2>
-                    <p>I am non losum dolor sit amet, consectetur adipiscing elit, sed do elusmod tempor incididunt un nvironments technology and soo dan nature in inciapain connqiality and testinouily envinopment cousnesnatam and focused development.</p>
-                    <p>My profile and in the miral resreestant cor-cems and implant nature of our organi nature arubimomnabor an energy environmctara.</p>
-                    <p>Our founder no have-l corrected snnpo, snaring censactly and especially developments are unique and ettibar to a nature and more salmic want to snarl sharmitar in the world.</p>
-                    <p>Thank you.</p>
-                </div>
-            </section>
-
-            <section class="timeline-area">
-                <h2>Deep Time Timeline</h2>
-                <div class="timeline-scroll">
-                    <div class="timeline-item" id="genesis">
-                        <h3>Genesis</h3>
-                        <p>Connected to <em>corolitaire of ima unger</em> on cganiem eeclostvoven</p>
-                    </div>
-                    <div class="timeline-item" id="cyanobacteria">
-                        <h3>Cyanobacteria</h3>
-                        <p>Cyanobacteda of aoroiron tent over localteveeterved attirdecs. Airpre</p>
-                    </div>
-                    <div class="timeline-item" id="firstforests">
-                        <h3>First Forests</h3>
-                        <p>First Torton omans for the trendow temper andounds First foratest are aaw emide entanore and ountom dropeartb oncid conase</p>
-                    </div>
-                    <div class="timeline-item" id="holocene">
-                        <h3>Holocene</h3>
-                        <p>Holocentery presenos</p>
-                    </div>
-                    <div class="timeline-item" id="now">
-                        <h3>Now</h3>
-                        <p>Now toxder animation.</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>Root & Reclaim | Data Synthesis: Beginning to Till</p>
-        </footer>
-
-        <div id="ai-window">
-            <div class="ai-header"><span>ai-window</span><i class="fa-solid fa-xmark" onclick="toggleAI()" style="cursor:pointer"></i></div>
-            <div class="ai-body" id="aiBody">AI-bubble is sin daler sit amet, consectetur adipiscing elit. Now connive aware oct 1o curennetel context and eventually, and bove aware of the environmental context.</div>
-            <div class="ai-input">
-                <input type="text" id="aiIn" placeholder="Ask AI..." onkeypress="if(event.key==='Enter') askAI()">
-                <button onclick="askAI()" style="border:none; background:none; color:var(--white); cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
+    <nav>
+        <a href="#" class="logo-group">
+            <svg class="logo-svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="none" stroke="var(--accent-gold)" stroke-width="4" stroke-dasharray="10 5" />
+                <path d="M100 140 V 80 M70 110 L 100 90 L 130 110" stroke="#4a3728" stroke-width="8" fill="none" />
+                <circle cx="100" cy="70" r="15" fill="var(--leaf)" />
+            </svg>
+            <span class="logo-text">Root & Reclaim</span>
+        </a>
+        <div class="nav-links">
+            <div class="seed-counter"><i class="fa-solid fa-seedling"></i> Seeds: <span id="seedVal">0</span></div>
         </div>
+    </nav>
 
-    </div> <audio id="rainAudio" loop src="https://assets.mixkit.co/active_storage/sfx/2418/2418-preview.mp3"></audio>
+    <header class="hero">
+        <div class="bg-layer bg1"></div>
+        <div class="bg-layer bg2"></div>
+        <div class="bg-layer bg3"></div>
+
+        <canvas id="rainCanvas"></canvas>
+
+        <div class="hero-content">
+            <h1>Nature AI Algorithm</h1>
+            <p>Processing 4.5 Billion Years of biological data in real-time.</p>
+        </div>
+    </header>
+
+    <section class="terminal">
+        <p><strong>[SYSTEM LOG]:</strong> Algorithm cycling every 5 seconds...</p>
+        <div id="logBody">> Initializing reforestation protocol...<br>> Securing deep-time data synthesis...</div>
+    </section>
+
+    <section class="founder-section">
+        <div class="founder-img-container"></div>
+        <div class="founder-text">
+            <h2>The Visionary Founder</h2>
+            <p>Welcome to Root & Reclaim. I built this AI system to prove that technology is not the enemy of nature—it is its most powerful observer. By translating Earth's needs into code, we can reclaim what has been lost.</p>
+            <p>Every seed we plant digitally is a commitment to a physical forest. Join the mission.</p>
+            <p><em>— The Creator of Nature AI</em></p>
+        </div>
+    </section>
+
+    <div class="ai-btn" onclick="alert('Nature AI: I am monitoring the cross-fade algorithm. System is 100% stable.')">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Root & Reclaim | Data Synthesis: Genesis to Now</p>
+    </footer>
 
     <script>
-        /* --- The Smooth Atmosphere Engine (The 3-Second Algorithm) --- */
-        let totalSeeds = 0;
-        const slides = document.querySelectorAll('.hero-slide');
-        const envStates = [
-            { name: "Forest Rain", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80", sub: "Analyzing Transparent Falling Overlay.", log: "[ALGO]: Precipitation detected..." },
-            { name: "Jungle Light", img: "https://images.unsplash.com/photo-1511497584788-8767fe771d36?auto=format&fit=crop&w=1920&q=80", sub: "Monitoring Photosynthesis Efficiency.", log: "[INFO]: Peak light levels detected." },
-            { name: "Mountain Storm", img: "https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&w=1920&q=80", sub: "Nitrogen Fixation & Electrical synthesis.", log: "[SYSTEM]: Thunderstorm activity initiated." }
+        /* --- Terminal Log Algorithm --- */
+        const logs = [
+            "> [ALGO]: Precipitation levels: 12% optimal.",
+            "> [INFO]: Scanning nitrogen levels in soil...",
+            "> [SYSTEM]: Cross-fade engine synchronized.",
+            "> [ALGO]: Root-network conductivity: Secure.",
+            "> [DATA]: Processing 4.5bn year history logs..."
         ];
+        let logIdx = 0;
+        const logBody = document.getElementById('logBody');
 
-        let stateIdx = 0;
-        function runAtmosphereEngine() {
-            // Fade out current slide
-            slides[stateIdx].classList.remove('active');
+        function updateLogs() {
+            const lines = logBody.innerHTML.split('<br>');
+            if(lines.length > 4) lines.shift();
+            lines.push(logs[logIdx]);
+            logBody.innerHTML = lines.join('<br>');
+            logIdx = (logIdx + 1) % logs.length;
             
-            // Increment index
-            stateIdx = (stateIdx + 1) % slides.length;
-            
-            // Fade in next slide
-            slides[stateIdx].classList.add('active');
-
-            // Update Text Overlays
-            const state = envStates[stateIdx];
-            document.getElementById('envTitle').innerText = state.name;
-            document.getElementById('envSub').innerText = state.sub;
-
-            // Seed Counter Logic
-            totalSeeds += Math.floor(Math.random() * 5) + 1;
-            document.getElementById('countVal').innerText = totalSeeds;
-
-            // Terminal Log Update
-            const term = document.getElementById('algoLog');
-            let logs = term.innerHTML.split('<br>');
-            if(logs.length > 5) logs.shift(); // keep it clean
-            logs.push(state.log);
-            term.innerHTML = logs.join('<br>');
-            term.scrollTop = term.scrollHeight; // Auto-scroll to bottom
-
-            // Update rain visuals
-            if(state.name === "Forest Rain") {
-                document.getElementById('rainCanvas').style.opacity = '0.5';
-            } else {
-                document.getElementById('rainCanvas').style.opacity = '0';
-            }
+            // Increment seed counter
+            document.getElementById('seedVal').innerText = parseInt(document.getElementById('seedVal').innerText) + 5;
         }
+        setInterval(updateLogs, 5000);
 
-        // Set the Algorithm to cycle every 3 seconds
-        setInterval(runAtmosphereEngine, 3000);
-
-        /* --- Audio Toggle Logic --- */
-        const audio = document.getElementById('rainAudio');
-        function toggleAudio() {
-            if(audio.paused) { 
-                audio.play(); 
-                document.getElementById('audioIcon').className = "fa-solid fa-volume-high"; 
-            } else { 
-                audio.pause(); 
-                document.getElementById('audioIcon').className = "fa-solid fa-volume-xmark"; 
-            }
-        }
-
-        /* --- Logo Particles Logic --- */
-        const pCanvas = document.getElementById('particleCanvas');
-        const pCtx = pCanvas.getContext('2d');
-        let pList = [];
-        pCanvas.width = 150; pCanvas.height = 150;
-
-        class Particle {
-            constructor() { this.reset(); }
-            reset() { this.x = Math.random() * 150; this.y = 160; this.size = Math.random() * 2 + 1; this.speedY = Math.random() * 0.5 + 0.2; }
-            update() { this.y -= this.speedY; if (this.y < -10) this.reset(); }
-            draw() { pCtx.fillStyle = '#a4c639'; pCtx.globalAlpha = 0.4; pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI*2); pCtx.fill(); }
-        }
-        for(let i=0; i<15; i++) pList.push(new Particle());
-        function animP() {
-            pCtx.clearRect(0,0,150,150);
-            pList.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animP);
-        }
-        animP();
-
-        /* --- Rain Logic --- */
+        /* --- Rain Visuals --- */
         const rCanvas = document.getElementById('rainCanvas');
         const rCtx = rCanvas.getContext('2d');
         let drops = [];
+
         function initRain() {
             rCanvas.width = window.innerWidth; rCanvas.height = window.innerHeight;
-            drops = Array.from({ length: 120 }, () => ({ x: Math.random() * rCanvas.width, y: Math.random() * rCanvas.height, l: 20, s: 8 }));
+            drops = Array.from({ length: 80 }, () => ({ x: Math.random() * rCanvas.width, y: Math.random() * rCanvas.height, l: 20, s: 7 }));
         }
+
         function drawRain() {
             rCtx.clearRect(0, 0, rCanvas.width, rCanvas.height);
-            rCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-            rCtx.lineWidth = 1;
+            rCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
             drops.forEach(d => {
                 rCtx.beginPath(); rCtx.moveTo(d.x, d.y); rCtx.lineTo(d.x, d.y + d.l); rCtx.stroke();
                 d.y += d.s; if (d.y > rCanvas.height) d.y = -20;
             });
             requestAnimationFrame(drawRain);
         }
+
         window.addEventListener('resize', initRain);
         initRain();
         drawRain();
-
-        /* --- AI Interaction Logic --- */
-        function toggleAI() { const w = document.getElementById('ai-window'); w.style.display = (w.style.display === 'flex') ? 'none' : 'flex'; }
-        function askAI() {
-            const i = document.getElementById('aiIn'); const b = document.getElementById('aiBody');
-            if(!i.value) return;
-            b.innerHTML += `<div style="text-align:right; margin:10px 0;"><b>You:</b> ${i.value}</div>`;
-            let resp = "The Algorithm of Growth is currently monitoring the " + envStates[(stateIdx+slides.length)%slides.length].name + ". My profile resreestant concerns and implant the organis natural environments technology.";
-            if(i.value.toLowerCase().includes("seed")) resp = "Seed counter secures the arubimomnabor energy envionmctara. We are Securing the ettiar to a nature world.";
-            if(i.value.toLowerCase().includes("founder")) resp = "Our founder is non losum dolor, non losum nature sharmitar in the inciapain connqiality.";
-            
-            setTimeout(() => { b.innerHTML += `<div style="margin:10px 0;"><b>AI:</b> ${resp}</div>`; b.scrollTop = b.scrollHeight; }, 600);
-            i.value = "";
-        }
     </script>
 </body>
 </html>
