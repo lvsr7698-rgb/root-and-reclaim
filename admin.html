@@ -9,133 +9,158 @@
         .dashboard { max-width: 1000px; margin: 0 auto; background: var(--panel-bg); border: 2px solid var(--nv-green); padding: 30px; box-shadow: 0 0 30px rgba(0,255,65,0.2); }
         h1 { border-bottom: 2px solid var(--nv-green); padding-bottom: 15px; text-transform: uppercase; letter-spacing: 3px; }
         
-        /* UPLOAD & CONTROL BUTTONS */
-        .controls { background: #222; padding: 25px; border: 1px dashed var(--nv-green); margin-bottom: 40px; display: flex; gap: 15px; }
-        .btn { padding: 15px 25px; background: var(--nv-green); color: #000; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; transition: 0.3s; }
-        .btn:hover { background: #fff; box-shadow: 0 0 15px var(--nv-green); }
+        /* CONTROLS */
+        .controls { background: #222; padding: 25px; border: 1px dashed var(--nv-green); margin-bottom: 40px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .btn { padding: 15px 25px; background: var(--nv-green); color: #000; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
         .btn-blue { background: #3498db; color: #fff; }
         .btn-red { background: #ff3131; color: #fff; }
 
         /* DATA CARDS */
-        .page-card { background: #111; border: 1px solid #333; border-left: 8px solid var(--nv-green); padding: 30px; margin-bottom: 30px; position: relative; }
-        .save-banner { background: #004d00; color: #fff; padding: 10px; margin-top: 20px; text-align: center; font-weight: bold; border-radius: 4px; display: block; width: 100%; border: none; cursor: pointer; text-transform: uppercase; }
-        .save-banner:hover { background: var(--nv-green); color: #000; }
+        .page-card { background: #111; border: 2px solid #333; border-left: 10px solid var(--nv-green); padding: 30px; margin-bottom: 40px; }
+        
+        /* THE SAVE BUTTON (CRITICAL) */
+        .push-button { 
+            background: #00ff41; color: #000; padding: 20px; margin-top: 20px; 
+            text-align: center; font-weight: bold; font-size: 1.2rem;
+            width: 100%; border: 4px solid #fff; cursor: pointer; text-transform: uppercase; 
+            display: block; box-shadow: 0 0 20px rgba(0,255,65,0.5);
+        }
+        .push-button:hover { background: #fff; color: #000; }
 
-        textarea { width: 100%; height: 180px; background: #000; color: #fff; border: 1px solid #444; padding: 15px; font-family: inherit; font-size: 1.1rem; margin-top: 15px; outline: none; }
-        .media-preview { background: #050505; border: 1px solid #222; padding: 20px; margin: 15px 0; text-align: center; }
-        img, video, audio { max-width: 100%; max-height: 300px; border: 1px solid var(--nv-green); }
+        textarea { width: 100%; height: 200px; background: #000; color: #fff; border: 1px solid var(--nv-green); padding: 15px; font-family: inherit; font-size: 1.1rem; margin-top: 15px; }
+        .preview-box { background: #000; border: 1px solid #444; padding: 20px; margin: 15px 0; text-align: center; }
+        img, video, audio { max-width: 100%; max-height: 400px; border: 1px solid var(--nv-green); }
     </style>
 </head>
 <body>
 
     <div id="lock" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <h2 style="color:var(--nv-green)">FOUNDER AUTHENTICATION REQUIRED</h2>
-        <input type="password" id="passInput" placeholder="Enter Key..." style="padding:10px; background:#111; border:1px solid var(--nv-green); color:#fff; text-align:center;">
-        <button class="btn" onclick="checkPass()" style="margin-top:20px;">ACCESS ARCHIVE</button>
+        <h2 style="color:var(--nv-green)">FOUNDER KEY REQUIRED</h2>
+        <input type="password" id="passInput" placeholder="Enter 'admin'..." style="padding:15px; background:#111; border:2px solid var(--nv-green); color:#fff; text-align:center; font-size:1.2rem;">
+        <button class="btn" onclick="checkPass()" style="margin-top:20px;">UNLOCK PORTAL</button>
     </div>
 
     <div class="dashboard">
         <h1>Founder Command Center</h1>
-        <p style="color: #888;">Logged in as: <strong>Founder SRK</strong> | Status: Authorized</p>
+        <p style="color: #888;">ROOT and reclaim | Status: <span id="dbStatus">Connecting to Database...</span></p>
 
         <div class="controls">
-            <button class="btn" onclick="addBlankPage()">+ Create New Book Page</button>
-            <button class="btn btn-blue" onclick="document.getElementById('masterUpload').click()">📂 Upload Any File (Music, Video, Image)</button>
-            <input type="file" id="masterUpload" style="display:none" onchange="handleUpload(event)">
-            <button class="btn btn-red" onclick="purgeArchive()" style="margin-left:auto;">Reset Entire Archive</button>
+            <button class="btn" onclick="createNewPage()">+ Create New Book Page</button>
+            <button class="btn btn-blue" onclick="document.getElementById('uploadTrigger').click()">📂 Upload Media (Music/Video/Image)</button>
+            <input type="file" id="uploadTrigger" style="display:none" onchange="processFileUpload(event)">
+            <button class="btn btn-red" onclick="wipeDatabase()">Clear All Archive Data</button>
         </div>
 
-        <div id="adminList">
+        <div id="displayList">
             </div>
     </div>
 
     <script>
-        let db;
+        let rootDB;
+        const dbName = "RootReclaimDB_v19"; // New version to force clear old errors
+
         function checkPass() {
             if(document.getElementById('passInput').value === "admin") {
                 document.getElementById('lock').style.display = 'none';
-            } else { alert("Key Incorrect."); }
+            } else { alert("Key Invalid."); }
         }
 
-        const request = indexedDB.open("RootReclaimDB", 1);
+        // --- DATABASE INITIALIZATION ---
+        const request = indexedDB.open(dbName, 1);
         request.onupgradeneeded = (e) => {
-            db = e.target.result;
-            if (!db.objectStoreNames.contains("pages")) {
-                db.createObjectStore("pages", { keyPath: "id" });
+            let db = e.target.result;
+            if (!db.objectStoreNames.contains("archive")) {
+                db.createObjectStore("archive", { keyPath: "id" });
             }
         };
-        request.onsuccess = (e) => { db = e.target.result; renderPortal(); };
+        request.onsuccess = (e) => {
+            rootDB = e.target.result;
+            document.getElementById('dbStatus').innerText = "ONLINE";
+            refreshList();
+        };
 
-        function addBlankPage() {
-            const newP = { id: Date.now(), content: "Write your analysis here...", file: null, fileName: "", fileType: "", likes: 0, comments: [] };
-            const tx = db.transaction("pages", "readwrite");
-            tx.objectStore("pages").add(newP);
-            tx.oncomplete = renderPortal;
+        // --- ACTIONS ---
+        function createNewPage() {
+            const entry = { id: Date.now(), content: "", file: null, fName: "", fType: "", likes: 0 };
+            const tx = rootDB.transaction("archive", "readwrite");
+            tx.objectStore("archive").add(entry);
+            tx.oncomplete = () => { refreshList(); };
         }
 
-        function handleUpload(e) {
-            const file = e.target.files[0]; if(!file) return;
+        function processFileUpload(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            document.getElementById('dbStatus').innerText = "UPLOADING " + file.name + "...";
+
             const reader = new FileReader();
             reader.onload = (ev) => {
-                const mediaP = { id: Date.now(), content: "Details for: " + file.name, file: ev.target.result, fileName: file.name, fileType: file.type, likes: 0, comments: [] };
-                const tx = db.transaction("pages", "readwrite");
-                tx.objectStore("pages").add(mediaP);
-                tx.oncomplete = () => { alert("File Synchronized."); renderPortal(); };
+                const entry = { id: Date.now(), content: "Attached: " + file.name, file: ev.target.result, fName: file.name, fType: file.type, likes: 0 };
+                const tx = rootDB.transaction("archive", "readwrite");
+                tx.objectStore("archive").add(entry);
+                tx.oncomplete = () => { 
+                    document.getElementById('dbStatus').innerText = "UPLOAD COMPLETE";
+                    refreshList(); 
+                };
             };
             reader.readAsDataURL(file);
         }
 
-        function renderPortal() {
-            const list = document.getElementById('adminList');
-            const tx = db.transaction("pages", "readonly");
-            tx.objectStore("pages").getAll().onsuccess = (e) => {
-                const pages = e.target.result.sort((a,b) => b.id - a.id);
-                list.innerHTML = pages.map(p => `
+        function refreshList() {
+            const list = document.getElementById('displayList');
+            const tx = rootDB.transaction("archive", "readonly");
+            tx.objectStore("archive").getAll().onsuccess = (e) => {
+                const items = e.target.result.sort((a,b) => b.id - a.id);
+                list.innerHTML = items.map(p => `
                     <div class="page-card">
-                        <div style="display:flex; justify-content:space-between; color:#666; font-size:0.7rem;">
-                            <span>ID: ${p.id}</span>
-                            <span onclick="deleteItem(${p.id})" style="color:red; cursor:pointer;">[DELETE THIS PAGE]</span>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                            <strong>PACKET ID: ${p.id}</strong>
+                            <span onclick="deleteItem(${p.id})" style="color:red; cursor:pointer; font-weight:bold;">[DELETE THIS]</span>
                         </div>
                         
-                        ${renderPreview(p)}
+                        ${showPreview(p)}
 
-                        <textarea id="txt-${p.id}">${p.content}</textarea>
+                        <textarea id="area-${p.id}" placeholder="Type your book content here...">${p.content}</textarea>
 
-                        <button class="save-banner" onclick="pushToPublic(${p.id})">Save to Public Site Now</button>
+                        <button class="push-button" onclick="saveToPublic(${p.id})">Save Content to Public Site</button>
                     </div>
                 `).join('');
             };
         }
 
-        function renderPreview(p) {
-            if(!p.file) return '';
-            if(p.fileType.includes('image')) return `<div class="media-preview"><img src="${p.file}"></div>`;
-            if(p.fileType.includes('audio')) return `<div class="media-node"><strong>🎵 AUDIO: ${p.fileName}</strong><br><audio controls src="${p.file}"></audio></div>`;
-            if(p.fileType.includes('video')) return `<div class="media-node"><video controls src="${p.file}"></video></div>`;
-            return `<div>Document: ${p.fileName}</div>`;
+        function showPreview(p) {
+            if(!p.file) return '<div class="preview-box">TEXT-ONLY PAGE</div>';
+            if(p.fType.includes('image')) return `<div class="preview-box"><img src="${p.file}"></div>`;
+            if(p.fType.includes('audio')) return `<div class="preview-box"><strong>🎵 ${p.fName}</strong><br><audio controls src="${p.file}"></audio></div>`;
+            if(p.fType.includes('video')) return `<div class="preview-box"><video controls src="${p.file}"></video></div>`;
+            return `<div class="preview-box">File Ready: ${p.fName}</div>`;
         }
 
-        function pushToPublic(id) {
-            const text = document.getElementById(`txt-${id}`).value;
-            const tx = db.transaction("pages", "readwrite");
-            const store = tx.objectStore("pages");
+        function saveToPublic(id) {
+            const textContent = document.getElementById(`area-${id}`).value;
+            const tx = rootDB.transaction("archive", "readwrite");
+            const store = tx.objectStore("archive");
             store.get(id).onsuccess = (e) => {
                 const data = e.target.result;
-                data.content = text;
+                data.content = textContent;
                 store.put(data);
-                tx.oncomplete = () => alert("SUCCESS: Data is now visible on index.html");
+                tx.oncomplete = () => alert("SUCCESS: Saved to index.html");
             };
         }
 
         function deleteItem(id) {
-            if(confirm("Purge this item?")) {
-                const tx = db.transaction("pages", "readwrite");
-                tx.objectStore("pages").delete(id);
-                tx.oncomplete = renderPortal;
+            if(confirm("Permanently delete?")) {
+                const tx = rootDB.transaction("archive", "readwrite");
+                tx.objectStore("archive").delete(id);
+                tx.oncomplete = refreshList;
             }
         }
 
-        function purgeArchive() { if(confirm("WIPE EVERYTHING?")) { indexedDB.deleteDatabase("RootReclaimDB"); location.reload(); } }
+        function wipeDatabase() {
+            if(confirm("This will erase ALL uploaded files and text. Are you sure?")) {
+                indexedDB.deleteDatabase(dbName);
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
