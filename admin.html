@@ -3,19 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | FOUNDER v24 FIXED</title>
+    <title>ROOT | FOUNDER v25 HYBRID</title>
     <style>
         :root { --nv-green: #00ff41; --bg: #0a0a0a; }
         body { background: var(--bg); color: var(--nv-green); font-family: monospace; padding: 15px; margin: 0; }
         .panel { border: 2px solid var(--nv-green); padding: 15px; background: #111; }
         
-        /* UPLOAD PROGRESS BAR */
-        #progressContainer { width: 100%; background: #222; height: 12px; border: 1px solid var(--nv-green); margin: 15px 0; display: none; overflow: hidden; }
-        #progressBar { width: 0%; height: 100%; background: var(--nv-green); transition: width 0.2s; }
-
         .btn { width: 100%; padding: 18px; background: var(--nv-green); color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
         .btn-blue { background: #3498db; color: #fff; }
-        .btn-reset { background: #555; color: #fff; font-size: 0.7rem; padding: 8px; }
+        .btn-purple { background: #8e44ad; color: #fff; }
 
         .card { background: #000; border: 1px solid #333; padding: 20px; margin-top: 20px; border-left: 8px solid var(--nv-green); }
         textarea { width: 100%; height: 120px; background: #111; color: #fff; border: 1px solid #444; margin: 10px 0; padding: 10px; box-sizing: border-box; }
@@ -26,78 +22,59 @@
 <body>
 
     <div class="panel">
-        <button class="btn-reset" onclick="forceReset()">[!] STUCK? CLICK TO RESET BROWSER MEMORY</button>
-        <h2 style="text-align:center;">FOUNDER COMMAND v24</h2>
-        
-        <div id="status">STATUS: STANDBY</div>
-        <div id="progressContainer"><div id="progressBar"></div></div>
+        <h2 style="text-align:center;">FOUNDER COMMAND v25</h2>
+        <div id="status">STATUS: READY</div>
         
         <button class="btn" onclick="addTextEntry()">+ CREATE NEW BOOK PAGE</button>
-        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD MUSIC / VIDEO / IMAGE</button>
-        <input type="file" id="fileIn" style="display:none" onchange="startUpload(event)">
+        <button class="btn btn-purple" onclick="addViaLink()">🔗 ADD VIA LINK (ANY SIZE)</button>
+        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD SMALL FILE (<5MB)</button>
+        
+        <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
         
         <div id="adminList"></div>
     </div>
 
     <script>
         let db;
-        const DB_NAME = "RootReclaimDB_v24"; // Fresh version to clear old errors
+        const DB_NAME = "RootReclaimDB_v25";
 
         const request = indexedDB.open(DB_NAME, 1);
         request.onupgradeneeded = (e) => { e.target.result.createObjectStore("archive", { keyPath: "id" }); };
         request.onsuccess = (e) => { db = e.target.result; render(); };
 
-        function startUpload(e) {
+        // NEW: ADD VIA LINK (SOLVES THE "FILE TOO LARGE" ERROR)
+        function addViaLink() {
+            const url = prompt("Paste the URL of your Music or Video file:");
+            if(!url) return;
+            
+            let type = "audio";
+            if(url.includes(".mp4") || url.includes("video")) type = "video";
+
+            const entry = {
+                id: Date.now(),
+                content: "Cloud Data Linked",
+                file: url,
+                fName: "External Media",
+                fType: type,
+                isLink: true
+            };
+
+            const tx = db.transaction("archive", "readwrite");
+            tx.objectStore("archive").add(entry);
+            tx.oncomplete = render;
+        }
+
+        function handleUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
 
-            const status = document.getElementById('status');
-            const bar = document.getElementById('progressBar');
-            const container = document.getElementById('progressContainer');
-
-            container.style.display = 'block';
-            status.innerText = "FORCE UPLOADING: " + file.name.substring(0, 15) + "...";
-            status.style.color = "yellow";
-
             const reader = new FileReader();
-            
-            reader.onprogress = (d) => {
-                if (d.lengthComputable) {
-                    let percent = (d.loaded / d.total) * 100;
-                    bar.style.width = percent + "%";
-                }
-            };
-
             reader.onload = (ev) => {
-                try {
-                    const entry = {
-                        id: Date.now(),
-                        content: "Archive Log for " + file.name,
-                        file: ev.target.result,
-                        fName: file.name,
-                        fType: file.type
-                    };
-
-                    const tx = db.transaction("archive", "readwrite");
-                    const store = tx.objectStore("archive");
-                    const addReq = store.add(entry);
-
-                    addReq.onsuccess = () => {
-                        status.innerText = "SUCCESS: PACKET STORED";
-                        status.style.color = "#00ff41";
-                        container.style.display = 'none';
-                        render();
-                    };
-
-                    addReq.onerror = () => {
-                        alert("MOBILE MEMORY FULL: This file is too large for your phone's browser. Try a smaller version.");
-                        forceReset();
-                    };
-                } catch (err) {
-                    alert("CRITICAL ERROR: Browser blocked the upload. Try a smaller file.");
-                }
+                const entry = { id: Date.now(), content: "Local Upload", file: ev.target.result, fName: file.name, fType: file.type };
+                const tx = db.transaction("archive", "readwrite");
+                tx.objectStore("archive").add(entry);
+                tx.oncomplete = render;
             };
-
             reader.readAsDataURL(file);
         }
 
@@ -107,7 +84,7 @@
             tx.objectStore("archive").getAll().onsuccess = (e) => {
                 list.innerHTML = e.target.result.sort((a,b) => b.id - a.id).map(p => `
                     <div class="card">
-                        <strong style="color:#fff">${p.fName || 'Text Entry'}</strong>
+                        <strong>${p.fName}</strong>
                         <textarea id="edit-${p.id}">${p.content}</textarea>
                         <button class="btn" onclick="updateEntry(${p.id})">SAVE & PUBLISH</button>
                         <button onclick="deleteEntry(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer;">[DELETE]</button>
@@ -116,7 +93,7 @@
         }
 
         function addTextEntry() {
-            const entry = { id: Date.now(), content: "Write logs here...", file: null, fName: "", fType: null };
+            const entry = { id: Date.now(), content: "Write logs here...", file: null, fName: "Text Log", fType: null };
             const tx = db.transaction("archive", "readwrite");
             tx.objectStore("archive").add(entry);
             tx.oncomplete = render;
@@ -129,21 +106,15 @@
                 const data = e.target.result;
                 data.content = document.getElementById(`edit-${id}`).value;
                 store.put(data);
-                tx.oncomplete = () => alert("DATA SYNCHRONIZED TO PUBLIC SITE");
+                tx.oncomplete = () => alert("PUBLISHED TO PUBLIC SITE");
             };
         }
 
         function deleteEntry(id) {
-            if(confirm("Permanently Delete?")) {
+            if(confirm("Delete?")) {
                 const tx = db.transaction("archive", "readwrite");
                 tx.objectStore("archive").delete(id);
                 tx.oncomplete = render;
-            }
-        }
-
-        function forceReset() {
-            if(confirm("This will clear the 'Upload Stuck' error. You will not lose your saved work. Proceed?")) {
-                location.reload();
             }
         }
     </script>
