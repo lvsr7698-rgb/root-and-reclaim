@@ -147,3 +147,48 @@
     </div>
 
     </div>
+
+<script>
+    // ... (Keep existing DB and Upload logic) ...
+
+    function render() {
+        const list = document.getElementById('adminList');
+        const vList = document.getElementById('visitList');
+        const bell = document.getElementById('notifyBell');
+        
+        const tx = db.transaction("archive", "readonly");
+        tx.objectStore("archive").getAll().onsuccess = (e) => {
+            const allData = e.target.result;
+            
+            // 1. ANALYSE VISITOR DATA
+            const visits = allData.filter(d => d.type === "visit");
+            vList.innerHTML = visits.map(v => `<div>[${v.time}] Visitor via ${v.platform}</div>`).join('');
+
+            // 2. CHECK FOR NOTIFICATIONS (Unread comments)
+            const hasNew = allData.some(p => p.comments && p.comments.some(c => c.founderNotify));
+            bell.style.display = hasNew ? 'block' : 'none';
+
+            // 3. RENDER CONTENT CARDS
+            list.innerHTML = allData.filter(p => p.id && !p.type).map(p => `
+                <div class="card">
+                    <strong>${p.fName || 'Text Log'}</strong>
+                    <div style="color:yellow; font-size:0.7rem;">Comments: ${(p.comments || []).length}</div>
+                    <textarea id="edit-${p.id}">${p.content}</textarea>
+                    <button class="btn" onclick="save(${p.id})">SAVE & CLEAR NOTIFY</button>
+                </div>`).join('');
+        };
+    }
+
+    function save(id) {
+        const tx = db.transaction("archive", "readwrite");
+        const store = tx.objectStore("archive");
+        store.get(id).onsuccess = (e) => {
+            const data = e.target.result;
+            data.content = document.getElementById(`edit-${id}`).value;
+            // Clear notifications for this page
+            if(data.comments) data.comments.forEach(c => c.founderNotify = false);
+            store.put(data);
+            tx.oncomplete = () => { alert("Updated & Notifications Cleared"); render(); };
+        };
+    }
+</script>
