@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT and reclaim | UNIVERSAL ARCHIVE</title>
+    <title>ROOT and reclaim | UNIVERSAL MASTER ARCHIVE</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --nv-green: #00ff41;
@@ -13,78 +14,49 @@
             --sea-blue: #2980b9;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            background: #000;
-            font-family: 'Consolas', 'Courier New', monospace;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; overflow-x: hidden; scroll-behavior: smooth; }
 
         /* --- BACKGROUND: TREE & NEON GREEN FIREFLIES --- */
-        .bg-fixed {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 90%);
-        }
-        .big-tree {
-            position: absolute; bottom: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 80%; max-width: 700px; opacity: 0.6;
-            filter: drop-shadow(0 0 20px var(--nv-green));
-            pointer-events: none;
-        }
-        .firefly {
-            position: absolute; width: 5px; height: 5px;
-            background: var(--firefly-green); border-radius: 50%;
-            box-shadow: 0 0 15px 6px var(--firefly-green);
-            animation: drift var(--d) infinite ease-in-out;
-        }
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 90%); }
+        .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 700px; opacity: 0.6; filter: drop-shadow(0 0 20px var(--nv-green)); pointer-events: none; }
+        .firefly { position: absolute; width: 5px; height: 5px; background: var(--firefly-green); border-radius: 50%; box-shadow: 0 0 15px 6px var(--firefly-green); animation: drift var(--d) infinite ease-in-out; }
         @keyframes drift { 0%, 100% { transform: translate(0,0); opacity:0; } 50% { transform: translate(var(--x), var(--y)); opacity:1; } }
 
-        /* --- HEADER & ANNOUNCEMENT TICKER --- */
-        header {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--nv-green);
-            z-index: 1000;
-        }
+        /* --- HEADER & TICKER --- */
+        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--nv-green); z-index: 1000; }
         .header-top { display: flex; align-items: center; justify-content: space-between; padding: 10px 40px; }
         .ticker-wrap { background: #001a00; border-top: 1px solid #004d00; overflow: hidden; white-space: nowrap; padding: 5px 0; }
-        .ticker-text { display: inline-block; color: var(--nv-green); font-weight: bold; font-size: 0.8rem; animation: ticker 30s linear infinite; text-transform: uppercase; }
+        .ticker-text { display: inline-block; color: var(--nv-green); font-size: 0.8rem; animation: ticker 30s linear infinite; font-weight: bold; }
         @keyframes ticker { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
 
-        /* --- FOUNDER/ADMIN DASHBOARD --- */
-        .admin-corner {
-            position: fixed; top: 125px; left: 20px; width: 220px;
-            background: var(--paper-color); border: 3px solid #333;
-            padding: 15px; color: #000; z-index: 500;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-        }
+        /* --- ADMIN DASHBOARD (FOUNDER ONLY) --- */
+        #adminPanel { position: fixed; top: 125px; left: 20px; width: 220px; background: var(--paper-color); border: 3px solid #333; padding: 15px; z-index: 500; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
         .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--nv-green); display: block; margin: 0 auto 10px; object-fit: cover; }
-        .ctrl-btn { background: #111; color: #fff; width: 100%; border: none; padding: 8px; margin-top: 5px; cursor: pointer; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .ctrl-btn { background: #111; color: #fff; width: 100%; border: none; padding: 8px; margin-top: 5px; cursor: pointer; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; border-radius: 2px; }
         .ctrl-btn:hover { background: var(--nv-green); color: #000; }
 
         /* --- THE PHYSICAL PAPER STACK --- */
         .book-stack { margin: 160px auto 150px 280px; width: 65%; max-width: 900px; display: flex; flex-direction: column; gap: 70px; }
-        .paper-sheet {
-            background: var(--paper-color); background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
-            background-size: 100% 2.2rem; color: var(--ink-color); padding: 70px 60px; min-height: 900px;
-            position: relative; box-shadow: 3px 3px 15px rgba(0,0,0,0.3), 8px 8px 0px #fff, 15px 15px 0px #ddd;
-            border-left: 10px solid #bbb;
-        }
+        .paper-sheet { background: var(--paper-color); background-image: linear-gradient(#e5e5e5 1px, transparent 1px); background-size: 100% 2.2rem; color: var(--ink-color); padding: 70px 60px; min-height: 900px; position: relative; box-shadow: 3px 3px 15px rgba(0,0,0,0.3), 8px 8px 0px #fff; border-left: 10px solid #bbb; }
         .paper-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, #00ff41, #8e44ad); opacity: 0.05; pointer-events: none; }
 
-        /* --- UNIVERSAL MEDIA VIEWER --- */
-        .media-box { background: #1a1a1a; color: var(--nv-green); padding: 25px; border-radius: 10px; margin: 30px 0; border: 2px solid #000; text-align: center; }
-        .p-btn { background: var(--nv-green); border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 5px; margin: 5px; font-family: inherit; }
-        .like-btn { background: #ff4757; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        /* --- MULTIMEDIA VIEWER --- */
+        .media-node { background: #1a1a1a; color: var(--nv-green); padding: 25px; border-radius: 8px; margin: 20px 0; border: 2px solid #000; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .viewer-btn { background: var(--nv-green); color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; margin: 5px; font-family: inherit; border-radius: 4px; }
+        .viewer-btn:hover { background: #fff; }
 
-        .social-share { margin-top: 40px; border-top: 1px dashed #ccc; padding-top: 20px; display: flex; gap: 15px; align-items: center; }
-        .share-link { text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.75rem; color: #fff; font-weight: bold; }
+        /* --- INTERACTIVE VIEWER FEATURES --- */
+        .comment-area { margin-top: 40px; border-top: 1px dashed #ccc; padding-top: 20px; }
+        .comment-box { width: 100%; padding: 12px; border: 1px solid #ddd; margin-bottom: 10px; font-family: inherit; box-sizing: border-box; }
+        .comment-item { background: #f0f0f0; padding: 10px; margin-bottom: 8px; border-left: 4px solid var(--nv-green); font-size: 0.9rem; }
+        .social-share { display: flex; gap: 10px; margin-top: 20px; }
+        .share-btn { text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 0.75rem; color: #fff; font-weight: bold; }
         .fb { background: #3b5998; } .tw { background: #1da1f2; } .wa { background: #25d366; }
 
-        .page-ctrls { position: absolute; top: 20px; right: 20px; }
-        .edit-area { width: 100%; height: 500px; background: transparent; border: 1px dashed #ccc; font-family: inherit; font-size: 1.2rem; line-height: 2.2rem; outline: none; resize: none; }
+        /* --- ADMIN CRUD --- */
+        .admin-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 5px; }
+        .admin-action { background: #111; color: #fff; border: 1px solid #555; padding: 5px 10px; cursor: pointer; font-size: 0.7rem; }
+        .edit-paper { width: 100%; height: 500px; background: transparent; border: 1px dashed #aaa; font-family: inherit; font-size: 1.2rem; line-height: 2.2rem; outline: none; resize: none; }
 
         footer { position: fixed; bottom: 0; width: 100%; height: 45px; background: var(--sea-blue); z-index: 1000; }
         .sea { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,213.3C960,224,1056,192,1152,165.3C1248,139,1344,117,1392,106.7L1440,96V320H0Z"></path></svg>'); animation: flow 12s linear infinite; }
@@ -99,30 +71,28 @@
 
     <header>
         <div class="header-top">
-            <div style="display:flex; align-items:center;">
-                <div style="width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,#00ff41,#8e44ad);box-shadow:0 0 10px var(--nv-green);"></div>
-                <div style="margin-left:15px; color:var(--nv-green); font-weight:bold; letter-spacing:2px;">ROOT and reclaim</div>
-            </div>
+            <div style="display:flex; align-items:center; color:var(--nv-green); font-weight:bold; font-size: 1.2rem;">🌌 ROOT and reclaim</div>
             <div style="background:#111; border:1px solid var(--nv-green); padding:5px 15px; border-radius:20px;">
-                <input type="text" id="globalSearch" placeholder="SEARCH ARCHIVE..." onkeyup="filterArchive()" style="background:transparent; border:none; color:var(--nv-green); outline:none; width:200px; font-family:inherit;">
+                <input type="text" id="globalSearch" placeholder="SEARCH ARCHIVE..." onkeyup="filterArchive()" style="background:transparent; border:none; color:var(--nv-green); outline:none; width:220px; font-family:inherit;">
             </div>
+            <button class="viewer-btn" onclick="toggleAdminMode()" style="background:#333; color:#fff; font-size:0.6rem;">ADMIN LOGIN</button>
         </div>
-        <div class="ticker-wrap">
-            <div class="ticker-text" id="tickerContent">
-                SYSTEM STATUS: OPTIMAL // ARCHIVE v13.0 LIVE // FOUNDER SRK IS PROCESSING RECLAIM PACKETS // GREEN FIREFLY PROTOCOL ENGAGED // 
-            </div>
-        </div>
+        <div class="ticker-wrap"><div class="ticker-text" id="tickerMsg">ROOT AND RECLAIM ARCHIVE v15.0 // ADMIN: FOUNDER SRK // STATUS: SECURE AND ACTIVE // BROADCASTING WORLDWIDE // </div></div>
     </header>
 
-    <div class="admin-corner">
+    <div id="adminPanel" style="display:none;">
         <img src="image_0.png" class="profile-img">
         <center><strong>FOUNDER SRK</strong></center>
         <button class="ctrl-btn" onclick="addPaper()">+ NEW PAGE</button>
-        <button class="ctrl-btn" style="background:var(--sea-blue)" onclick="document.getElementById('universalIn').click()">📂 IMPORT ANY FILE</button>
-        <input type="file" id="universalIn" style="display:none" onchange="handleUniversalImport(event)">
-        <button class="ctrl-btn" onclick="exportData()">EXPORT BACKUP</button>
-        <button class="ctrl-btn" style="background:red" onclick="resetAll()">PURGE ALL</button>
-        <button class="ctrl-btn" style="background:green" onclick="updateTicker()">EDIT TICKER</button>
+        <button class="ctrl-btn" style="background:var(--sea-blue)" onclick="document.getElementById('importAny').click()">📂 UPLOAD/IMPORT ANY FILE</button>
+        <input type="file" id="importAny" style="display:none" onchange="importAnyFile(event)">
+        
+        <button class="ctrl-btn" onclick="exportToPDF()">EXPORT AS PDF</button>
+        <button class="ctrl-btn" onclick="exportToWord()">EXPORT AS WORD</button>
+        <button class="ctrl-btn" onclick="exportJSON()">JSON MASTER BACKUP</button>
+        
+        <button class="ctrl-btn" style="background:red" onclick="resetAll()">RESET ALL DATA</button>
+        <button class="ctrl-btn" style="background:green" onclick="editTicker()">EDIT TICKER</button>
     </div>
 
     <div class="book-stack" id="bookStack"></div>
@@ -130,7 +100,7 @@
     <footer><div class="sea"></div></footer>
 
     <script>
-        // GREEN GLOW FIREFLY SYSTEM
+        // GREEN GLOW FIREFLIES
         const field = document.getElementById('field');
         for (let i = 0; i < 50; i++) {
             let ff = document.createElement('div');
@@ -144,44 +114,60 @@
             field.appendChild(ff);
         }
 
-        let ledger = JSON.parse(localStorage.getItem('srk_ledger_v13')) || [];
+        // DATABASE
+        let isAdmin = false;
+        let ledger = JSON.parse(localStorage.getItem('srk_master_v15')) || [];
         if (ledger.length === 0) addPaper(false);
 
+        function toggleAdminMode() {
+            let pass = prompt("Enter Founder Key:");
+            if(pass === "admin") { 
+                isAdmin = true; 
+                document.getElementById('adminPanel').style.display = 'block';
+                render();
+            } else { alert("Access Denied."); }
+        }
+
         function addPaper(update = true) {
-            ledger.push({ id: Date.now() + Math.random(), content: "", file: null, fileName: "", fileType: "", isEdit: true, pageNum: ledger.length + 1, likes: 0 });
+            ledger.push({ id: Date.now() + Math.random(), content: "", file: null, fileName: "", fileType: "", isEdit: true, pageNum: ledger.length + 1, comments: [] });
             if(update) save();
         }
 
-        function save() { localStorage.setItem('srk_ledger_v13', JSON.stringify(ledger)); render(); }
+        function save() { localStorage.setItem('srk_master_v15', JSON.stringify(ledger)); render(); }
 
         function render() {
             const stack = document.getElementById('bookStack');
             stack.innerHTML = '';
             ledger.forEach((p) => {
-                const shareUrl = encodeURIComponent(window.location.href);
+                const sUrl = encodeURIComponent(window.location.href);
                 stack.innerHTML += `
                     <div class="paper-sheet">
                         <div class="paper-watermark"></div>
-                        <div class="page-ctrls">
-                            ${p.isEdit ? `<button onclick="savePage(${p.id})" style="background:green;color:white;padding:5px 10px;cursor:pointer;border:none;">SAVE</button>` : 
-                            `<button onclick="editPage(${p.id})" style="background:#333;color:white;padding:5px 10px;cursor:pointer;border:none;">EDIT</button>`}
-                            <button onclick="delPage(${p.id})" style="background:red;color:white;padding:5px 10px;cursor:pointer;margin-left:5px;border:none;">DEL</button>
-                        </div>
-                        <h2>ENTRY: ${p.pageNum}</h2>
+                        
+                        ${isAdmin ? `
+                        <div class="admin-controls">
+                            ${p.isEdit ? `<button class="admin-action" onclick="savePage(${p.id})">SAVE</button>` : `<button class="admin-action" onclick="editPage(${p.id})">EDIT</button>`}
+                            <button class="admin-action" style="color:red" onclick="delPage(${p.id})">DEL</button>
+                        </div>` : ''}
+
+                        <h2 style="border-bottom:3px solid #000; padding-bottom:10px;">LEDGER LOG: PAGE ${p.pageNum}</h2>
                         
                         ${renderMedia(p)}
 
-                        ${p.isEdit ? `<textarea class="edit-area" id="txt-${p.id}">${p.content}</textarea>` :
-                        `<div style="font-size:1.2rem;line-height:2.2rem;white-space:pre-wrap;">${p.content || "[NO DATA]"}</div>`}
-                        
-                        <div style="margin-top:20px;">
-                            <button class="like-btn" onclick="addLike(${p.id})">❤ ${p.likes} LIKES</button>
-                        </div>
+                        ${p.isEdit && isAdmin ? `<textarea class="edit-paper" id="txt-${p.id}">${p.content}</textarea>` :
+                        `<div style="font-size:1.2rem;line-height:2.2rem;white-space:pre-wrap;">${p.content || "[RECLAIM DATA PACKET EMPTY]"}</div>`}
 
                         <div class="social-share">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-link fb">FB</a>
-                            <a href="https://twitter.com/intent/tweet?url=${shareUrl}" target="_blank" class="share-link tw">X</a>
-                            <a href="https://api.whatsapp.com/send?text=${shareUrl}" target="_blank" class="share-link wa">WA</a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=${sUrl}" target="_blank" class="share-btn fb">FB SHARE</a>
+                            <a href="https://twitter.com/intent/tweet?url=${sUrl}" target="_blank" class="share-btn tw">X SHARE</a>
+                            <a href="https://api.whatsapp.com/send?text=${sUrl}" target="_blank" class="share-btn wa">WA SHARE</a>
+                        </div>
+
+                        <div class="comment-area">
+                            <strong>ARCHIVE COMMENTS</strong>
+                            <div id="c-list-${p.id}">${p.comments.map(c => `<div class="comment-item">${c}</div>`).join('')}</div>
+                            <input type="text" class="comment-box" id="c-in-${p.id}" placeholder="Viewer: Leave a message...">
+                            <button class="viewer-btn" onclick="addComment(${p.id})">POST MESSAGE</button>
                         </div>
                     </div>`;
             });
@@ -190,40 +176,49 @@
         function renderMedia(p) {
             if(!p.file) return '';
             if(p.fileType.includes('audio')) {
-                return `<div class="media-box"><strong>🎵 AUDIO: ${p.fileName}</strong><audio id="aud-${p.id}" src="${p.file}"></audio><div><button class="p-btn" onclick="document.getElementById('aud-${p.id}').play()">PLAY</button><button class="p-btn" onclick="document.getElementById('aud-${p.id}').pause()">PAUSE</button><button class="p-btn" style="background:#3498db;color:#fff;" onclick="dlFile('${p.file}','${p.fileName}')">DOWNLOAD</button></div></div>`;
-            }
-            if(p.fileType.includes('image')) {
-                return `<img src="${p.file}" style="max-width:100%; border:2px solid #000; margin:20px 0;">`;
+                return `<div class="media-node"><strong>🎵 MUSIC PACKET: ${p.fileName}</strong><br><audio id="a-${p.id}" src="${p.file}"></audio><button class="viewer-btn" onclick="document.getElementById('a-${p.id}').play()">PLAY</button><button class="viewer-btn" onclick="document.getElementById('a-${p.id}').pause()">PAUSE</button><button class="viewer-btn" onclick="dlFile('${p.file}','${p.fileName}')">DOWNLOAD</button></div>`;
             }
             if(p.fileType.includes('video')) {
-                return `<video src="${p.file}" controls style="max-width:100%; margin:20px 0;"></video>`;
+                return `<div class="media-node"><video src="${p.file}" controls style="max-width:100%;"></video><br><button class="viewer-btn" onclick="dlFile('${p.file}','${p.fileName}')">DOWNLOAD VIDEO</button></div>`;
             }
-            return `<div class="media-box"><strong>📄 ATTACHMENT: ${p.fileName}</strong><br><button class="p-btn" onclick="dlFile('${p.file}','${p.fileName}')">DOWNLOAD FILE</button></div>`;
+            if(p.fileType.includes('image')) return `<img src="${p.file}" style="max-width:100%; border:2px solid #000; margin:20px 0; box-shadow:5px 5px 15px rgba(0,0,0,0.2);">`;
+            return `<div class="media-node"><strong>📄 ATTACHMENT: ${p.fileName}</strong><br><button class="viewer-btn" onclick="dlFile('${p.file}','${p.fileName}')">DOWNLOAD FILE</button></div>`;
         }
 
-        function handleUniversalImport(e) {
+        // --- ADMIN POWERS ---
+        function importAnyFile(e) {
             const file = e.target.files[0]; if(!file) return;
             const reader = new FileReader();
             reader.onload = (ev) => {
-                ledger.push({ id: Date.now(), content: "Imported " + file.type + " analysis.", file: ev.target.result, fileName: file.name, fileType: file.type, isEdit: false, pageNum: ledger.length + 1, likes: 0 });
+                ledger.push({ id: Date.now(), content: "Admin added " + file.name, file: ev.target.result, fileName: file.name, fileType: file.type, isEdit: false, pageNum: ledger.length + 1, comments: [] });
                 save();
             };
-            if(file.type.includes('text') || file.type.includes('json')) { reader.readAsText(file); } else { reader.readAsDataURL(file); }
+            reader.readAsDataURL(file);
         }
-
-        function addLike(id) { let p = ledger.find(x => x.id === id); p.likes++; save(); }
-        function updateTicker() { const newMsg = prompt("Enter Ticker Msg:", document.getElementById('tickerContent').innerText); if(newMsg) document.getElementById('tickerContent').innerText = newMsg.toUpperCase() + " // "; }
         function savePage(id) { let p = ledger.find(x => x.id === id); p.content = document.getElementById(`txt-${id}`).value; p.isEdit = false; save(); }
         function editPage(id) { ledger.find(x => x.id === id).isEdit = true; render(); }
-        function delPage(id) { if(confirm("Delete?")) { ledger = ledger.filter(x => x.id !== id); ledger.forEach((x, i) => x.pageNum = i + 1); save(); } }
+        function delPage(id) { if(confirm("Permanently delete?")) { ledger = ledger.filter(x => x.id !== id); ledger.forEach((x, i) => x.pageNum = i + 1); save(); } }
+        function resetAll() { if(confirm("PURGE ENTIRE ARCHIVE?")) { localStorage.removeItem('srk_master_v15'); location.reload(); } }
+        function editTicker() { let t = prompt("Edit Ticker:", document.getElementById('tickerMsg').innerText); if(t) document.getElementById('tickerMsg').innerText = t.toUpperCase() + " // "; }
+
+        // --- VIEWER POWERS ---
+        function addComment(id) { let box = document.getElementById(`c-in-${id}`); if(box.value) { ledger.find(x => x.id === id).comments.push(box.value); box.value = ""; save(); } }
         function dlFile(src, name) { const a = document.createElement('a'); a.href = src; a.download = name; a.click(); }
-        function resetAll() { if(confirm("Reset?")) { localStorage.removeItem('srk_ledger_v13'); location.reload(); } }
-        function exportData() { const blob = new Blob([JSON.stringify(ledger, null, 2)], {type: "application/json"}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "ROOT_BACKUP.json"; a.click(); }
         function filterArchive() {
-            const query = document.getElementById('globalSearch').value.toLowerCase();
-            document.querySelectorAll('.paper-sheet').forEach(sheet => {
-                sheet.style.display = sheet.innerText.toLowerCase().includes(query) ? 'block' : 'none';
-            });
+            let q = document.getElementById('globalSearch').value.toLowerCase();
+            document.querySelectorAll('.paper-sheet').forEach(s => s.style.display = s.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+        }
+
+        // --- MASTER EXPORTS ---
+        function exportToPDF() { html2pdf().set({ margin: 0.5, filename: 'SRK_ARCHIVE.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(document.getElementById('bookStack')).save(); }
+        function exportToWord() {
+            let content = ledger.map(p => `PAGE ${p.pageNum}\n${p.content}\n\n`).join('---');
+            const blob = new Blob([content], {type: "application/msword"});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "SRK_RECLAIM.doc"; a.click();
+        }
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(ledger, null, 2)], {type: "application/json"});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "ROOT_BACKUP.json"; a.click();
         }
 
         window.onload = render;
