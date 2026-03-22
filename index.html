@@ -65,7 +65,7 @@
 
         // DB SYNC v23
         let db;
-        const request = indexedDB.open("RootReclaimDB_v23", 1);
+        const request = indexedDB.open("RootReclaimDB_v24", 1);
         request.onsuccess = (e) => { db = e.target.result; loadArchive(); };
 
         function openTab(name, event) {
