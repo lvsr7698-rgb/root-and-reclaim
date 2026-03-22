@@ -3,96 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | FOUNDER CONTROL v23</title>
+    <title>ROOT | FOUNDER v24 FIXED</title>
     <style>
-        :root { --nv-green: #00ff41; }
-        body { background: #0a0a0a; color: var(--nv-green); font-family: monospace; padding: 20px; }
-        .panel { border: 2px solid var(--nv-green); padding: 20px; background: #111; max-width: 800px; margin: 0 auto; }
-        .btn { padding: 15px; background: var(--nv-green); color: #000; border: none; font-weight: bold; cursor: pointer; margin-bottom: 10px; width: 100%; text-transform: uppercase; }
+        :root { --nv-green: #00ff41; --bg: #0a0a0a; }
+        body { background: var(--bg); color: var(--nv-green); font-family: monospace; padding: 15px; margin: 0; }
+        .panel { border: 2px solid var(--nv-green); padding: 15px; background: #111; }
+        
+        /* UPLOAD PROGRESS BAR */
+        #progressContainer { width: 100%; background: #222; height: 12px; border: 1px solid var(--nv-green); margin: 15px 0; display: none; overflow: hidden; }
+        #progressBar { width: 0%; height: 100%; background: var(--nv-green); transition: width 0.2s; }
+
+        .btn { width: 100%; padding: 18px; background: var(--nv-green); color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
         .btn-blue { background: #3498db; color: #fff; }
-        .card { background: #000; border: 1px solid #333; padding: 20px; margin-top: 20px; border-left: 5px solid var(--nv-green); }
-        textarea { width: 100%; height: 120px; background: #222; color: #fff; border: 1px solid #444; margin: 10px 0; padding: 10px; box-sizing: border-box; }
-        #status { text-align: center; margin-bottom: 10px; font-weight: bold; }
-        #progress { width: 100%; background: #222; height: 10px; margin-bottom: 15px; display: none; }
-        #bar { height: 100%; background: var(--nv-green); width: 0%; transition: 0.1s; }
+        .btn-reset { background: #555; color: #fff; font-size: 0.7rem; padding: 8px; }
+
+        .card { background: #000; border: 1px solid #333; padding: 20px; margin-top: 20px; border-left: 8px solid var(--nv-green); }
+        textarea { width: 100%; height: 120px; background: #111; color: #fff; border: 1px solid #444; margin: 10px 0; padding: 10px; box-sizing: border-box; }
+        
+        #status { text-align: center; font-weight: bold; padding: 10px; border: 1px solid #333; margin-bottom: 10px; }
     </style>
 </head>
 <body>
+
     <div class="panel">
-        <h2>FOUNDER CONTROL CENTER v23</h2>
-        <div id="status">READY</div>
-        <div id="progress"><div id="bar"></div></div>
+        <button class="btn-reset" onclick="forceReset()">[!] STUCK? CLICK TO RESET BROWSER MEMORY</button>
+        <h2 style="text-align:center;">FOUNDER COMMAND v24</h2>
         
-        <button class="btn" onclick="addText()">+ CREATE NEW BOOK PAGE</button>
+        <div id="status">STATUS: STANDBY</div>
+        <div id="progressContainer"><div id="progressBar"></div></div>
+        
+        <button class="btn" onclick="addTextEntry()">+ CREATE NEW BOOK PAGE</button>
         <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD MUSIC / VIDEO / IMAGE</button>
-        <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
+        <input type="file" id="fileIn" style="display:none" onchange="startUpload(event)">
         
         <div id="adminList"></div>
     </div>
 
     <script>
         let db;
-        const request = indexedDB.open("RootReclaimDB_v23", 1);
+        const DB_NAME = "RootReclaimDB_v24"; // Fresh version to clear old errors
+
+        const request = indexedDB.open(DB_NAME, 1);
         request.onupgradeneeded = (e) => { e.target.result.createObjectStore("archive", { keyPath: "id" }); };
         request.onsuccess = (e) => { db = e.target.result; render(); };
 
-        function handleUpload(e) {
-            const file = e.target.files[0]; if(!file) return;
-            const status = document.getElementById('status');
-            const prog = document.getElementById('progress');
-            const bar = document.getElementById('bar');
+        function startUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
 
-            prog.style.display = 'block';
-            status.innerText = "PROCESSING " + file.name.toUpperCase();
+            const status = document.getElementById('status');
+            const bar = document.getElementById('progressBar');
+            const container = document.getElementById('progressContainer');
+
+            container.style.display = 'block';
+            status.innerText = "FORCE UPLOADING: " + file.name.substring(0, 15) + "...";
+            status.style.color = "yellow";
 
             const reader = new FileReader();
-            reader.onprogress = (d) => { if(d.lengthComputable) bar.style.width = (d.loaded/d.total)*100 + '%'; };
-            reader.onload = (ev) => {
-                const entry = { id: Date.now(), content: "Note: " + file.name, file: ev.target.result, fName: file.name, fType: file.type };
-                const tx = db.transaction("archive", "readwrite");
-                tx.objectStore("archive").add(entry);
-                tx.oncomplete = () => {
-                    status.innerText = "UPLOAD SUCCESSFUL";
-                    prog.style.display = 'none';
-                    render();
-                };
+            
+            reader.onprogress = (d) => {
+                if (d.lengthComputable) {
+                    let percent = (d.loaded / d.total) * 100;
+                    bar.style.width = percent + "%";
+                }
             };
-            reader.readAsDataURL(file);
-        }
 
-        function addText() {
-            const entry = { id: Date.now(), content: "Write logs here...", file: null, fName: "", fType: null };
-            const tx = db.transaction("archive", "readwrite");
-            tx.objectStore("archive").add(entry);
-            tx.oncomplete = render;
+            reader.onload = (ev) => {
+                try {
+                    const entry = {
+                        id: Date.now(),
+                        content: "Archive Log for " + file.name,
+                        file: ev.target.result,
+                        fName: file.name,
+                        fType: file.type
+                    };
+
+                    const tx = db.transaction("archive", "readwrite");
+                    const store = tx.objectStore("archive");
+                    const addReq = store.add(entry);
+
+                    addReq.onsuccess = () => {
+                        status.innerText = "SUCCESS: PACKET STORED";
+                        status.style.color = "#00ff41";
+                        container.style.display = 'none';
+                        render();
+                    };
+
+                    addReq.onerror = () => {
+                        alert("MOBILE MEMORY FULL: This file is too large for your phone's browser. Try a smaller version.");
+                        forceReset();
+                    };
+                } catch (err) {
+                    alert("CRITICAL ERROR: Browser blocked the upload. Try a smaller file.");
+                }
+            };
+
+            reader.readAsDataURL(file);
         }
 
         function render() {
             const list = document.getElementById('adminList');
             const tx = db.transaction("archive", "readonly");
             tx.objectStore("archive").getAll().onsuccess = (e) => {
-                list.innerHTML = e.target.result.sort((a,b)=>b.id-a.id).map(p => `
+                list.innerHTML = e.target.result.sort((a,b) => b.id - a.id).map(p => `
                     <div class="card">
-                        <strong>${p.fName || 'Text Log'}</strong><br>
-                        <textarea id="edit-${p.id}">${p.content}</textarea><br>
-                        <button class="btn" onclick="save(${p.id})">SAVE TO PUBLIC SITE</button>
-                        <button class="btn" style="background:red; color:#fff;" onclick="del(${p.id})">DELETE PAGE</button>
+                        <strong style="color:#fff">${p.fName || 'Text Entry'}</strong>
+                        <textarea id="edit-${p.id}">${p.content}</textarea>
+                        <button class="btn" onclick="updateEntry(${p.id})">SAVE & PUBLISH</button>
+                        <button onclick="deleteEntry(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer;">[DELETE]</button>
                     </div>`).join('');
             };
         }
 
-        function save(id) {
+        function addTextEntry() {
+            const entry = { id: Date.now(), content: "Write logs here...", file: null, fName: "", fType: null };
+            const tx = db.transaction("archive", "readwrite");
+            tx.objectStore("archive").add(entry);
+            tx.oncomplete = render;
+        }
+
+        function updateEntry(id) {
             const tx = db.transaction("archive", "readwrite");
             const store = tx.objectStore("archive");
             store.get(id).onsuccess = (e) => {
                 const data = e.target.result;
                 data.content = document.getElementById(`edit-${id}`).value;
                 store.put(data);
-                tx.oncomplete = () => alert("DATA SYNCHRONIZED");
+                tx.oncomplete = () => alert("DATA SYNCHRONIZED TO PUBLIC SITE");
             };
         }
 
-        function del(id) { if(confirm("Delete?")) { const tx = db.transaction("archive", "readwrite"); tx.objectStore("archive").delete(id); tx.oncomplete = render; } }
+        function deleteEntry(id) {
+            if(confirm("Permanently Delete?")) {
+                const tx = db.transaction("archive", "readwrite");
+                tx.objectStore("archive").delete(id);
+                tx.oncomplete = render;
+            }
+        }
+
+        function forceReset() {
+            if(confirm("This will clear the 'Upload Stuck' error. You will not lose your saved work. Proceed?")) {
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
