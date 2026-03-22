@@ -74,7 +74,7 @@
         }
 
         let db;
-        const request = indexedDB.open("RootReclaimDB_v26", 1);
+        const request = indexedDB.open("RootReclaimDB_v32", 1);
         request.onsuccess = (e) => { db = e.target.result; loadAll(); };
 
         function switchBook(id, e) {
