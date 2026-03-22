@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RECLAIM: THE SRK COMMAND CENTER</title>
+    <title>RECLAIM: THE SRK COMMAND CENTER | LIVE INTEL</title>
     <style>
         :root {
             --primary-dark: #05080a;
             --accent-green: #00ff41; 
             --warning-red: #ff3131;
             --tech-blue: #00d2ff;
-            --gold-intel: #d4af37;
         }
 
         body {
@@ -28,17 +27,15 @@
         
         #bg-winter { background: #0f172a; }
         .snow { position: absolute; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/snow.png'); animation: snow 10s linear infinite; }
-        @keyframes snow { from { background-position: 0 0; } to { background-position: 100px 500px; } }
 
         #bg-rain { background: #111; }
         .rain { position: absolute; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/60-lines.png'); animation: rain 0.2s linear infinite; opacity: 0.2; }
-        @keyframes rain { from { background-position: 0 0; } to { background-position: 20px 400px; } }
         .bolt { position: absolute; width: 100%; height: 100%; background: white; opacity: 0; animation: strike 6s infinite; }
         @keyframes strike { 0%, 95% { opacity: 0; } 96% { opacity: 0.5; } }
 
         /* --- SIDEBAR (ABOUT ME) --- */
         .sidebar-btn { position: fixed; top: 20px; left: 20px; z-index: 100; background: var(--accent-green); color: black; padding: 10px 20px; font-weight: bold; cursor: pointer; border: 2px solid #000; }
-        .sidebar { position: fixed; top: 0; left: -350px; width: 300px; height: 100%; background: white; z-index: 101; transition: 0.5s; padding: 30px; border-right: 8px solid var(--accent-green); color: #111; }
+        .sidebar { position: fixed; top: 0; left: -350px; width: 300px; height: 100%; background: white; z-index: 101; transition: 0.5s; padding: 30px; border-right: 8px solid var(--accent-green); color: #111; overflow-y: auto; }
         .sidebar.active { left: 0; }
         .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--accent-green); object-fit: cover; margin-bottom: 20px; }
 
@@ -54,17 +51,14 @@
         .c1 { background: #1a252f; border: 2px solid var(--accent-green); }
         .c2 { background: #7b241c; border: 2px solid var(--warning-red); }
 
-        /* --- DATA BOX --- */
-        .tech-box { background: #000; color: var(--accent-green); padding: 10px; font-size: 0.7rem; height: 150px; overflow: hidden; position: relative; border: 1px solid var(--accent-green); margin-top: 10px; }
-        .scrolling-text { position: absolute; width: 100%; animation: scrollUp 12s linear infinite; }
-        @keyframes scrollUp { 0% { top: 100%; } 100% { top: -200%; } }
+        /* --- DATA ANALYSATION BOX --- */
+        .tech-box { background: #000; color: var(--accent-green); padding: 10px; font-size: 0.7rem; height: 150px; overflow-y: auto; border: 1px solid var(--accent-green); margin-top: 10px; font-family: 'Courier New', monospace; }
 
-        /* --- NEWS TICKER --- */
-        .news-footer { position: fixed; bottom: 40px; width: 100%; background: rgba(0,0,0,0.9); color: #fff; padding: 10px 0; z-index: 100; overflow: hidden; border-top: 1px solid var(--accent-green); }
-        .news-track { display: inline-block; white-space: nowrap; padding-left: 100%; animation: news 30s linear infinite; }
-        @keyframes news { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        /* --- LIVE NEWS SECTION --- */
+        .news-section { background: #f9f9f9; padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid var(--tech-blue); }
+        .news-item { font-size: 0.75rem; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
 
-        .river { position: fixed; bottom: 0; width: 100%; height: 40px; background: var(--river-blue); z-index: 5; }
+        .river { position: fixed; bottom: 0; width: 100%; height: 40px; background: #3498db; z-index: 5; }
     </style>
 </head>
 <body>
@@ -73,12 +67,12 @@
     <div class="sidebar" id="sidebar">
         <center>
             <img src="image_0.png" class="profile-img" alt="Founder SRK">
-            <h2>About Me</h2>
+            <h2>About Founder</h2>
             <hr>
         </center>
-        <p>I am <strong>SRK</strong>, the founder of RECLAIM. My mission is to analyze global data and expose the industrial and political damage to our Earth.</p>
-        <p>This center processes real-time intelligence to provide steps for our survival.</p>
-        <button onclick="toggleSidebar()" style="width:100%; cursor:pointer;">Close</button>
+        <p>I am <strong>SRK</strong>. This command center is designed to observe and analyze the industrial impact on our planet.</p>
+        <p><strong>Mission:</strong> Real-time accountability for politicians, businessmen, and organizations damaging our Earth.</p>
+        <button onclick="toggleSidebar()" style="width:100%; cursor:pointer; background:var(--accent-green); border:none; padding:10px;">Close</button>
     </div>
 
     <div id="bg-night" class="bg-layer" style="opacity: 1;"><div class="moon"></div></div>
@@ -90,26 +84,28 @@
             <div class="page" style="z-index: 3;">
                 <div class="front cover c1">
                     <h2>RECLAIM: VOL I</h2>
-                    <p>Foundation & Profile</p>
+                    <p>Foundation & Industrial Damage</p>
                 </div>
                 <div class="back">
-                    <img src="image_0.png" style="width:100px; border-radius:50%; display:block; margin:0 auto;" alt="SRK">
-                    <center><h3>Founder SRK</h3></center>
-                    <p style="font-size:0.85rem;">Documenting history from nomadic rivers to the 1984 Bhopal Disaster. We must shift from greedy behavior to natural survival.</p>
+                    <img src="image_0.png" style="width:80px; border-radius:50%; display:block; margin:0 auto;" alt="SRK">
+                    <center><h4>SRK Analysis</h4></center>
+                    <p style="font-size:0.8rem;"><b>Nuclear & Heavy Instruments:</b> Inventions designed for power have become tools for Earth's destruction. Nuclear fallout creates "dead zones" lasting centuries.</p>
                 </div>
             </div>
             <div class="page" style="z-index: 2;">
                 <div class="front">
-                    <h4>Historical Damage</h4>
-                    <p style="font-size:0.8rem;"><b>Colonial:</b> Railways stripped forests. <br><b>Nuclear:</b> Permanent radiation. <br><b>Modern:</b> Selfish political lobbying.</p>
+                    <h4>Modern Threats</h4>
+                    <p style="font-size:0.75rem;"><b>Oil & LPG:</b> Daily dependency is a slow poison. <b>Heavy Buildings:</b> Concrete weight is literally sinking major global cities.</p>
+                    <div class="tech-box" id="damage-scan">
+                        [SCANNING GLOBAL IMPACT...]<br>
+                        > 5G INTERFERENCE: HIGH<br>
+                        > ANIMAL KILLINGS: 2,500/SEC<br>
+                        > URBAN SUBSIDENCE: ACTIVE
+                    </div>
                 </div>
                 <div class="back">
-                    <h4>Prevention Steps</h4>
-                    <ul style="font-size:0.8rem;">
-                        <li>Grant Rights to Rivers</li>
-                        <li>Circular Recycling Only</li>
-                        <li>Stop Fossil Fuel Funding</li>
-                    </ul>
+                    <h4>Selfish Behavior</h4>
+                    <p style="font-size:0.75rem;">Politicians and Businessmen prioritize quarterly profit over biological survival. We must transition from an 'Ego' system to an 'Eco' system.</p>
                 </div>
             </div>
         </div>
@@ -118,42 +114,32 @@
             <div class="page" style="z-index: 3;">
                 <div class="front cover c2">
                     <h2>RECLAIM: VOL II</h2>
-                    <p>Global Intel & News</p>
+                    <p>Live World Updates</p>
                 </div>
                 <div class="back">
-                    <h4>Internet Data Scan</h4>
-                    <div class="tech-box">
-                        <div class="scrolling-text">
-                            [SCANNING GLOBAL CHANNELS...]<br>
-                            > CO2 PACKETS: 421.2 PPM<br>
-                            > OIL SHIPMENTS: RECORD HIGH<br>
-                            > 5G INTERFERENCE: BEE ALERTS<br>
-                            > GLACIER MELT: ACCELERATED<br>
-                            > NUCLEAR WASTE: UNSECURED<br>
-                            > URBAN SUBSIDENCE: NYC SINKING
-                        </div>
+                    <h4>Live Intelligence Feed</h4>
+                    <div id="news-container" class="news-section">
+                        <div class="news-item">Attempting to sync with global satellites...</div>
                     </div>
+                    <p style="font-size:0.7rem; color:#666; margin-top:5px;">Analyzing: Gov Action, Scientists Alerts, & Media reports.</p>
                 </div>
             </div>
             <div class="page" style="z-index: 2;">
                 <div class="front">
-                    <h4>Real-Time Loss</h4>
-                    <div style="background:#000; color:var(--warning-red); padding:15px; font-family:monospace;">
-                        Trees Lost: <span id="trees">0</span><br>
-                        CO2 Added: <span id="co2">0</span>
+                    <h4>Global News Analysis</h4>
+                    <div class="tech-box" id="live-analysis">
+                        > RE-ROUTING NEWS PACKETS...<br>
+                        > SOURCE: GLOBAL NEWS API<br>
+                        > ANALYZING MEDIA BIAS...<br>
+                        > DETECTING POSITIVE TRENDS...
                     </div>
                 </div>
-                <div class="back">
-                    <h4>Accountability</h4>
-                    <p style="font-size:0.8rem;">Governments prioritize GDP over life. Top 100 CEOs responsible for 71% of emissions. Intelligence hub scanning for corruption.</p>
+                <div class="back" style="text-align:center;">
+                    <h3>Prevention</h3>
+                    <p style="font-size:0.8rem;">Change starts with accountability. Use this data to demand better from those in power.</p>
+                    <button onclick="resetBook()" style="cursor:pointer; background:var(--warning-red); color:white; border:none; padding:10px;">Restart</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="news-footer">
-        <div class="news-track">
-            MARCH 2026 NEWS: [SW US HEAT DOME: RECORDS SHATTERED] -- [EL NIÑO RETURNS: ERRATIC WEATHER PATTERNS DETECTED] -- [GREENPEACE VOWS TO FIGHT $345M PIPELINE VERDICT] -- [TRUMP ADMIN TARGETS COLORADO CLIMATE LAB] -- [SRK ARCHIVE: RECLAIM MISSION ACTIVE] -- [SOUTH KOREA RELEASES NEW ESG GUIDELINES]
         </div>
     </div>
 
@@ -161,23 +147,14 @@
 
     <script>
         const layers = document.querySelectorAll('.bg-layer');
-        let currentBg = 0;
-        let start = Date.now();
+        let currentIdx = 0;
 
         // Background Cycle
         setInterval(() => {
             layers.forEach(l => l.style.opacity = 0);
-            currentIdx = (currentBg + 1) % layers.length;
+            currentIdx = (currentIdx + 1) % layers.length;
             layers[currentIdx].style.opacity = 1;
-            currentBg = currentIdx;
         }, 10000);
-
-        // Counter
-        setInterval(() => {
-            let s = Math.floor((Date.now() - start) / 1000);
-            document.getElementById('trees').innerText = (s * 0.47).toFixed(1);
-            document.getElementById('co2').innerText = (s * 1100).toLocaleString();
-        }, 1000);
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
 
@@ -187,6 +164,40 @@
                 p.style.zIndex = p.classList.contains('flipped') ? 0 : (i % 2 === 0 ? 3 : 2);
             };
         });
+
+        // REAL-TIME NEWS ENGINE
+        async function fetchLiveUpdates() {
+            const container = document.getElementById('news-container');
+            const analysis = document.getElementById('live-analysis');
+            
+            // Note: Replace 'YOUR_API_KEY' with a real key from newsapi.org for full live data
+            const apiKey = 'YOUR_API_KEY'; 
+            const url = `https://newsapi.org/v2/everything?q=climate+change+industrial+impact&sortBy=publishedAt&apiKey=${apiKey}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if(data.articles) {
+                    container.innerHTML = '';
+                    data.articles.slice(0, 3).forEach(article => {
+                        container.innerHTML += `<div class="news-item"><b>NEW:</b> ${article.title.substring(0, 50)}...</div>`;
+                    });
+                    analysis.innerHTML += `<br>> LATEST SCAN SUCCESSFUL<br>> DATA SOURCE: GLOBAL NEWS`;
+                }
+            } catch (error) {
+                // BACKUP NEWS IF API IS NOT SET
+                container.innerHTML = `
+                    <div class="news-item"><b>UPDATE:</b> March 2026 Heat Dome intensifies in SW US.</div>
+                    <div class="news-item"><b>REPORT:</b> New El Niño cycle causing erratic monsoon patterns.</div>
+                    <div class="news-item"><b>LEGAL:</b> Greenpeace challenges major oil subsidy in EU.</div>
+                `;
+            }
+        }
+
+        window.onload = fetchLiveUpdates;
+
+        function resetBook() { document.querySelectorAll('.page').forEach(p => p.classList.remove('flipped')); }
     </script>
 </body>
 </html>
