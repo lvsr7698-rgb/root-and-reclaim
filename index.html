@@ -8,131 +8,121 @@
         :root { --nv-green: #00ff41; --firefly-green: rgba(0, 255, 65, 0.9); --paper: #fdfdfd; }
         body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; color: #fff; overflow-x: hidden; }
         
-        /* BACKGROUND & ANIMATION */
+        /* BACKGROUND & WATERMARK */
         .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 90%); }
         .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; opacity: 0.6; filter: drop-shadow(0 0 20px var(--nv-green)); pointer-events: none; }
-        .firefly { position: absolute; width: 5px; height: 5px; background: var(--firefly-green); border-radius: 50%; box-shadow: 0 0 15px 5px var(--firefly-green); animation: drift var(--d) infinite ease-in-out; }
-        @keyframes drift { 0%, 100% { transform: translate(0,0); opacity:0; } 50% { transform: translate(var(--x), var(--y)); opacity:1; } }
+        .tree-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; opacity: 0.05; pointer-events: none; }
 
-        /* NAVIGATION TABS */
-        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--nv-green); z-index: 1000; display: flex; justify-content: center; gap: 15px; padding: 15px 0; }
-        .tab-btn { background: none; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 8px 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
+        /* HEADER & SEARCH */
+        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--nv-green); z-index: 1000; padding: 10px 0; }
+        .search-wrap { display: flex; justify-content: center; gap: 10px; }
+        .search-bar { background: #111; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 8px; width: 250px; outline: none; }
+
+        /* FOUNDER PROFILE */
+        .founder-panel { position: fixed; top: 120px; left: 15px; width: 200px; background: var(--paper); border: 2px solid #333; padding: 20px; color: #111; z-index: 500; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
+        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--nv-green); display: block; margin: 0 auto 10px; object-fit: cover; }
+
+        /* TABS */
+        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        .tab-btn { background: none; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 5px 15px; cursor: pointer; font-size: 0.7rem; }
         .tab-btn.active { background: var(--nv-green); color: #000; }
 
-        /* CONTENT CONTAINERS */
-        .container { margin: 100px auto; width: 90%; max-width: 900px; display: none; }
-        .container.active { display: block; }
-
         /* BOOK PAGES */
-        .paper-sheet { background: var(--paper); color: #111; padding: 50px; margin-bottom: 40px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); border-left: 10px solid #bbb; position: relative; }
+        .container { margin: 150px auto; width: 90%; max-width: 800px; display: none; }
+        .container.active { display: block; }
+        .paper-sheet { background: var(--paper); color: #111; padding: 60px; margin-bottom: 60px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); border-left: 10px solid #bbb; position: relative; overflow: hidden; }
         
-        /* MEDIA CARDS */
-        .media-card { background: #111; border: 1px solid #333; padding: 20px; margin-bottom: 25px; text-align: center; border-radius: 8px; border-left: 5px solid var(--nv-green); position: relative; }
-        .action-bar { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-        .act-btn { background: var(--nv-green); color: #000; border: none; padding: 8px 12px; cursor: pointer; font-weight: bold; border-radius: 4px; font-size: 0.75rem; }
+        .media-card { background: #111; border: 1px solid #333; padding: 20px; margin-bottom: 25px; text-align: center; border-left: 5px solid var(--nv-green); }
+        .act-btn { background: var(--nv-green); color: #000; border: none; padding: 10px 15px; cursor: pointer; font-weight: bold; margin: 5px; }
         
-        /* KISS ANIMATION */
-        .kiss-emoji { position: absolute; font-size: 2.5rem; animation: floatUp 1s ease-out forwards; pointer-events: none; z-index: 2000; }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-120px) scale(1.5); } }
-
-        .comment-input { width: 100%; padding: 10px; margin-top: 10px; background: #222; color: #fff; border: 1px solid #444; box-sizing: border-box; }
+        /* KISS EMOJI */
+        .kiss-emoji { position: absolute; font-size: 2.5rem; animation: floatUp 1s forwards; pointer-events: none; z-index: 2000; }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
     </style>
 </head>
 <body>
     <div class="bg-fixed" id="field"><img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree"></div>
 
-    <nav>
-        <button class="tab-btn active" onclick="openTab('book', event)">The Book</button>
-        <button class="tab-btn" onclick="openTab('music', event)">Music Archive</button>
-        <button class="tab-btn" onclick="openTab('video', event)">Video Vault</button>
-    </nav>
+    <header>
+        <div class="search-wrap">
+            <input type="text" id="publicSearch" class="search-bar" placeholder="SEARCH ARCHIVE..." onkeyup="filterPages()">
+        </div>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="openTab('book', event)">THE BOOK</button>
+            <button class="tab-btn" onclick="openTab('music', event)">MUSIC</button>
+            <button class="tab-btn" onclick="openTab('video', event)">VIDEO</button>
+        </div>
+    </header>
+
+    <div class="founder-panel">
+        <img src="image_0.png" class="profile-img">
+        <center><strong>FOUNDER SRK</strong></center>
+        <p style="font-size: 0.7rem; border-top: 1px solid #ccc; padding-top: 10px; margin-top: 10px;">
+            <strong>About Me:</strong> Architect of ROOT. documenting industrial decay and nature's return. Unlimited reclaim data.
+        </p>
+    </div>
 
     <div id="book" class="container active"></div>
     <div id="music" class="container"></div>
     <div id="video" class="container"></div>
 
     <script>
-        // FIREFLY SYSTEM
-        const fld = document.getElementById('field');
-        for (let i = 0; i < 40; i++) {
-            let f = document.createElement('div'); f.className = 'firefly';
-            f.style.setProperty('--x', (Math.random() * 400 - 200) + 'px');
-            f.style.setProperty('--y', (Math.random() * -400 - 50) + 'px');
-            f.style.setProperty('--d', (Math.random() * 6 + 4) + 's');
-            f.style.left = Math.random() * 100 + '%'; f.style.top = Math.random() * 100 + '%';
-            fld.appendChild(f);
-        }
-
-        // DB SYNC v25
         let db;
-        const request = indexedDB.open("RootReclaimDB_v25", 1);
-        request.onsuccess = (e) => { db = e.target.result; loadArchive(); };
+        const request = indexedDB.open("RootReclaimDB_v26", 1);
+        request.onupgradeneeded = (e) => { e.target.result.createObjectStore("archive", { keyPath: "id" }); };
+        request.onsuccess = (e) => { db = e.target.result; render(); };
 
-        function openTab(name, event) {
+        function openTab(name, e) {
             document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(name).classList.add('active');
-            event.currentTarget.classList.add('active');
+            e.currentTarget.classList.add('active');
         }
 
-        function loadArchive() {
+        function render() {
             const tx = db.transaction("archive", "readonly");
             tx.objectStore("archive").getAll().onsuccess = (e) => {
                 const data = e.target.result.sort((a,b) => b.id - a.id);
                 renderBooks(data.filter(p => !p.fType));
-                renderMusic(data.filter(p => p.fType?.includes('audio')));
-                renderVideos(data.filter(p => p.fType?.includes('video')));
+                renderMedia(data.filter(p => p.fType?.includes('audio')), 'music');
+                renderMedia(data.filter(p => p.fType?.includes('video')), 'video');
             };
         }
 
         function renderBooks(items) {
             document.getElementById('book').innerHTML = items.map(p => `
                 <div class="paper-sheet">
-                    <h2>LOG ENTRY</h2>
+                    <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="tree-watermark">
                     <p style="white-space:pre-wrap; font-size:1.1rem; line-height:2.2rem;">${p.content}</p>
-                    <div class="action-bar">
+                    <button class="act-btn" onclick="spawnKiss(event)">❤ LIKE</button>
+                    <button class="act-btn" onclick="alert('Shared!')">SHARE</button>
+                </div>`).join('');
+        }
+
+        function renderMedia(items, id) {
+            document.getElementById(id).innerHTML = items.map(p => `
+                <div class="media-card">
+                    <h3>${p.fName || 'Media'}</h3>
+                    ${id === 'music' ? `<audio controls src="${p.file}" style="width:100%"></audio>` : `<video controls src="${p.file}" style="width:100%"></video>`}
+                    <div style="margin-top:10px;">
                         <button class="act-btn" onclick="spawnKiss(event)">❤ LIKE</button>
-                        <button class="act-btn" onclick="share()">SHARE</button>
+                        <button class="act-btn" onclick="window.open('${p.file}')">DOWNLOAD</button>
                     </div>
                 </div>`).join('');
         }
 
-        function renderMusic(items) {
-            document.getElementById('music').innerHTML = items.map(p => `
-                <div class="media-card">
-                    <h3>🎵 ${p.fName}</h3>
-                    <audio controls src="${p.file}" style="width:100%"></audio>
-                    <div class="action-bar">
-                        <button class="act-btn" onclick="spawnKiss(event)">❤ LIKE</button>
-                        <button class="act-btn" onclick="dl('${p.file}','${p.fName}')">DOWNLOAD</button>
-                    </div>
-                </div>`).join('');
-        }
-
-        function renderVideos(items) {
-            document.getElementById('video').innerHTML = items.map(p => `
-                <div class="media-card">
-                    <video controls src="${p.file}" style="width:100%"></video>
-                    <h3>${p.fName}</h3>
-                    <div class="action-bar">
-                        <button class="act-btn" onclick="spawnKiss(event)">❤ LIKE</button>
-                        <button class="act-btn" onclick="dl('${p.file}','${p.fName}')">DOWNLOAD</button>
-                    </div>
-                </div>`).join('');
+        function filterPages() {
+            let q = document.getElementById('publicSearch').value.toLowerCase();
+            document.querySelectorAll('.paper-sheet, .media-card').forEach(el => {
+                el.style.display = el.innerText.toLowerCase().includes(q) ? 'block' : 'none';
+            });
         }
 
         function spawnKiss(e) {
-            const kiss = document.createElement('div');
-            kiss.className = 'kiss-emoji';
-            kiss.innerText = '💋';
-            kiss.style.left = (e.pageX - 20) + 'px';
-            kiss.style.top = (e.pageY - 40) + 'px';
-            document.body.appendChild(kiss);
-            setTimeout(() => kiss.remove(), 1000);
+            const k = document.createElement('div'); k.className = 'kiss-emoji'; k.innerText = '💋';
+            k.style.left = e.pageX + 'px'; k.style.top = e.pageY + 'px';
+            document.body.appendChild(k); setTimeout(() => k.remove(), 1000);
         }
-
-        function dl(s, n) { const a = document.createElement('a'); a.href = s; a.download = n; a.click(); }
-        function share() { alert("Link copied! Share your reclaim findings."); }
     </script>
 </body>
 </html>
