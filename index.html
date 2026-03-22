@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT and reclaim | MASTER ARCHIVE</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>ROOT and reclaim | UNIVERSAL ARCHIVE</title>
     <style>
         :root {
             --nv-green: #00ff41;
-            --firefly-gold: rgba(241, 196, 15, 0.9);
-            --deep-black: #05080a;
+            --firefly-green: rgba(0, 255, 65, 0.9);
+            --paper-color: #fdfdfd;
+            --ink-color: #1a1a1a;
             --sea-blue: #2980b9;
         }
 
         body, html {
             margin: 0; padding: 0;
             background: #000;
-            font-family: 'Consolas', monospace;
-            color: var(--nv-green);
+            font-family: 'Consolas', 'Courier New', monospace;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* --- BACKGROUND: TREE & FIREFLIES --- */
+        /* --- BACKGROUND: TREE & NEON GREEN FIREFLIES --- */
         .bg-fixed {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
@@ -30,112 +30,110 @@
         .big-tree {
             position: absolute; bottom: 0; left: 50%;
             transform: translateX(-50%);
-            width: 90%; max-width: 800px; opacity: 0.7;
-            filter: drop-shadow(0 0 30px var(--nv-green));
+            width: 80%; max-width: 700px; opacity: 0.6;
+            filter: drop-shadow(0 0 20px var(--nv-green));
             pointer-events: none;
         }
         .firefly {
-            position: absolute; width: 4px; height: 4px;
-            background: var(--firefly-gold); border-radius: 50%;
-            box-shadow: 0 0 12px 3px var(--firefly-gold);
+            position: absolute; width: 5px; height: 5px;
+            background: var(--firefly-green); border-radius: 50%;
+            box-shadow: 0 0 15px 6px var(--firefly-green);
             animation: drift var(--d) infinite ease-in-out;
         }
-        @keyframes drift {
-            0%, 100% { transform: translate(0, 0); opacity: 0.2; }
-            50% { transform: translate(var(--x), var(--y)); opacity: 1; }
-        }
+        @keyframes drift { 0%, 100% { transform: translate(0,0); opacity:0; } 50% { transform: translate(var(--x), var(--y)); opacity:1; } }
 
-        /* --- DASHBOARD (TOP LEFT) --- */
-        .founder-corner {
-            position: fixed; top: 80px; left: 20px; width: 210px;
-            background: rgba(255, 255, 255, 0.95); border: 2px solid var(--nv-green);
-            padding: 15px; color: #111; z-index: 1001; font-size: 0.75rem;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        /* --- HEADER & ANNOUNCEMENT TICKER --- */
+        header {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--nv-green);
+            z-index: 1000;
         }
-        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--nv-green); display: block; margin: 0 auto 10px; object-fit: cover; }
-        .control-btn { background: #000; color: #fff; width: 100%; border: none; padding: 8px; margin-top: 8px; cursor: pointer; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
-        
-        /* --- FULL VIEW BOOK --- */
-        .book-container {
-            margin: 120px 40px 100px 250px; 
-            background: rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(5px); 
-            color: #fff; padding: 50px;
-            border-radius: 10px; border: 1px solid rgba(0, 255, 65, 0.2);
-            min-height: 85vh; position: relative;
+        .header-top { display: flex; align-items: center; justify-content: space-between; padding: 10px 40px; }
+        .ticker-wrap { background: #001a00; border-top: 1px solid #004d00; overflow: hidden; white-space: nowrap; padding: 5px 0; }
+        .ticker-text { display: inline-block; color: var(--nv-green); font-weight: bold; font-size: 0.8rem; animation: ticker 30s linear infinite; text-transform: uppercase; }
+        @keyframes ticker { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+
+        /* --- FOUNDER/ADMIN DASHBOARD --- */
+        .admin-corner {
+            position: fixed; top: 125px; left: 20px; width: 220px;
+            background: var(--paper-color); border: 3px solid #333;
+            padding: 15px; color: #000; z-index: 500;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
         }
+        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--nv-green); display: block; margin: 0 auto 10px; object-fit: cover; }
+        .ctrl-btn { background: #111; color: #fff; width: 100%; border: none; padding: 8px; margin-top: 5px; cursor: pointer; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .ctrl-btn:hover { background: var(--nv-green); color: #000; }
 
-        .saved-page { border-bottom: 1px solid rgba(0, 255, 65, 0.2); padding: 60px 0; position: relative; }
-        .watermark {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px; border-radius: 50%;
-            background: radial-gradient(circle, #00ff41, #8e44ad);
-            opacity: 0.06; pointer-events: none;
+        /* --- THE PHYSICAL PAPER STACK --- */
+        .book-stack { margin: 160px auto 150px 280px; width: 65%; max-width: 900px; display: flex; flex-direction: column; gap: 70px; }
+        .paper-sheet {
+            background: var(--paper-color); background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 2.2rem; color: var(--ink-color); padding: 70px 60px; min-height: 900px;
+            position: relative; box-shadow: 3px 3px 15px rgba(0,0,0,0.3), 8px 8px 0px #fff, 15px 15px 0px #ddd;
+            border-left: 10px solid #bbb;
         }
+        .paper-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, #00ff41, #8e44ad); opacity: 0.05; pointer-events: none; }
 
-        /* LIVE EDITOR & MUSIC NODE */
-        .editor-area { width: 100%; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid var(--nv-green); padding: 15px; font-family: inherit; margin-top: 10px; min-height: 100px; display: block; }
-        
-        .audio-node {
-            background: rgba(0,0,0,0.8); border: 2px solid var(--nv-green);
-            padding: 20px; margin: 20px 0; border-radius: 5px; text-align: center;
-        }
-        .audio-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
-        .audio-btn { background: var(--nv-green); color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
-        .audio-btn.dl { background: var(--sea-blue); color: #fff; }
+        /* --- UNIVERSAL MEDIA VIEWER --- */
+        .media-box { background: #1a1a1a; color: var(--nv-green); padding: 25px; border-radius: 10px; margin: 30px 0; border: 2px solid #000; text-align: center; }
+        .p-btn { background: var(--nv-green); border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 5px; margin: 5px; font-family: inherit; }
+        .like-btn { background: #ff4757; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 
-        .page-actions { position: absolute; top: 20px; right: 0; z-index: 10; display: flex; gap: 10px; }
-        .action-btn { background: #000; color: var(--nv-green); border: 1px solid var(--nv-green); padding: 5px 12px; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
-        
-        .archive-img { max-width: 80%; display: block; margin: 20px auto; border: 2px solid var(--nv-green); }
-        .page-content-display { font-size: 1.2rem; line-height: 1.8; text-shadow: 1px 1px 2px #000; white-space: pre-wrap; margin-top: 15px; }
+        .social-share { margin-top: 40px; border-top: 1px dashed #ccc; padding-top: 20px; display: flex; gap: 15px; align-items: center; }
+        .share-link { text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.75rem; color: #fff; font-weight: bold; }
+        .fb { background: #3b5998; } .tw { background: #1da1f2; } .wa { background: #25d366; }
 
-        footer { position: fixed; bottom: 0; width: 100%; height: 40px; background: var(--sea-blue); z-index: 1000; overflow: hidden; }
-        .sea-layer { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,192L48,176C96,160,192,128,288,144C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,181.3C1248,192,1344,160,1392,144L1440,128V320H0Z"></path></svg>'); animation: wave 12s linear infinite; }
+        .page-ctrls { position: absolute; top: 20px; right: 20px; }
+        .edit-area { width: 100%; height: 500px; background: transparent; border: 1px dashed #ccc; font-family: inherit; font-size: 1.2rem; line-height: 2.2rem; outline: none; resize: none; }
+
+        footer { position: fixed; bottom: 0; width: 100%; height: 45px; background: var(--sea-blue); z-index: 1000; }
+        .sea { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,213.3C960,224,1056,192,1152,165.3C1248,139,1344,117,1392,106.7L1440,96V320H0Z"></path></svg>'); animation: flow 12s linear infinite; }
+        @keyframes flow { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
 
-    <div class="bg-fixed" id="fireflyField">
+    <div class="bg-fixed" id="field">
         <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree">
     </div>
 
-    <header style="position:fixed; top:0; width:100%; background:rgba(0,0,0,0.9); border-bottom:2px solid var(--nv-green); padding:10px 40px; z-index:1100; display:flex; align-items:center;">
-        <div class="logo">🌿</div>
-        <div style="margin-left:15px; font-weight:bold; letter-spacing:2px;">ROOT and reclaim</div>
+    <header>
+        <div class="header-top">
+            <div style="display:flex; align-items:center;">
+                <div style="width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,#00ff41,#8e44ad);box-shadow:0 0 10px var(--nv-green);"></div>
+                <div style="margin-left:15px; color:var(--nv-green); font-weight:bold; letter-spacing:2px;">ROOT and reclaim</div>
+            </div>
+            <div style="background:#111; border:1px solid var(--nv-green); padding:5px 15px; border-radius:20px;">
+                <input type="text" id="globalSearch" placeholder="SEARCH ARCHIVE..." onkeyup="filterArchive()" style="background:transparent; border:none; color:var(--nv-green); outline:none; width:200px; font-family:inherit;">
+            </div>
+        </div>
+        <div class="ticker-wrap">
+            <div class="ticker-text" id="tickerContent">
+                SYSTEM STATUS: OPTIMAL // ARCHIVE v13.0 LIVE // FOUNDER SRK IS PROCESSING RECLAIM PACKETS // GREEN FIREFLY PROTOCOL ENGAGED // 
+            </div>
+        </div>
     </header>
 
-    <div class="founder-corner">
-        <img src="image_0.png" class="profile-img" alt="Founder">
+    <div class="admin-corner">
+        <img src="image_0.png" class="profile-img">
         <center><strong>FOUNDER SRK</strong></center>
-        
-        <button class="control-btn" onclick="addNewPage()">+ New Empty Page</button>
-        <button class="control-btn" style="background:var(--sea-blue)" onclick="document.getElementById('importFile').click()">Import Image/JSON</button>
-        <button class="control-btn" style="background:var(--firefly-gold); color:#000;" onclick="document.getElementById('importMusic').click()">🎵 Import Music</button>
-        
-        <input type="file" id="importFile" style="display:none" onchange="handleImport(event)" accept="image/*,.json,.txt">
-        <input type="file" id="importMusic" style="display:none" onchange="handleMusicImport(event)" accept="audio/*">
-        
-        <button class="control-btn" onclick="exportPDF()">Export PDF</button>
-        <button class="control-btn" onclick="exportJSON()">Master Backup</button>
-        <button class="control-btn" style="background:#c0392b" onclick="resetBook()">Reset Archive</button>
+        <button class="ctrl-btn" onclick="addPaper()">+ NEW PAGE</button>
+        <button class="ctrl-btn" style="background:var(--sea-blue)" onclick="document.getElementById('universalIn').click()">📂 IMPORT ANY FILE</button>
+        <input type="file" id="universalIn" style="display:none" onchange="handleUniversalImport(event)">
+        <button class="ctrl-btn" onclick="exportData()">EXPORT BACKUP</button>
+        <button class="ctrl-btn" style="background:red" onclick="resetAll()">PURGE ALL</button>
+        <button class="ctrl-btn" style="background:green" onclick="updateTicker()">EDIT TICKER</button>
     </div>
 
-    <div class="book-container" id="captureArea">
-        <div class="book-header">
-            <h1 style="margin:0;">INFINITE ARCHIVE</h1>
-            <span id="pageCounter" style="color:var(--nv-green); font-weight:bold;">PAGES: 0</span>
-        </div>
-        <div class="pages-list" id="ledgerList"></div>
-    </div>
+    <div class="book-stack" id="bookStack"></div>
 
-    <footer><div class="sea-layer"></div></footer>
+    <footer><div class="sea"></div></footer>
 
     <script>
-        // FIREFLIES ENGINE
-        const field = document.getElementById('fireflyField');
+        // GREEN GLOW FIREFLY SYSTEM
+        const field = document.getElementById('field');
         for (let i = 0; i < 50; i++) {
-            const ff = document.createElement('div');
+            let ff = document.createElement('div');
             ff.className = 'firefly';
             ff.style.setProperty('--x', (Math.random() * 500 - 250) + 'px');
             ff.style.setProperty('--y', (Math.random() * -500 - 50) + 'px');
@@ -146,153 +144,89 @@
             field.appendChild(ff);
         }
 
-        // DATA CORE
-        let archive = JSON.parse(localStorage.getItem('srk_master_v8')) || [];
-        if (archive.length === 0) addNewPage(false);
+        let ledger = JSON.parse(localStorage.getItem('srk_ledger_v13')) || [];
+        if (ledger.length === 0) addPaper(false);
 
-        function addNewPage(shouldUpdate = true) {
-            archive.push({ 
-                id: Date.now() + Math.random(), 
-                content: "", 
-                isEditing: true,
-                image: null, 
-                audio: null,
-                audioName: null,
-                timestamp: "NEW PAGE", 
-                pageNumber: archive.length + 1 
-            });
-            if(shouldUpdate) updateStorage();
+        function addPaper(update = true) {
+            ledger.push({ id: Date.now() + Math.random(), content: "", file: null, fileName: "", fileType: "", isEdit: true, pageNum: ledger.length + 1, likes: 0 });
+            if(update) save();
         }
 
-        function updateStorage() {
-            localStorage.setItem('srk_master_v8', JSON.stringify(archive));
-            renderLedger();
-        }
+        function save() { localStorage.setItem('srk_ledger_v13', JSON.stringify(ledger)); render(); }
 
-        function renderLedger() {
-            const list = document.getElementById('ledgerList');
-            document.getElementById('pageCounter').innerText = `PAGES: ${archive.length}`;
-            list.innerHTML = ''; 
-
-            archive.forEach((item) => {
-                list.innerHTML += `
-                    <div class="saved-page">
-                        <div class="watermark"></div>
-                        <div class="page-actions">
-                            ${item.isEditing ? 
-                                `<button class="action-btn" onclick="savePage(${item.id})">SAVE PAGE</button>` : 
-                                `<button class="action-btn" onclick="editPage(${item.id})">EDIT DATA</button>`
-                            }
-                            <button class="action-btn" style="color:red; border-color:red;" onclick="deletePage(${item.id})">DELETE PAGE</button>
+        function render() {
+            const stack = document.getElementById('bookStack');
+            stack.innerHTML = '';
+            ledger.forEach((p) => {
+                const shareUrl = encodeURIComponent(window.location.href);
+                stack.innerHTML += `
+                    <div class="paper-sheet">
+                        <div class="paper-watermark"></div>
+                        <div class="page-ctrls">
+                            ${p.isEdit ? `<button onclick="savePage(${p.id})" style="background:green;color:white;padding:5px 10px;cursor:pointer;border:none;">SAVE</button>` : 
+                            `<button onclick="editPage(${p.id})" style="background:#333;color:white;padding:5px 10px;cursor:pointer;border:none;">EDIT</button>`}
+                            <button onclick="delPage(${p.id})" style="background:red;color:white;padding:5px 10px;cursor:pointer;margin-left:5px;border:none;">DEL</button>
                         </div>
-                        <h2 style="color:var(--nv-green);">Page ${item.pageNumber}</h2>
+                        <h2>ENTRY: ${p.pageNum}</h2>
                         
-                        ${item.image ? `<img src="${item.image}" class="archive-img">` : ''}
-                        
-                        ${item.audio ? `
-                            <div class="audio-node">
-                                <strong>🎵 AUDIO PACKET: ${item.audioName}</strong>
-                                <audio id="audio-${item.id}" src="${item.audio}"></audio>
-                                <div class="audio-controls">
-                                    <button class="audio-btn" onclick="document.getElementById('audio-${item.id}').play()">PLAY</button>
-                                    <button class="audio-btn" onclick="document.getElementById('audio-${item.id}').pause()">PAUSE</button>
-                                    <button class="audio-btn dl" onclick="downloadAudio('${item.audio}', '${item.audioName}')">DOWNLOAD</button>
-                                </div>
-                            </div>
-                        ` : ''}
+                        ${renderMedia(p)}
 
-                        ${item.isEditing ? 
-                            `<textarea class="editor-area" id="edit-${item.id}" placeholder="Write analysis here...">${item.content}</textarea>` :
-                            `<div class="page-content-display">${item.content || "<em>No data recorded.</em>"}</div>`
-                        }
+                        ${p.isEdit ? `<textarea class="edit-area" id="txt-${p.id}">${p.content}</textarea>` :
+                        `<div style="font-size:1.2rem;line-height:2.2rem;white-space:pre-wrap;">${p.content || "[NO DATA]"}</div>`}
                         
-                        <div style="font-size:0.7rem; color:var(--nv-green); opacity:0.5; margin-top:20px;">SYNC: ${item.timestamp}</div>
-                    </div>
-                `;
+                        <div style="margin-top:20px;">
+                            <button class="like-btn" onclick="addLike(${p.id})">❤ ${p.likes} LIKES</button>
+                        </div>
+
+                        <div class="social-share">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-link fb">FB</a>
+                            <a href="https://twitter.com/intent/tweet?url=${shareUrl}" target="_blank" class="share-link tw">X</a>
+                            <a href="https://api.whatsapp.com/send?text=${shareUrl}" target="_blank" class="share-link wa">WA</a>
+                        </div>
+                    </div>`;
             });
         }
 
-        // CRUD FUNCTIONS
-        function savePage(id) {
-            const item = archive.find(i => i.id === id);
-            const textVal = document.getElementById(`edit-${id}`).value;
-            item.content = textVal;
-            item.isEditing = false;
-            item.timestamp = new Date().toLocaleString();
-            updateStorage();
-        }
-
-        function editPage(id) {
-            const item = archive.find(i => i.id === id);
-            item.isEditing = true;
-            renderLedger();
-        }
-
-        function deletePage(id) {
-            if(confirm("Permanently delete this entire page and its contents?")) {
-                archive = archive.filter(i => i.id !== id);
-                archive.forEach((p, idx) => p.pageNumber = idx + 1);
-                updateStorage();
+        function renderMedia(p) {
+            if(!p.file) return '';
+            if(p.fileType.includes('audio')) {
+                return `<div class="media-box"><strong>🎵 AUDIO: ${p.fileName}</strong><audio id="aud-${p.id}" src="${p.file}"></audio><div><button class="p-btn" onclick="document.getElementById('aud-${p.id}').play()">PLAY</button><button class="p-btn" onclick="document.getElementById('aud-${p.id}').pause()">PAUSE</button><button class="p-btn" style="background:#3498db;color:#fff;" onclick="dlFile('${p.file}','${p.fileName}')">DOWNLOAD</button></div></div>`;
             }
-        }
-
-        function downloadAudio(src, name) {
-            const link = document.createElement('a');
-            link.href = src;
-            link.download = name || "reclaim_audio.mp3";
-            link.click();
-        }
-
-        // IMPORT FUNCTIONS
-        function handleImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            if (file.type.startsWith('image/')) {
-                reader.onload = e => { 
-                    archive.push({ id: Date.now(), content: "", isEditing: true, image: e.target.result, audio:null, timestamp: "IMAGE IMPORTED", pageNumber: archive.length + 1 }); 
-                    updateStorage(); 
-                };
-                reader.readAsDataURL(file);
-            } else {
-                reader.onload = e => {
-                    try { 
-                        const parsed = JSON.parse(e.target.result); 
-                        if (Array.isArray(parsed)) archive = parsed; 
-                    } catch { 
-                        archive.push({ id: Date.now(), content: e.target.result, isEditing: false, image: null, audio:null, timestamp: "TEXT IMPORTED", pageNumber: archive.length + 1 }); 
-                    }
-                    updateStorage();
-                };
-                reader.readAsText(file);
+            if(p.fileType.includes('image')) {
+                return `<img src="${p.file}" style="max-width:100%; border:2px solid #000; margin:20px 0;">`;
             }
+            if(p.fileType.includes('video')) {
+                return `<video src="${p.file}" controls style="max-width:100%; margin:20px 0;"></video>`;
+            }
+            return `<div class="media-box"><strong>📄 ATTACHMENT: ${p.fileName}</strong><br><button class="p-btn" onclick="dlFile('${p.file}','${p.fileName}')">DOWNLOAD FILE</button></div>`;
         }
 
-        function handleMusicImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function handleUniversalImport(e) {
+            const file = e.target.files[0]; if(!file) return;
             const reader = new FileReader();
-            reader.onload = e => {
-                archive.push({ 
-                    id: Date.now(), 
-                    content: "Music analysis log.", 
-                    isEditing: true,
-                    image: null, 
-                    audio: e.target.result, 
-                    audioName: file.name,
-                    timestamp: "MUSIC IMPORTED", 
-                    pageNumber: archive.length + 1 
-                });
-                updateStorage();
+            reader.onload = (ev) => {
+                ledger.push({ id: Date.now(), content: "Imported " + file.type + " analysis.", file: ev.target.result, fileName: file.name, fileType: file.type, isEdit: false, pageNum: ledger.length + 1, likes: 0 });
+                save();
             };
-            reader.readAsDataURL(file);
+            if(file.type.includes('text') || file.type.includes('json')) { reader.readAsText(file); } else { reader.readAsDataURL(file); }
         }
 
-        function resetBook() { if(confirm("Wipe entire archive? This cannot be undone.")) { localStorage.removeItem('srk_master_v8'); location.reload(); } }
-        function exportPDF() { html2pdf().set({ margin: 0.5, filename: 'SRK_ARCHIVE.pdf', html2canvas: { scale: 2, backgroundColor: '#000000' } }).from(document.getElementById('captureArea')).save(); }
-        function exportJSON() { const blob = new Blob([JSON.stringify(archive, null, 2)], { type: "application/json" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "SRK_BACKUP.json"; link.click(); }
+        function addLike(id) { let p = ledger.find(x => x.id === id); p.likes++; save(); }
+        function updateTicker() { const newMsg = prompt("Enter Ticker Msg:", document.getElementById('tickerContent').innerText); if(newMsg) document.getElementById('tickerContent').innerText = newMsg.toUpperCase() + " // "; }
+        function savePage(id) { let p = ledger.find(x => x.id === id); p.content = document.getElementById(`txt-${id}`).value; p.isEdit = false; save(); }
+        function editPage(id) { ledger.find(x => x.id === id).isEdit = true; render(); }
+        function delPage(id) { if(confirm("Delete?")) { ledger = ledger.filter(x => x.id !== id); ledger.forEach((x, i) => x.pageNum = i + 1); save(); } }
+        function dlFile(src, name) { const a = document.createElement('a'); a.href = src; a.download = name; a.click(); }
+        function resetAll() { if(confirm("Reset?")) { localStorage.removeItem('srk_ledger_v13'); location.reload(); } }
+        function exportData() { const blob = new Blob([JSON.stringify(ledger, null, 2)], {type: "application/json"}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "ROOT_BACKUP.json"; a.click(); }
+        function filterArchive() {
+            const query = document.getElementById('globalSearch').value.toLowerCase();
+            document.querySelectorAll('.paper-sheet').forEach(sheet => {
+                sheet.style.display = sheet.innerText.toLowerCase().includes(query) ? 'block' : 'none';
+            });
+        }
 
-        window.onload = renderLedger;
+        window.onload = render;
     </script>
 </body>
 </html>
