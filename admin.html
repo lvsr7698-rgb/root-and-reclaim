@@ -1,52 +1,54 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | FOUNDER COMMAND v31</title>
+    <title>ROOT | FOUNDER COMMAND v32</title>
     <style>
         :root { --nv-green: #00ff41; --bg: #050505; }
         body { background: var(--bg); color: var(--nv-green); font-family: 'Consolas', monospace; padding: 15px; margin: 0; }
-        .panel { border: 2px solid var(--nv-green); padding: 15px; background: #111; margin-bottom: 20px; }
+        .panel { border: 2px solid var(--nv-green); padding: 15px; background: #111; max-width: 800px; margin: 0 auto; }
         
-        /* ANALYTICS BOXES */
+        /* NOTIFICATION BELL */
+        .notify-box { background: #ff3131; color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 5px; animation: pulse 2s infinite; display: none; text-align: center; font-weight: bold; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        /* ANALYTICS GRID */
         .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: #000; border: 1px solid var(--nv-green); padding: 15px; height: 200px; overflow-y: auto; font-size: 0.75rem; }
-        .stat-header { border-bottom: 1px solid var(--nv-green); padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; color: #fff; }
-        
-        /* ACTION BUTTONS */
+        .stat-box { background: #000; border: 1px solid var(--nv-green); padding: 15px; height: 180px; overflow-y: auto; font-size: 0.75rem; }
+        .stat-header { border-bottom: 1px solid var(--nv-green); padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; color: #fff; }
+
+        /* BUTTONS */
         .btn { width: 100%; padding: 15px; background: var(--nv-green); color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; }
         .btn-blue { background: #3498db; color: #fff; }
-        .btn-clear { background: #ff3131; color: #fff; font-size: 0.6rem; padding: 5px; width: auto; margin-top: 5px; }
-
-        .card { background: #000; border: 1px solid #333; padding: 15px; margin-top: 15px; border-left: 5px solid var(--nv-green); }
-        textarea { width: 100%; height: 80px; background: #111; color: #fff; border: 1px solid #444; margin-top: 10px; }
+        .btn-link { background: #8e44ad; color: #fff; }
         
+        /* CONTENT CARDS */
+        .card { background: #000; border: 1px solid #333; padding: 15px; margin-top: 15px; border-left: 5px solid var(--nv-green); }
+        textarea { width: 100%; height: 80px; background: #111; color: #fff; border: 1px solid #444; margin-top: 10px; padding: 10px; box-sizing: border-box; }
         .log-entry { border-bottom: 1px solid #222; padding: 5px 0; color: #aaa; }
-        .new-tag { color: #ff3131; font-weight: bold; margin-right: 5px; }
     </style>
 </head>
 <body>
 
     <div class="panel">
+        <div id="notifyBell" class="notify-box">🔔 NEW PUBLIC INTERACTION DETECTED</div>
         <h2 style="text-align:center; margin-top:0;">FOUNDER COMMAND CENTER</h2>
         
         <div class="analytics-grid">
             <div class="stat-box">
-                <div class="stat-header">👤 PUBLIC VISITOR LOGS</div>
-                <div id="visitLogs">Waiting for data...</div>
-                <button class="btn-clear" onclick="clearLogs('visit')">Clear Visitor Logs</button>
+                <div class="stat-header">👤 VISITOR LOGS</div>
+                <div id="visitLogs">Waiting for pulse...</div>
             </div>
-
             <div class="stat-box">
                 <div class="stat-header">💬 PUBLIC COMMENTS</div>
-                <div id="commentLogs">No new interactions...</div>
-                <button class="btn-clear" onclick="clearLogs('comment')">Clear All Comments</button>
+                <div id="commentLogs">No new messages...</div>
             </div>
         </div>
 
-        <button class="btn" onclick="addPage()">+ CREATE NEW BOOK PAGE</button>
-        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD MEDIA</button>
+        <button class="btn" onclick="addBookPage()">+ NEW BOOK PAGE</button>
+        <button class="btn btn-link" onclick="addByLink()">🔗 ADD MEDIA VIA LINK</button>
+        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD SMALL FILE</button>
         <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
         
         <div id="adminList"></div>
@@ -54,8 +56,20 @@
 
     <script>
         let db;
-        const request = indexedDB.open("RootReclaimDB_v26", 1);
-        request.onsuccess = (e) => { db = e.target.result; render(); };
+        // MUST match the version in your index.html
+        const request = indexedDB.open("RootReclaimDB_v32", 1);
+
+        request.onupgradeneeded = (e) => {
+            let database = e.target.result;
+            if (!database.objectStoreNames.contains("archive")) {
+                database.createObjectStore("archive", { keyPath: "id" });
+            }
+        };
+
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            render();
+        };
 
         function render() {
             const tx = db.transaction("archive", "readonly");
@@ -65,26 +79,21 @@
                 // 1. UPDATE VISITOR BOX
                 const visits = allData.filter(d => d.dataType === "visit").sort((a,b)=>b.id-a.id);
                 document.getElementById('visitLogs').innerHTML = visits.map(v => `
-                    <div class="log-entry">
-                        [${v.time}] <span style="color:var(--nv-green)">${v.device}</span>
-                    </div>`).join('') || "No visits recorded.";
+                    <div class="log-entry">[${v.time}] ${v.device}</div>`).join('') || "No visits logged.";
 
-                // 2. UPDATE COMMENT BOX
-                let commentsFound = false;
+                // 2. UPDATE COMMENT BOX & NOTIFY BELL
                 let commentHTML = "";
+                let hasNewComment = false;
                 allData.forEach(p => {
-                    if(p.comments && p.comments.length > 0) {
-                        commentsFound = true;
+                    if(p.comments) {
                         p.comments.forEach(c => {
-                            commentHTML += `
-                                <div class="log-entry">
-                                    <span class="new-tag">${c.isNew ? 'NEW' : ''}</span>
-                                    <strong>On "${p.fName || 'Log'}":</strong> ${c.text}
-                                </div>`;
+                            if(c.isNew) hasNewComment = true;
+                            commentHTML += `<div class="log-entry"><strong>${p.fName || 'Log'}:</strong> ${c.text}</div>`;
                         });
                     }
                 });
-                document.getElementById('commentLogs').innerHTML = commentHTML || "No comments yet.";
+                document.getElementById('commentLogs').innerHTML = commentHTML || "No comments.";
+                document.getElementById('notifyBell').style.display = hasNewComment ? 'block' : 'none';
 
                 // 3. RENDER CONTENT CARDS
                 const content = allData.filter(p => !p.dataType).sort((a,b)=>b.id-a.id);
@@ -92,13 +101,33 @@
                     <div class="card">
                         <strong>${p.fName || 'Text Log'}</strong>
                         <textarea id="edit-${p.id}">${p.content}</textarea>
-                        <button class="btn" style="padding:10px; margin-top:10px;" onclick="save(${p.id})">UPDATE PAGE & MARK READ</button>
-                        <button onclick="del(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer;">[DELETE]</button>
+                        <button class="btn" style="padding:10px; margin-top:10px;" onclick="save(${p.id})">UPDATE & MARK READ</button>
+                        <button onclick="del(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer; margin-top:10px;">[DELETE]</button>
                     </div>`).join('');
             };
         }
 
-        // ... (Keep existing handleUpload, addPage, and del functions) ...
+        function handleUpload(e) {
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const entry = { id: Date.now(), content: "", file: ev.target.result, fName: file.name, fType: file.type };
+                db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function addByLink() {
+            const url = prompt("Paste Direct Link:");
+            if(!url) return;
+            const entry = { id: Date.now(), content: "", file: url, fName: "Linked Media", fType: url.includes('video') ? 'video' : 'audio' };
+            db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
+        }
+
+        function addBookPage() {
+            const entry = { id: Date.now(), content: "New log entry...", fType: null };
+            db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
+        }
 
         function save(id) {
             const tx = db.transaction("archive", "readwrite");
@@ -108,209 +137,15 @@
                 data.content = document.getElementById(`edit-${id}`).value;
                 if(data.comments) data.comments.forEach(c => c.isNew = false);
                 store.put(data);
-                tx.oncomplete = () => { alert("Page Updated"); render(); };
+                tx.oncomplete = () => { alert("Saved and Read"); render(); };
             };
         }
 
-        function clearLogs(type) {
-            if(!confirm("Purge these data logs?")) return;
-            const tx = db.transaction("archive", "readwrite");
-            const store = tx.objectStore("archive");
-            if(type === 'visit') {
-                store.getAll().onsuccess = (e) => {
-                    e.target.result.filter(d => d.dataType === 'visit').forEach(v => store.delete(v.id));
-                    tx.oncomplete = render;
-                };
+        function del(id) {
+            if(confirm("Delete this?")) {
+                db.transaction("archive", "readwrite").objectStore("archive").delete(id).onsuccess = render;
             }
         }
     </script>
 </body>
 </html>
-
-
-<script>
-    // ... (Keep existing DB and Upload logic) ...
-
-    function render() {
-        const list = document.getElementById('adminList');
-        const vList = document.getElementById('visitList');
-        const bell = document.getElementById('notifyBell');
-        
-        const tx = db.transaction("archive", "readonly");
-        tx.objectStore("archive").getAll().onsuccess = (e) => {
-            const allData = e.target.result;
-            
-            // 1. ANALYSE VISITOR DATA
-            const visits = allData.filter(d => d.type === "visit");
-            vList.innerHTML = visits.map(v => `<div>[${v.time}] Visitor via ${v.platform}</div>`).join('');
-
-            // 2. CHECK FOR NOTIFICATIONS (Unread comments)
-            const hasNew = allData.some(p => p.comments && p.comments.some(c => c.founderNotify));
-            bell.style.display = hasNew ? 'block' : 'none';
-
-            // 3. RENDER CONTENT CARDS
-            list.innerHTML = allData.filter(p => p.id && !p.type).map(p => `
-                <div class="card">
-                    <strong>${p.fName || 'Text Log'}</strong>
-                    <div style="color:yellow; font-size:0.7rem;">Comments: ${(p.comments || []).length}</div>
-                    <textarea id="edit-${p.id}">${p.content}</textarea>
-                    <button class="btn" onclick="save(${p.id})">SAVE & CLEAR NOTIFY</button>
-                </div>`).join('');
-        };
-    }
-
-    function save(id) {
-        const tx = db.transaction("archive", "readwrite");
-        const store = tx.objectStore("archive");
-        store.get(id).onsuccess = (e) => {
-            const data = e.target.result;
-            data.content = document.getElementById(`edit-${id}`).value;
-            // Clear notifications for this page
-            if(data.comments) data.comments.forEach(c => c.founderNotify = false);
-            store.put(data);
-            tx.oncomplete = () => { alert("Updated & Notifications Cleared"); render(); };
-        };
-    }
-</script>
-
-        body { background: #0a0a0a; color: #00ff41; font-family: monospace; padding: 20px; }
-        .panel { border: 2px solid #00ff41; padding: 20px; background: #111; max-width: 600px; margin: 0 auto; }
-        .btn { width: 100%; padding: 15px; background: #00ff41; color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; }
-        .btn-link { background: #8e44ad; color: #fff; }
-        .card { background: #000; border: 1px solid #333; padding: 15px; margin-top: 15px; border-left: 5px solid #00ff41; }
-        textarea { width: 100%; height: 100px; background: #222; color: #fff; border: 1px solid #444; margin-top: 10px; }
-    </style>
-</head>
-<body>
-    <div class="panel">
-        <h2>FOUNDER COMMAND v26</h2>
-        <button class="btn" onclick="addBookPage()">+ NEW BOOK PAGE</button>
-        <button class="btn btn-link" onclick="addByLink()">🔗 ADD MUSIC/VIDEO VIA LINK (FOR LARGE FILES)</button>
-        <button class="btn" style="background:#3498db; color:#fff;" onclick="document.getElementById('fileIn').click()">📂 UPLOAD SMALL FILE (<TB)</button>
-        <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
-        <div id="adminList"></div>
-    </div>
-
-    <script>
-        let db;
-        const request = indexedDB.open("RootReclaimDB_v26", 1);
-        request.onupgradeneeded = (e) => { e.target.result.createObjectStore("archive", { keyPath: "id" }); };
-        request.onsuccess = (e) => { db = e.target.result; render(); };
-
-        function addByLink() {
-            const url = prompt("Paste Direct Link to Music/Video:");
-            if(!url) return;
-            const entry = { id: Date.now(), content: "Linked Media", file: url, fName: "Cloud File", fType: url.includes('video') ? 'video' : 'audio' };
-            const tx = db.transaction("archive", "readwrite");
-            tx.objectStore("archive").add(entry);
-            tx.oncomplete = render;
-        }
-
-        function handleUpload(e) {
-            const file = e.target.files[0]; if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const entry = { id: Date.now(), content: "Upload: " + file.name, file: ev.target.result, fName: file.name, fType: file.type };
-                const tx = db.transaction("archive", "readwrite");
-                tx.objectStore("archive").add(entry);
-                tx.oncomplete = render;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function addBookPage() {
-            const entry = { id: Date.now(), content: "New log entry...", fType: null };
-            const tx = db.transaction("archive", "readwrite");
-            tx.objectStore("archive").add(entry);
-            tx.oncomplete = render;
-        }
-
-        function render() {
-            const list = document.getElementById('adminList');
-            const tx = db.transaction("archive", "readonly");
-            tx.objectStore("archive").getAll().onsuccess = (e) => {
-                list.innerHTML = e.target.result.sort((a,b)=>b.id-a.id).map(p => `
-                    <div class="card">
-                        <strong>${p.fName || 'Text Log'}</strong><br>
-                        <textarea id="edit-${p.id}">${p.content}</textarea>
-                        <button class="btn" style="margin-top:10px;" onclick="save(${p.id})">SAVE & PUBLISH</button>
-                        <button class="btn" style="background:red; color:#fff;" onclick="del(${p.id})">DELETE</button>
-                    </div>`).join('');
-            };
-        }
-
-        function save(id) {
-            const tx = db.transaction("archive", "readwrite");
-            const store = tx.objectStore("archive");
-            store.get(id).onsuccess = (e) => {
-                const d = e.target.result; d.content = document.getElementById(`edit-${id}`).value;
-                store.put(d); tx.oncomplete = () => alert("PUBLISHED");
-            };
-        }
-
-        function del(id) { if(confirm("Delete?")) { const tx = db.transaction("archive", "readwrite"); tx.objectStore("archive").delete(id); tx.oncomplete = render; } }
-    </script>
-</body>
-</html>
-
-<style>
-    .notify-box { background: #ff3131; color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 5px; animation: pulse 2s infinite; display: none; }
-    .analytics-panel { background: #000; border: 1px solid var(--nv-green); padding: 15px; margin-top: 20px; font-size: 0.8rem; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-</style>
-
-<div class="panel">
-    <div id="notifyBell" class="notify-box">🔔 NEW PUBLIC INTERACTION DETECTED</div>
-    <h2>FOUNDER COMMAND v30</h2>
-    
-    <div id="analytics" class="analytics-panel">
-        <strong>VISITOR LOGS:</strong>
-        <div id="visitList" style="max-height:100px; overflow-y:auto; color:#aaa;"></div>
-    </div>
-
-    </div>
-
-<script>
-    // ... (Keep existing DB and Upload logic) ...
-
-    function render() {
-        const list = document.getElementById('adminList');
-        const vList = document.getElementById('visitList');
-        const bell = document.getElementById('notifyBell');
-        
-        const tx = db.transaction("archive", "readonly");
-        tx.objectStore("archive").getAll().onsuccess = (e) => {
-            const allData = e.target.result;
-            
-            // 1. ANALYSE VISITOR DATA
-            const visits = allData.filter(d => d.type === "visit");
-            vList.innerHTML = visits.map(v => `<div>[${v.time}] Visitor via ${v.platform}</div>`).join('');
-
-            // 2. CHECK FOR NOTIFICATIONS (Unread comments)
-            const hasNew = allData.some(p => p.comments && p.comments.some(c => c.founderNotify));
-            bell.style.display = hasNew ? 'block' : 'none';
-
-            // 3. RENDER CONTENT CARDS
-            list.innerHTML = allData.filter(p => p.id && !p.type).map(p => `
-                <div class="card">
-                    <strong>${p.fName || 'Text Log'}</strong>
-                    <div style="color:yellow; font-size:0.7rem;">Comments: ${(p.comments || []).length}</div>
-                    <textarea id="edit-${p.id}">${p.content}</textarea>
-                    <button class="btn" onclick="save(${p.id})">SAVE & CLEAR NOTIFY</button>
-                </div>`).join('');
-        };
-    }
-
-    function save(id) {
-        const tx = db.transaction("archive", "readwrite");
-        const store = tx.objectStore("archive");
-        store.get(id).onsuccess = (e) => {
-            const data = e.target.result;
-            data.content = document.getElementById(`edit-${id}`).value;
-            // Clear notifications for this page
-            if(data.comments) data.comments.forEach(c => c.founderNotify = false);
-            store.put(data);
-            tx.oncomplete = () => { alert("Updated & Notifications Cleared"); render(); };
-        };
-    }
-</script>
