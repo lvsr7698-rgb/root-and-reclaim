@@ -3,68 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | THE RECLAIM BOOK</title>
+    <title>ROOT | THE TRIPLE ARCHIVE</title>
     <style>
-        :root { --nv-green: #00ff41; --paper: #fdfdfd; }
+        :root { --nv-green: #00ff41; --paper: #fdfdfd; --ink: #111; }
         body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; overflow: hidden; height: 100vh; }
         
         /* BACKGROUND & FIREFLIES */
         .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 90%); }
-        .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 70%; opacity: 0.5; filter: drop-shadow(0 0 20px var(--nv-green)); pointer-events: none; }
+        .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 70%; opacity: 0.4; filter: drop-shadow(0 0 20px var(--nv-green)); pointer-events: none; }
         .firefly { position: absolute; width: 4px; height: 4px; background: var(--nv-green); border-radius: 50%; box-shadow: 0 0 10px 4px var(--nv-green); animation: drift var(--d) infinite ease-in-out; }
         @keyframes drift { 0%, 100% { transform: translate(0,0); opacity:0; } 50% { transform: translate(var(--x), var(--y)); opacity:1; } }
 
-        /* THE FOUNDER PANEL (STAYING ON TOP) */
-        .founder-info { position: fixed; top: 20px; left: 20px; width: 180px; background: var(--paper); padding: 15px; border-left: 5px solid var(--nv-green); z-index: 1000; box-shadow: 5px 5px 15px #000; color: #111; font-size: 0.7rem; }
+        /* NAVIGATION TABS */
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.8); border-bottom: 2px solid var(--nv-green); z-index: 2000; display: flex; justify-content: center; gap: 15px; padding: 15px 0; }
+        .tab-btn { background: none; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 8px 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        .tab-btn.active { background: var(--nv-green); color: #000; }
 
-        /* THE 3D BOOK ENGINE */
-        .book-container { position: relative; width: 90vw; height: 80vh; margin: 80px auto; perspective: 1500px; }
-        .book { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s; }
+        /* FOUNDER INFO PANEL */
+        .founder-panel { position: fixed; top: 80px; left: 20px; width: 180px; background: var(--paper); padding: 15px; border-left: 5px solid var(--nv-green); z-index: 1000; color: #111; font-size: 0.7rem; box-shadow: 5px 5px 15px #000; }
+
+        /* 3D BOOK ENGINE */
+        .book-wrapper { position: relative; width: 85vw; height: 75vh; margin: 120px auto 0; perspective: 2000px; display: none; }
+        .book-wrapper.active { display: block; }
+        .book { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
         
         .page { 
             position: absolute; width: 50%; height: 100%; right: 0; top: 0; 
             background: var(--paper); transform-origin: left; transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); 
-            transform-style: preserve-3d; box-shadow: inset 3px 0px 20px rgba(0,0,0,0.1); border-left: 1px solid #ddd;
-            padding: 40px; box-sizing: border-box; color: #111; cursor: pointer;
+            transform-style: preserve-3d; border-left: 1px solid #ddd; padding: 35px; box-sizing: border-box; color: var(--ink); cursor: pointer; 
+            box-shadow: inset 3px 0px 20px rgba(0,0,0,0.1);
         }
         .page.flipped { transform: rotateY(-180deg); }
-        .page:nth-child(odd) { z-index: 1; }
 
-        /* PAGE CONTENT & WATERMARK */
-        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; opacity: 0.04; pointer-events: none; }
-        .page-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        /* CONTENT & WATERMARK */
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 220px; opacity: 0.05; pointer-events: none; }
+        .content-wrap { height: 100%; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 5; }
+
+        /* SOCIAL & ACTION BUTTONS */
+        .actions { border-top: 1px solid #ccc; padding-top: 10px; margin-top: auto; }
+        .btn-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .btn { background: var(--nv-green); border: none; padding: 6px 10px; font-weight: bold; cursor: pointer; font-size: 0.65rem; border-radius: 2px; }
         
-        /* INTERACTION BUTTONS ON EVERY PAGE */
-        .controls { display: flex; justify-content: space-around; border-top: 1px solid #ccc; padding-top: 15px; margin-top: auto; }
-        .btn { background: var(--nv-green); border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; font-size: 0.7rem; border-radius: 3px; }
+        .social-row { display: flex; gap: 8px; justify-content: center; }
+        .social-btn { width: 25px; height: 25px; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
+        .social-btn:hover { filter: grayscale(0); transform: scale(1.1); }
 
-        .kiss { position: absolute; font-size: 2rem; animation: floatUp 1s forwards; pointer-events: none; }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
-
-        /* SEARCH BAR */
-        .search-area { position: fixed; top: 20px; right: 20px; z-index: 1000; }
-        input { background: #111; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 10px; width: 200px; outline: none; }
+        /* ANIMATIONS */
+        .kiss { position: absolute; font-size: 2.5rem; animation: floatUp 1s forwards; pointer-events: none; z-index: 5000; }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-120px); } }
     </style>
 </head>
 <body>
     <div class="bg-fixed" id="field"><img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree"></div>
 
-    <div class="founder-info">
+    <nav>
+        <button class="tab-btn active" onclick="switchBook('bookTab', event)">The Book</button>
+        <button class="tab-btn" onclick="switchBook('musicTab', event)">Music</button>
+        <button class="tab-btn" onclick="switchBook('videoTab', event)">Video</button>
+    </nav>
+
+    <div class="founder-panel">
         <strong>FOUNDER SRK</strong><br><hr>
-        <p>Architect of ROOT. documenting industrial decay and nature's return.</p>
+        <p>Architect of ROOT. documenting resilience and industrial decay.</p>
     </div>
 
-    <div class="search-area">
-        <input type="text" placeholder="SEARCH BOOK..." onkeyup="searchBook(this.value)">
-    </div>
-
-    <div class="book-container">
-        <div class="book" id="theBook">
-            </div>
-    </div>
+    <div id="bookTab" class="book-wrapper active"><div class="book" id="bookTarget"></div></div>
+    <div id="musicTab" class="book-wrapper"><div class="book" id="musicTarget"></div></div>
+    <div id="videoTab" class="book-wrapper"><div class="book" id="videoTarget"></div></div>
 
     <script>
-        // FIREFLY GENERATOR
+        // FIREFLIES
         const fld = document.getElementById('field');
         for (let i = 0; i < 30; i++) {
             let f = document.createElement('div'); f.className = 'firefly';
@@ -77,40 +85,54 @@
 
         // DATABASE SYNC
         let db;
-        const request = indexedDB.open("RootReclaimDB_v26", 1); // Using v26 to keep your data
-        request.onsuccess = (e) => { db = e.target.result; loadBook(); };
+        const request = indexedDB.open("RootReclaimDB_v26", 1);
+        request.onsuccess = (e) => { db = e.target.result; loadAllArchives(); };
 
-        function loadBook() {
+        function switchBook(id, e) {
+            document.querySelectorAll('.book-wrapper').forEach(w => w.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            e.currentTarget.classList.add('active');
+        }
+
+        function loadAllArchives() {
             const tx = db.transaction("archive", "readonly");
             tx.objectStore("archive").getAll().onsuccess = (e) => {
                 const data = e.target.result.sort((a,b) => b.id - a.id);
-                const book = document.getElementById('theBook');
-                
-                book.innerHTML = data.map((p, index) => `
-                    <div class="page" onclick="this.classList.toggle('flipped')" style="z-index: ${data.length - index}">
-                        <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="watermark">
-                        <div class="page-content">
-                            <div>
-                                <small>ARCHIVE LOG #${data.length - index}</small>
-                                <h3 style="margin: 10px 0;">${p.fName || 'Text Entry'}</h3>
-                                
-                                ${p.fType?.includes('audio') ? `<audio controls src="${p.file}" style="width:100%"></audio>` : ''}
-                                ${p.fType?.includes('video') ? `<video controls src="${p.file}" style="width:100%"></video>` : ''}
-                                ${p.fType?.includes('image') ? `<img src="${p.file}" style="max-width:100%">` : ''}
-                                
-                                <p style="font-size: 0.9rem; line-height:1.6; color:#333;">${p.content}</p>
-                            </div>
+                renderPages(data.filter(p => !p.fType), 'bookTarget');
+                renderPages(data.filter(p => p.fType?.includes('audio')), 'musicTarget');
+                renderPages(data.filter(p => p.fType?.includes('video')), 'videoTarget');
+            };
+        }
 
-                            <div class="controls" onclick="event.stopPropagation()">
+        function renderPages(items, targetId) {
+            const target = document.getElementById(targetId);
+            target.innerHTML = items.map((p, index) => `
+                <div class="page" onclick="this.classList.toggle('flipped')" style="z-index: ${items.length - index}">
+                    <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="watermark">
+                    <div class="content-wrap">
+                        <div>
+                            <small>NODE ID: ${p.id}</small>
+                            <h3 style="margin:10px 0;">${p.fName || 'Log Entry'}</h3>
+                            ${p.fType?.includes('audio') ? `<audio controls src="${p.file}" style="width:100%"></audio>` : ''}
+                            ${p.fType?.includes('video') ? `<video controls src="${p.file}" style="width:100%"></video>` : ''}
+                            <p style="font-size:0.85rem; line-height:1.6;">${p.content}</p>
+                        </div>
+                        <div class="actions" onclick="event.stopPropagation()">
+                            <div class="btn-row">
                                 <button class="btn" onclick="kiss(event)">❤ LIKE</button>
-                                <button class="btn" onclick="alert('Shared!')">SHARE</button>
                                 <button class="btn" onclick="window.open('${p.file || '#'}')">DOWNLOAD</button>
                                 <button class="btn" onclick="prompt('Comment:')">COMMENT</button>
                             </div>
+                            <div class="social-row">
+                                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" class="social-btn" onclick="share('tw')">
+                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="social-btn" onclick="share('fb')">
+                                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" class="social-btn" onclick="share('wa')">
+                            </div>
                         </div>
                     </div>
-                `).join('');
-            };
+                </div>
+            `).join('');
         }
 
         function kiss(e) {
@@ -119,10 +141,12 @@
             document.body.appendChild(k); setTimeout(() => k.remove(), 1000);
         }
 
-        function searchBook(q) {
-            document.querySelectorAll('.page').forEach(p => {
-                p.style.opacity = p.innerText.toLowerCase().includes(q.toLowerCase()) ? "1" : "0.1";
-            });
+        function share(plat) {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("Check out this ROOT Reclaim Archive!");
+            if(plat === 'wa') window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
+            if(plat === 'fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
+            if(plat === 'tw') window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`);
         }
     </script>
 </body>
