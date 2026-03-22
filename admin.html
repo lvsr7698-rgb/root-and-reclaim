@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | FOUNDER COMMAND v32</title>
+    <title>ROOT | FOUNDER COMMAND v33.1</title>
     <style>
         :root { --nv-green: #00ff41; --bg: #050505; }
         body { background: var(--bg); color: var(--nv-green); font-family: 'Consolas', monospace; padding: 15px; margin: 0; }
@@ -27,6 +27,7 @@
         .card { background: #000; border: 1px solid #333; padding: 15px; margin-top: 15px; border-left: 5px solid var(--nv-green); }
         textarea { width: 100%; height: 80px; background: #111; color: #fff; border: 1px solid #444; margin-top: 10px; padding: 10px; box-sizing: border-box; }
         .log-entry { border-bottom: 1px solid #222; padding: 5px 0; color: #aaa; }
+        .thumb { height: 60px; border: 1px solid var(--nv-green); margin-top: 5px; display: block; }
     </style>
 </head>
 <body>
@@ -48,7 +49,7 @@
 
         <button class="btn" onclick="addBookPage()">+ NEW BOOK PAGE</button>
         <button class="btn btn-link" onclick="addByLink()">🔗 ADD MEDIA VIA LINK</button>
-        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD SMALL FILE</button>
+        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD MEDIA (IMAGE/MP3/MP4)</button>
         <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
         
         <div id="adminList"></div>
@@ -57,7 +58,7 @@
     <script>
         let db;
         // MUST match the version in your index.html
-        const request = indexedDB.open("RootReclaimDB_v32", 1);
+        const request = indexedDB.open("RootReclaimDB_v33", 1);
 
         request.onupgradeneeded = (e) => {
             let database = e.target.result;
@@ -95,13 +96,14 @@
                 document.getElementById('commentLogs').innerHTML = commentHTML || "No comments.";
                 document.getElementById('notifyBell').style.display = hasNewComment ? 'block' : 'none';
 
-                // 3. RENDER CONTENT CARDS
+                // 3. RENDER CONTENT CARDS (Including Image Previews)
                 const content = allData.filter(p => !p.dataType).sort((a,b)=>b.id-a.id);
                 document.getElementById('adminList').innerHTML = content.map(p => `
                     <div class="card">
                         <strong>${p.fName || 'Text Log'}</strong>
+                        ${p.fType?.includes('image') ? `<img src="${p.file}" class="thumb">` : ''}
                         <textarea id="edit-${p.id}">${p.content}</textarea>
-                        <button class="btn" style="padding:10px; margin-top:10px;" onclick="save(${p.id})">UPDATE & MARK READ</button>
+                        <button class="btn" style="padding:10px; margin-top:10px;" onclick="save(${p.id})">SAVE & PUBLISH</button>
                         <button onclick="del(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer; margin-top:10px;">[DELETE]</button>
                     </div>`).join('');
             };
@@ -111,7 +113,7 @@
             const file = e.target.files[0]; if(!file) return;
             const reader = new FileReader();
             reader.onload = (ev) => {
-                const entry = { id: Date.now(), content: "", file: ev.target.result, fName: file.name, fType: file.type };
+                const entry = { id: Date.now(), content: "Attached File", file: ev.target.result, fName: file.name, fType: file.type };
                 db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
             };
             reader.readAsDataURL(file);
@@ -120,12 +122,12 @@
         function addByLink() {
             const url = prompt("Paste Direct Link:");
             if(!url) return;
-            const entry = { id: Date.now(), content: "", file: url, fName: "Linked Media", fType: url.includes('video') ? 'video' : 'audio' };
+            const entry = { id: Date.now(), content: "Linked Media", file: url, fName: "Cloud File", fType: url.includes('video') ? 'video' : 'audio' };
             db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
         }
 
         function addBookPage() {
-            const entry = { id: Date.now(), content: "New log entry...", fType: null };
+            const entry = { id: Date.now(), content: "New log entry...", fType: "text/plain" };
             db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
         }
 
@@ -137,7 +139,7 @@
                 data.content = document.getElementById(`edit-${id}`).value;
                 if(data.comments) data.comments.forEach(c => c.isNew = false);
                 store.put(data);
-                tx.oncomplete = () => { alert("Saved and Read"); render(); };
+                tx.oncomplete = () => { alert("Published & Synced"); render(); };
             };
         }
 
