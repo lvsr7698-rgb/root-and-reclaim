@@ -1,3 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Page Flip</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="book">
+        <div class="page" id="p1">
+            <div class="front">
+                <h1>The Great Gatsby</h1>
+                <p>Click to open</p>
+            </div>
+            <div class="back">
+                <h2>Page 1</h2>
+                <p>This is the back of the cover.</p>
+            </div>
+        </div>
+
+        <div class="page" id="p2">
+            <div class="front">
+                <h2>Page 2</h2>
+                <p>Content for the second page goes here.</p>
+            </div>
+            <div class="back">
+                <h2>The End</h2>
+                <p>Back cover content.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple click-to-flip logic
+        document.querySelectorAll('.page').forEach(page => {
+            page.addEventListener('click', () => {
+                page.classList.toggle('flipped');
+            });
+        });
+    </script>
+</body>
+</html>
+
 <header>
     <h1>The Human-Nature Bond</h1>
     <p>How Human "Nature" and "Needs" shaped the Earth from Day One</p>
