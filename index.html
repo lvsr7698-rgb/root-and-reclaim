@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT and RECLAIM</title>
+    <title>ROOT and reclaim | SRK LEDGER</title>
     <style>
         :root {
             --nv-green: #00ff41;
+            --firefly-gold: rgba(241, 196, 15, 0.8);
             --deep-black: #05080a;
             --sea-blue: #2980b9;
         }
@@ -14,175 +15,237 @@
         body, html {
             margin: 0; padding: 0;
             background: #000;
-            font-family: 'Consolas', monospace;
+            font-family: 'Consolas', 'Courier New', monospace;
+            color: var(--nv-green);
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
-        /* --- BACKGROUND: NIGHT VISION BIG TREE --- */
+        /* --- BACKGROUND: BIG TREE & FIREFLIES --- */
         .bg-fixed {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 70%);
-            display: flex; justify-content: center; align-items: flex-end;
+            background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.15) 0%, #000 85%);
+            overflow: hidden;
         }
-        .night-vision-tree {
-            width: 80%; max-width: 600px; height: auto;
-            opacity: 0.8;
-            filter: drop-shadow(0 0 15px var(--nv-green));
-            animation: sway 8s ease-in-out infinite;
+        .big-tree {
+            position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 85%; max-width: 750px; opacity: 0.5;
+            filter: drop-shadow(0 0 20px var(--nv-green));
+            pointer-events: none;
         }
-        @keyframes sway {
-            0%, 100% { transform: rotate(-1deg); }
-            50% { transform: rotate(1deg); }
+        .firefly {
+            position: absolute; width: 3px; height: 3px;
+            background: var(--firefly-gold); border-radius: 50%;
+            box-shadow: 0 0 8px 2px var(--firefly-gold);
+            animation: drift var(--d) infinite ease-in-out;
+            opacity: 0;
+        }
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); opacity: 0; }
+            20% { opacity: 1; }
+            50% { transform: translate(var(--x), var(--y)); }
+            80% { opacity: 1; }
         }
 
-        /* --- HEADER: ROOT AND RECLAIM --- */
+        /* --- HEADER --- */
         header {
             position: fixed; top: 0; width: 100%;
-            background: rgba(0,0,0,0.9);
-            border-bottom: 2px solid var(--nv-green);
-            display: flex; align-items: center;
-            padding: 10px 40px; z-index: 1000;
+            background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--nv-green);
+            display: flex; align-items: center; padding: 12px 40px; z-index: 1000;
             box-sizing: border-box;
         }
-        .logo-container {
-            width: 50px; height: 50px;
-            border: 2px solid var(--nv-green);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            background: radial-gradient(circle, #00ff41 0%, #8e44ad 100%); /* Tree/Galaxy Hybrid */
+        .logo {
+            width: 40px; height: 40px; border: 2px solid var(--nv-green);
+            border-radius: 50%; background: radial-gradient(circle, #00ff41, #8e44ad);
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
             box-shadow: 0 0 10px var(--nv-green);
-            font-size: 1.5rem;
         }
-        .header-text {
-            margin-left: 15px;
-            color: var(--nv-green);
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
+        .header-text { margin-left: 15px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* --- SIDEBAR: TINY FOUNDER BOOK --- */
-        .founder-sidebar {
-            position: fixed; top: 100px; left: 20px;
-            width: 180px; height: 260px;
-            background: #fff; border: 2px solid var(--nv-green);
-            z-index: 500; padding: 15px;
-            color: #111; font-size: 0.8rem;
-            box-shadow: 5px 5px 15px rgba(0,255,65,0.3);
-            border-radius: 2px;
+        /* --- FOUNDER PANEL --- */
+        .founder-panel {
+            position: fixed; top: 100px; left: 20px; width: 220px;
+            background: #fff; border: 3px solid var(--nv-green);
+            padding: 20px; color: #111; z-index: 500; font-size: 0.85rem;
+            box-shadow: 10px 10px 0px rgba(0,255,65,0.2);
         }
-        .profile-img {
-            width: 70px; height: 70px;
-            border-radius: 50%; border: 2px solid var(--nv-green);
-            display: block; margin: 0 auto 10px;
-            object-fit: cover;
+        .profile-img { 
+            width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--nv-green); 
+            display: block; margin: 0 auto 15px; object-fit: cover; 
         }
+        .control-btn {
+            background: #000; color: #fff; width: 100%; border: none;
+            padding: 8px; margin-top: 10px; cursor: pointer; font-size: 0.7rem;
+            font-weight: bold; text-transform: uppercase;
+        }
+        .control-btn:hover { background: var(--nv-green); color: #000; }
 
-        /* --- MAIN CONTENT: UNLIMITED PAGES BOOK (VERTICAL) --- */
-        .tower-container {
-            display: flex; flex-direction: column; align-items: center;
-            padding: 120px 0 200px 0;
-            gap: 60px;
+        /* --- THE INTERACTIVE LEDGER --- */
+        .book-container {
+            margin: 140px auto 120px auto; width: 90%; max-width: 850px;
+            background: #fff; color: #111; padding: 40px;
+            box-shadow: 0 0 40px rgba(0,255,65,0.1); border-radius: 2px;
+            min-height: 60vh;
         }
-        .book-page {
-            position: relative;
-            width: 380px; height: 500px;
-            background: #fff; color: #111;
-            border: 1px solid #333;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            padding: 40px; box-sizing: border-box;
-            transition: transform 0.3s;
+        .book-header { border-bottom: 2px solid #222; margin-bottom: 25px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
+        
+        .entry-form input, .entry-form textarea {
+            width: 100%; background: #f9f9f9; border: 1px solid #ccc;
+            padding: 12px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; font-size: 1rem;
         }
-        .book-page:hover { transform: scale(1.02); }
-        .page-number {
-            position: absolute; bottom: 15px; right: 20px;
-            font-weight: bold; color: #888;
+        .btn-add { 
+            background: #111; color: var(--nv-green); border: none; 
+            padding: 12px 25px; cursor: pointer; font-weight: bold; width: 100%; 
+            letter-spacing: 1px;
         }
+        .btn-add:hover { background: var(--nv-green); color: #000; }
 
-        /* --- FOOTER: WATER FLOWING SEA --- */
-        footer {
-            position: fixed; bottom: 0; width: 100%; height: 60px;
-            background: var(--sea-blue);
-            z-index: 1000; overflow: hidden;
+        /* --- DYNAMIC PAGES --- */
+        .pages-list { margin-top: 40px; }
+        .saved-page {
+            border-bottom: 1px solid #ddd; padding: 30px 0; position: relative;
         }
-        .sea-wave {
-            width: 200%; height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192V320H0Z"></path></svg>');
-            animation: waveFlow 12s linear infinite;
+        .page-actions { position: absolute; top: 30px; right: 0; }
+        .action-btn { 
+            background: #eee; border: 1px solid #ccc; padding: 5px 12px; 
+            cursor: pointer; font-size: 0.75rem; margin-left: 10px; font-weight: bold;
         }
-        @keyframes waveFlow {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
+        .action-btn:hover { background: #000; color: #fff; }
+
+        /* --- FOOTER --- */
+        footer { position: fixed; bottom: 0; width: 100%; height: 50px; background: var(--sea-blue); z-index: 1000; overflow: hidden; }
+        .sea-layer { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,192L48,176C96,160,192,128,288,144C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,181.3C1248,192,1344,160,1392,144L1440,128V320H0Z"></path></svg>'); animation: wave 12s linear infinite; }
+        @keyframes wave { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
 
-    <div class="bg-fixed">
-        <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="night-vision-tree" alt="Big Tree Night Vision">
+    <div class="bg-fixed" id="fireflyField">
+        <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree" alt="The Root Tree">
     </div>
 
     <header>
-        <div class="logo-container">🌿</div>
+        <div class="logo">🌌</div>
         <div class="header-text">ROOT and reclaim</div>
     </header>
 
-    <div class="founder-sidebar">
-        <img src="image_0.png" class="profile-img" alt="Founder">
-        <center><strong>FOUNDER</strong></center>
-        <p><strong>About Me:</strong> I am the architect of the Root system, observing the industrial pulse of the planet.</p>
-        <p><i>Mission: RECLAIM</i></p>
+    <div class="founder-panel">
+        <img src="image_0.png" class="profile-img" alt="SRK Founder">
+        <center><strong>FOUNDER SRK</strong></center>
+        <button class="control-btn" onclick="exportArchive()">Export (.txt)</button>
+        <button class="control-btn" onclick="document.getElementById('importFile').click()">Import (.txt)</button>
+        <input type="file" id="importFile" style="display:none" accept=".txt" onchange="importArchive(event)">
     </div>
 
-    <div class="tower-container" id="bookTower">
-        <div class="book-page">
-            <h3>NATURE DATA: LOG 001</h3>
-            <hr>
-            <p>Observing the night vision patterns of the central root system. Initial analysis shows industrial interference in sector 7.</p>
-            <span class="page-number">Page 1</span>
+    <div class="book-container">
+        <div class="book-header">
+            <h2 style="margin:0">SRK LEDGER</h2>
+            <span id="pageTotal" style="font-weight:bold; font-size:0.9rem">PAGES: 0</span>
         </div>
 
-        <div class="book-page">
-            <h3>NATURE DATA: LOG 002</h3>
-            <hr>
-            <p>Scanning global warming packets. Ocean levels rising at Node 44. Carbon concentration in the atmosphere exceeds 420ppm.</p>
-            <span class="page-number">Page 2</span>
+        <div class="entry-form">
+            <input type="text" id="titleInput" placeholder="SUBJECT / LOG TITLE...">
+            <textarea id="contentInput" rows="5" placeholder="RECLAIM DATA: Write observations here..."></textarea>
+            <button class="btn-add" onclick="saveEntry()">SAVE TO ARCHIVE</button>
         </div>
 
-        <div class="book-page">
-            <h3>NATURE DATA: LOG 003</h3>
-            <hr>
-            <p>Atmospheric rivers detected. Heavy rainfall expected in the winter sector. Soil nutrition levels dropping by 12% annually.</p>
-            <span class="page-number">Page 3</span>
-        </div>
+        <div class="pages-list" id="ledgerList"></div>
     </div>
 
-    <footer>
-        <div class="sea-wave"></div>
-    </footer>
+    <footer><div class="sea-layer"></div></footer>
 
     <script>
-        // Unlimited Pages Logic: Add new pages as the user scrolls
-        const tower = document.getElementById('bookTower');
-        let pageCount = 3;
+        // 1. FIREFLIES
+        const field = document.getElementById('fireflyField');
+        for (let i = 0; i < 50; i++) {
+            const ff = document.createElement('div');
+            ff.className = 'firefly';
+            ff.style.setProperty('--x', (Math.random() * 400 - 200) + 'px');
+            ff.style.setProperty('--y', (Math.random() * -400 - 50) + 'px');
+            ff.style.setProperty('--d', (Math.random() * 5 + 5) + 's');
+            ff.style.left = Math.random() * 100 + '%';
+            ff.style.top = Math.random() * 100 + '%';
+            ff.style.animationDelay = Math.random() * 10 + 's';
+            field.appendChild(ff);
+        }
 
-        window.onscroll = function() {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-                for(let i = 0; i < 2; i++) {
-                    pageCount++;
-                    const newPage = document.createElement('div');
-                    newPage.className = 'book-page';
-                    newPage.innerHTML = `
-                        <h3>NATURE DATA: LOG 00${pageCount}</h3>
-                        <hr>
-                        <p>Real-time analysis active. Scanning internet nodes for industrial damage updates...</p>
-                        <span class="page-number">Page ${pageCount}</span>
-                    `;
-                    tower.appendChild(newPage);
-                }
-            }
-        };
+        // 2. LEDGER CORE
+        let archive = JSON.parse(localStorage.getItem('srk_archive')) || [];
+
+        function saveEntry() {
+            const title = document.getElementById('titleInput').value;
+            const content = document.getElementById('contentInput').value;
+            if (!title || !content) return;
+            archive.unshift({ id: Date.now(), title, content, timestamp: new Date().toLocaleString() });
+            updateStorage();
+            document.getElementById('titleInput').value = '';
+            document.getElementById('contentInput').value = '';
+        }
+
+        function updateStorage() {
+            localStorage.setItem('srk_archive', JSON.stringify(archive));
+            renderLedger();
+        }
+
+        function renderLedger() {
+            const list = document.getElementById('ledgerList');
+            document.getElementById('pageTotal').innerText = `PAGES: ${archive.length}`;
+            list.innerHTML = archive.map((item, index) => `
+                <div class="saved-page">
+                    <div class="page-actions">
+                        <button class="action-btn" onclick="editEntry(${item.id})">EDIT</button>
+                        <button class="action-btn" style="color:red" onclick="deleteEntry(${item.id})">DELETE</button>
+                    </div>
+                    <h3>#${archive.length - index}: ${item.title}</h3>
+                    <p>${item.content}</p>
+                    <div style="font-size:0.7rem; color:#999">LOG_TIME: ${item.timestamp}</div>
+                </div>
+            `).join('');
+        }
+
+        function deleteEntry(id) { if(confirm("Delete data?")) { archive = archive.filter(i => i.id !== id); updateStorage(); } }
+        function editEntry(id) {
+            const item = archive.find(i => i.id === id);
+            const updated = prompt("Edit Data:", item.content);
+            if (updated) { item.content = updated; updateStorage(); }
+        }
+
+        // 3. EXPORT / IMPORT
+        function exportArchive() {
+            let data = archive.map(i => `TITLE: ${i.title}\nDATE: ${i.timestamp}\nCONTENT: ${i.content}\n---`).join('\n\n');
+            const blob = new Blob([data], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "SRK_ARCHIVE_DATA.txt";
+            link.click();
+        }
+
+        function importArchive(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lines = e.target.result.split('---');
+                lines.forEach(block => {
+                    const titleMatch = block.match(/TITLE: (.*)/);
+                    const contentMatch = block.match(/CONTENT: ([\s\S]*)/);
+                    if (titleMatch && contentMatch) {
+                        archive.push({
+                            id: Date.now() + Math.random(),
+                            title: titleMatch[1].trim(),
+                            content: contentMatch[1].trim(),
+                            timestamp: new Date().toLocaleString()
+                        });
+                    }
+                });
+                updateStorage();
+                alert("Data packets integrated into the Root Archive.");
+            };
+            reader.readAsText(file);
+        }
+
+        window.onload = renderLedger;
     </script>
 </body>
 </html>
