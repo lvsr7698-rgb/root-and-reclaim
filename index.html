@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | THE TRIPLE ARCHIVE</title>
+    <title>ROOT | THE MEGA ARCHIVE</title>
     <style>
         :root { --nv-green: #00ff41; --paper: #fdfdfd; --ink: #111; }
         body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; overflow: hidden; height: 100vh; }
@@ -15,22 +15,17 @@
         @keyframes drift { 0%, 100% { transform: translate(0,0); opacity:0; } 50% { transform: translate(var(--x), var(--y)); opacity:1; } }
 
         /* NAVIGATION TABS */
-        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.8); border-bottom: 2px solid var(--nv-green); z-index: 2000; display: flex; justify-content: center; gap: 15px; padding: 15px 0; }
-        .tab-btn { background: none; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 8px 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--nv-green); z-index: 2000; display: flex; justify-content: center; gap: 10px; padding: 15px 0; }
+        .tab-btn { background: none; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 8px 15px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.7rem; }
         .tab-btn.active { background: var(--nv-green); color: #000; }
-
-        /* FOUNDER INFO PANEL */
-        .founder-panel { position: fixed; top: 80px; left: 20px; width: 180px; background: var(--paper); padding: 15px; border-left: 5px solid var(--nv-green); z-index: 1000; color: #111; font-size: 0.7rem; box-shadow: 5px 5px 15px #000; }
 
         /* 3D BOOK ENGINE */
         .book-wrapper { position: relative; width: 85vw; height: 75vh; margin: 120px auto 0; perspective: 2000px; display: none; }
         .book-wrapper.active { display: block; }
-        .book { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
-        
         .page { 
             position: absolute; width: 50%; height: 100%; right: 0; top: 0; 
             background: var(--paper); transform-origin: left; transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); 
-            transform-style: preserve-3d; border-left: 1px solid #ddd; padding: 35px; box-sizing: border-box; color: var(--ink); cursor: pointer; 
+            transform-style: preserve-3d; border-left: 1px solid #ddd; padding: 30px; box-sizing: border-box; color: var(--ink); cursor: pointer; 
             box-shadow: inset 3px 0px 20px rgba(0,0,0,0.1);
         }
         .page.flipped { transform: rotateY(-180deg); }
@@ -39,16 +34,16 @@
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 220px; opacity: 0.05; pointer-events: none; }
         .content-wrap { height: 100%; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 5; }
 
-        /* SOCIAL & ACTION BUTTONS */
+        /* SOCIAL MEGA-BAR */
         .actions { border-top: 1px solid #ccc; padding-top: 10px; margin-top: auto; }
-        .btn-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .btn { background: var(--nv-green); border: none; padding: 6px 10px; font-weight: bold; cursor: pointer; font-size: 0.65rem; border-radius: 2px; }
-        
-        .social-row { display: flex; gap: 8px; justify-content: center; }
-        .social-btn { width: 25px; height: 25px; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
-        .social-btn:hover { filter: grayscale(0); transform: scale(1.1); }
+        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; padding: 5px; background: #eee; border-radius: 5px; }
+        .social-icon { width: 20px; height: 20px; cursor: pointer; transition: 0.3s; margin: 0 auto; filter: contrast(1.2); }
+        .social-icon:hover { transform: scale(1.3) rotate(10deg); filter: drop-shadow(0 0 5px var(--nv-green)); }
 
-        /* ANIMATIONS */
+        .btn-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .btn { background: var(--nv-green); border: none; padding: 5px 10px; font-weight: bold; cursor: pointer; font-size: 0.6rem; border-radius: 2px; }
+
+        /* KISS ANIMATION */
         .kiss { position: absolute; font-size: 2.5rem; animation: floatUp 1s forwards; pointer-events: none; z-index: 5000; }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-120px); } }
     </style>
@@ -61,11 +56,6 @@
         <button class="tab-btn" onclick="switchBook('musicTab', event)">Music</button>
         <button class="tab-btn" onclick="switchBook('videoTab', event)">Video</button>
     </nav>
-
-    <div class="founder-panel">
-        <strong>FOUNDER SRK</strong><br><hr>
-        <p>Architect of ROOT. documenting resilience and industrial decay.</p>
-    </div>
 
     <div id="bookTab" class="book-wrapper active"><div class="book" id="bookTarget"></div></div>
     <div id="musicTab" class="book-wrapper"><div class="book" id="musicTarget"></div></div>
@@ -83,10 +73,9 @@
             fld.appendChild(f);
         }
 
-        // DATABASE SYNC
         let db;
         const request = indexedDB.open("RootReclaimDB_v26", 1);
-        request.onsuccess = (e) => { db = e.target.result; loadAllArchives(); };
+        request.onsuccess = (e) => { db = e.target.result; loadAll(); };
 
         function switchBook(id, e) {
             document.querySelectorAll('.book-wrapper').forEach(w => w.classList.remove('active'));
@@ -95,7 +84,7 @@
             e.currentTarget.classList.add('active');
         }
 
-        function loadAllArchives() {
+        function loadAll() {
             const tx = db.transaction("archive", "readonly");
             tx.objectStore("archive").getAll().onsuccess = (e) => {
                 const data = e.target.result.sort((a,b) => b.id - a.id);
@@ -112,11 +101,11 @@
                     <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="watermark">
                     <div class="content-wrap">
                         <div>
-                            <small>NODE ID: ${p.id}</small>
-                            <h3 style="margin:10px 0;">${p.fName || 'Log Entry'}</h3>
+                            <small>ARCHIVE ID: ${p.id}</small>
+                            <h3 style="margin:5px 0; color:var(--nv-green)">${p.fName || 'Data Packet'}</h3>
                             ${p.fType?.includes('audio') ? `<audio controls src="${p.file}" style="width:100%"></audio>` : ''}
                             ${p.fType?.includes('video') ? `<video controls src="${p.file}" style="width:100%"></video>` : ''}
-                            <p style="font-size:0.85rem; line-height:1.6;">${p.content}</p>
+                            <p style="font-size:0.8rem; line-height:1.4;">${p.content}</p>
                         </div>
                         <div class="actions" onclick="event.stopPropagation()">
                             <div class="btn-row">
@@ -124,10 +113,15 @@
                                 <button class="btn" onclick="window.open('${p.file || '#'}')">DOWNLOAD</button>
                                 <button class="btn" onclick="prompt('Comment:')">COMMENT</button>
                             </div>
-                            <div class="social-row">
-                                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" class="social-btn" onclick="share('tw')">
-                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="social-btn" onclick="share('fb')">
-                                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" class="social-btn" onclick="share('wa')">
+                            <div class="social-grid">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3670/3670151.png" class="social-icon" onclick="share('tw')" title="X/Twitter">
+                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="social-icon" onclick="share('fb')" title="Facebook">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" class="social-icon" onclick="share('wa')" title="WhatsApp">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="social-icon" onclick="share('tg')" title="Telegram">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3955/3955024.png" class="social-icon" onclick="share('ig')" title="Instagram">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="social-icon" onclick="share('tk')" title="TikTok">
+                                <img src="https://cdn-icons-png.flaticon.com/512/145/145808.png" class="social-icon" onclick="share('pi')" title="Pinterest">
+                                <img src="https://cdn-icons-png.flaticon.com/512/1617/1617469.png" class="social-icon" onclick="share('cp')" title="Copy Link">
                             </div>
                         </div>
                     </div>
@@ -143,10 +137,19 @@
 
         function share(plat) {
             const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent("Check out this ROOT Reclaim Archive!");
-            if(plat === 'wa') window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
-            if(plat === 'fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
-            if(plat === 'tw') window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`);
+            const text = encodeURIComponent("ROOT ARCHIVE: New Data Reclaimed!");
+            const apps = {
+                wa: `https://api.whatsapp.com/send?text=${text}%20${url}`,
+                fb: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+                tw: `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
+                tg: `https://t.me/share/url?url=${url}&text=${text}`,
+                pi: `https://pinterest.com/pin/create/button/?url=${url}&description=${text}`,
+                ig: `https://www.instagram.com/`, // Direct IG post not possible via URL, opens app
+                tk: `https://www.tiktok.com/`,
+                cp: `copy`
+            };
+            if(apps[plat] === 'copy') { navigator.clipboard.writeText(window.location.href); alert("Link Copied!"); }
+            else { window.open(apps[plat]); }
         }
     </script>
 </body>
