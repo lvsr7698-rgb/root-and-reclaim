@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RECLAIM: GLOBAL INTELLIGENCE ARCHIVE | SRK</title>
+    <style>
+        :root {
+            --primary-dark: #1a252f;
+            --accent-green: #27ae60;
+            --paper-white: #ffffff;
+            --river-blue: #3498db;
+            --warning-red: #c0392b;
+            --tech-blue: #00d2ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden;
+        }
+
+        /* --- 3-PHASE BACKGROUND SYSTEM --- */
+        .bg-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0; transition: opacity 2.5s ease-in-out;
+        }
+        #bg-night { background: #050914; }
+        .moon { position: absolute; top: 10%; right: 10%; width: 80px; height: 80px; background: #f1c40f; border-radius: 50%; box-shadow: 0 0 50px #f1c40f; }
+        .stars { position: absolute; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/stardust.png'); }
+        #bg-winter { background: #dff9fb; }
+        .snow { position: absolute; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/snow.png'); animation: snowMove 10s linear infinite; }
+        @keyframes snowMove { from { background-position: 0 0; } to { background-position: 100px 500px; } }
+        #bg-rain { background: #1c2833; }
+        .rain-overlay { position: absolute; width: 100%; height: 100%; background: rgba(255,255,255,0.05) url('https://www.transparenttextures.com/patterns/60-lines.png'); animation: monsoon 0.2s linear infinite; }
+        @keyframes monsoon { from { background-position: 0 0; } to { background-position: 20px 400px; } }
+        .lightning-flash { position: absolute; width: 100%; height: 100%; background: white; opacity: 0; animation: strike 6s infinite; }
+        @keyframes strike { 0%, 95%, 100% { opacity: 0; } 96% { opacity: 0.4; } 98% { opacity: 0.2; } }
+
+        /* --- LOGO & SIDEBAR --- */
+        .logo-btn { position: fixed; top: 20px; left: 20px; z-index: 100; background: var(--accent-green); color: white; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; border: 2px solid #000; box-shadow: 4px 4px 0 #000; }
+        .sidebar { position: fixed; top: 0; left: -400px; width: 320px; height: 100%; background: white; z-index: 101; transition: 0.5s ease; padding: 30px; border-right: 10px solid var(--accent-green); display: flex; flex-direction: column; align-items: center; }
+        .sidebar.active { left: 0; }
+        .sidebar img { width: 180px; height: 180px; border-radius: 50%; border: 5px solid var(--accent-green); object-fit: cover; margin-bottom: 15px; }
+
+        /* --- THE RIVER --- */
+        .river { position: fixed; bottom: 0; left: 0; width: 100%; height: 45px; background: var(--river-blue); z-index: 5; }
+        .wave { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%232980b9" d="M0,192L48,176C96,160,192,128,288,144C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,181.3C1248,192,1344,160,1392,144L1440,128V320H0Z"></path></svg>'); animation: flow 10s linear infinite; }
+        @keyframes flow { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* --- THE BOOK --- */
+        .book-wrap { position: relative; width: 85%; max-width: 850px; height: 600px; perspective: 2000px; z-index: 10; }
+        .page { position: absolute; width: 100%; height: 100%; transform-origin: left; transform-style: preserve-3d; transition: 0.8s; cursor: pointer; }
+        .front, .back { position: absolute; width: 100%; height: 100%; padding: 40px; box-sizing: border-box; backface-visibility: hidden; background: white; border: 1px solid #ddd; overflow-y: auto; box-shadow: inset 0 0 40px rgba(0,0,0,0.05); }
+        .back { transform: rotateY(180deg); background: #f8f9fa; }
+        .page.flipped { transform: rotateY(-180deg); }
+
+        .cover { background: var(--primary-dark); color: white; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .profile-pic-book { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--accent-green); object-fit: cover; display: block; margin: 0 auto 10px; }
+        .section-title { color: var(--accent-green); border-left: 5px solid var(--accent-green); padding-left: 10px; margin: 15px 0; }
+        
+        /* --- GLOBAL DATA BOX (NEW) --- */
+        .intel-box { background: #000; color: var(--tech-blue); font-family: 'Courier New', monospace; padding: 15px; border-radius: 5px; font-size: 0.8rem; height: 180px; overflow: hidden; position: relative; border: 1px solid var(--tech-blue); margin-top: 10px; }
+        .intel-stream { position: absolute; width: 100%; animation: scrollUp 15s linear infinite; }
+        @keyframes scrollUp { 0% { top: 100%; } 100% { top: -200%; } }
+
+        /* --- DAILY NEWS TICKER (NEW) --- */
+        .news-ticker { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); color: #fff; padding: 5px 0; font-size: 0.75rem; overflow: hidden; white-space: nowrap; }
+        .news-scroll { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; font-weight: bold; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        .data-text { line-height: 1.5; color: #333; font-size: 0.9rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="bg-night" class="bg-layer" style="opacity: 1;"><div class="stars"></div><div class="moon"></div></div>
+    <div id="bg-winter" class="bg-layer"><div class="snow"></div></div>
+    <div id="bg-rain" class="bg-layer"><div class="lightning-flash"></div><div class="rain-overlay"></div></div>
+
+    <div class="logo-btn" onclick="toggleSidebar()">RECLAIM: SRK INTEL 🌿</div>
+    <div class="sidebar" id="sidebar">
+        <img src="image_0.png" alt="Founder SRK">
+        <h2 style="margin:5px 0;">SRK</h2>
+        <p style="color:var(--accent-green); font-weight:bold; margin-top:0;">CHIEF ANALYST</p>
+        <p class="data-text">Scanning global networks to document the industrial threat to Earth's survival.</p>
+        <button onclick="toggleSidebar()" style="cursor:pointer; padding:8px 15px; background:#eee; border:1px solid #ccc;">Return to Archive</button>
+    </div>
+
+    <div class="river"><div class="wave"></div></div>
+
+    <div class="book-wrap">
+        
+        <div class="page" style="z-index: 10;">
+            <div class="front cover">
+                <h1 style="font-size:3rem; margin-bottom:0;">RECLAIM</h1>
+                <p style="letter-spacing:2px; color:var(--accent-green);">GLOBAL DATA INTELLIGENCE</p>
+                <p style="margin-top:50px;">Curated by <strong>Founder SRK</strong></p>
+                <small>Click to Open →</small>
+            </div>
+            <div class="back">
+                <img src="image_0.png" class="profile-pic-book" alt="SRK">
+                <center><h3>Founder SRK</h3></center>
+                <p class="data-text">This archive is now linked to global data streams. I monitor the internet's pulse on nuclear threats, oil extraction, and urban weight to provide a living record of our impact.</p>
+                <p class="data-text">"The internet sees everything—and it sees a planet in crisis." — SRK</p>
+            </div>
+        </div>
+
+        <div class="page" style="z-index: 9;">
+            <div class="front">
+                <h2 class="section-title">Internet Data Analysis</h2>
+                <p class="data-text">SRK's Global Scanner analyzes real-time web data regarding industrial damage. Observe the current world-wide status below:</p>
+                <div class="intel-box">
+                    <div class="intel-stream">
+                        [SCANNING GLOBAL IP ADDRESSES...]<br>
+                        [DATA SOURCE: WORLD DATA BANK...]<br><br>
+                        > NUCLEAR THREAT LEVEL: STABLE BUT ELEVATED<br>
+                        > OIL EXTRACTION: 97.4 MILLION BARRELS/DAY<br>
+                        > URBAN SUBSIDENCE DETECTED: MUMBAI, NYC, JAKARTA<br>
+                        > 5G SIGNAL INTERFERENCE: HIGH (BEE COLONY ALERTS)<br>
+                        > DEFORESTATION RATE: 15 BILLION TREES PER YEAR<br>
+                        > GLOBAL METHANE PEAK: ANIMAL AGRICULTURE IMPACT<br>
+                        > PLASTIC CONCENTRATION: PACIFIC GYRE EXPANDING<br>
+                        [ANALYSIS COMPLETE: RECLAIM REQUIRED]
+                    </div>
+                </div>
+            </div>
+            <div class="back">
+                <h2 class="section-title">The Digital Footprint</h2>
+                <p class="data-text">The internet itself consumes massive energy. Data centers globally account for 2% of the world's electricity. While we use the web to solve problems, the web's physical existence (heavy buildings, underground cables) contributes to the Earth's burden.</p>
+                <p class="data-text">SRK Research: We must "Green" our digital behavior as much as our physical behavior.</p>
+            </div>
+        </div>
+
+        <div class="page" style="z-index: 8;">
+            <div class="front">
+                <h2 class="section-title">Heavy Threats: Nuclear & War</h2>
+                <p class="data-text">Nuclear weapons remain the biggest threat to the Earth's crust. One strike creates dead zones for centuries. Daily LPG and Oil use act as a slow-motion bomb, heating the air until the seasons fail.</p>
+            </div>
+            <div class="back">
+                <h2 class="section-title">Urban Weight & Infrastructure</h2>
+                <p class="data-text">The heavy buildings we invent sink the ground beneath them. Mobile networks interfere with the internal compass of migratory birds. Human selfishness has turned life into a "factory product."</p>
+            </div>
+        </div>
+
+        <div class="page" style="z-index: 7;">
+            <div class="front">
+                <h2 class="section-title">Prevention Steps</h2>
+                <div style="background:#e8f5e9; padding:10px; border-radius:5px; border-left:4px solid var(--accent-green);">
+                    <strong>1. Decarbonize:</strong> Replace LPG/Oil with Hydrogen/Solar.<br>
+                    <strong>2. Circularity:</strong> Design products for 100% recycling.<br>
+                    <strong>3. River Laws:</strong> Give rivers the right to sue polluters.
+                </div>
+            </div>
+            <div class="back">
+                <h2 class="section-title">Daily Global Impact</h2>
+                <p class="data-text">Since you opened this archive:</p>
+                <div style="background:#2c3e50; color:#fff; padding:15px; border-radius:8px; font-family:monospace;">
+                    Trees Lost: <span id="trees" style="color:#e74c3c;">0</span><br>
+                    CO2 Added (tons): <span id="co2" style="color:#e74c3c;">0</span><br>
+                    Waste Produced (kg): <span id="waste" style="color:#e74c3c;">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" style="z-index: 6;">
+            <div class="front" style="text-align:center;">
+                <h2 style="margin-top:40%;">KNOWLEDGE IS SURVIVAL</h2>
+                <p>The SRK Archive concludes here.</p>
+            </div>
+            <div class="back" style="text-align:center; position:relative;">
+                <h2>THE END</h2>
+                <p>Curated by <strong>Founder SRK</strong></p>
+                <button onclick="resetBook()" style="padding:10px 20px; cursor:pointer; background:var(--accent-green); color:#fff; border:none; border-radius:4px;">Restart Intel Journey</button>
+                
+                <div class="news-ticker">
+                    <div class="news-scroll">
+                        DAILY NEWS: [POLAR ICE AT RECORD LOW] -- [NEW OCEAN PLASTIC TREATY PROPOSED] -- [SOLAR ENERGY SURPASSES COAL IN 3 REGIONS] -- [SRK ARCHIVE: RECLAIM MISSION ACTIVE] -- [BEE POPULATIONS STABILIZING IN REFORESTED ZONES]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const pages = document.querySelectorAll('.page');
+        const layers = document.querySelectorAll('.bg-layer');
+        let currentIdx = 0;
+        let startTime = Date.now();
+
+        // Background Cycle (10 Seconds)
+        setInterval(() => {
+            layers.forEach(l => l.style.opacity = 0);
+            currentIdx = (currentIdx + 1) % layers.length;
+            layers[currentIdx].style.opacity = 1;
+        }, 10000);
+
+        // Impact Counter
+        setInterval(() => {
+            let sec = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('trees').innerText = (sec * 0.47).toFixed(2);
+            document.getElementById('co2').innerText = (sec * 1100).toLocaleString();
+            document.getElementById('waste').innerText = (sec * 63).toLocaleString();
+        }, 1000);
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+
+        pages.forEach((p, i) => {
+            p.onclick = () => {
+                p.classList.toggle('flipped');
+                p.style.zIndex = p.classList.contains('flipped') ? i : pages.length - i;
+            };
+        });
+
+        function resetBook() {
+            pages.forEach((p, i) => {
+                p.classList.remove('flipped');
+                p.style.zIndex = pages.length - i;
+            });
+            startTime = Date.now();
+        }
+    </script>
+</body>
+</html>
