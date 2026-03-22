@@ -21,7 +21,7 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            transition: 2s ease-in-out;
+            transition: background 2s ease-in-out;
         }
 
         /* --- VISUAL BACKGROUND SYSTEM --- */
@@ -86,6 +86,7 @@
             transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             padding: 50px 30px;
             box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            overflow-y: auto;
         }
         .founder-panel.open { left: 0; }
         .founder-panel h2 { color: var(--accent-green); border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -126,11 +127,15 @@
         .page.flipped { transform: rotateY(-180deg); }
 
         /* --- CONTENT STYLES --- */
-        .cover-front { background: var(--primary-dark); color: white; text-align: center; }
-        .section-title { color: var(--accent-green); border-left: 4px solid var(--accent-green); padding-left: 10px; margin: 20px 0; }
-        .matter-text { font-size: 1.05em; line-height: 1.6; color: #34495e; }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .stat-card { background: #eef2f3; padding: 10px; border-radius: 4px; font-size: 0.9em; }
+        .cover-front { background: var(--primary-dark); color: white; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .section-title { color: var(--accent-green); border-left: 4px solid var(--accent-green); padding-left: 10px; margin: 20px 0; font-size: 1.6em; }
+        .matter-text { font-size: 1.05em; line-height: 1.7; color: #34495e; margin-bottom: 15px; }
+        .highlight { color: #c0392b; font-weight: bold; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .stat-card { background: #eef2f3; padding: 15px; border-radius: 4px; font-size: 0.95em; border: 1px solid #dee2e6; }
+        .profile-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        .founder-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; object-position: right center; border: 5px solid var(--accent-green); margin-bottom: 15px; }
+        .sub-title { color: #7f8c8d; font-size: 0.9em; margin-bottom: 5px; }
 
         /* --- RIVER FOOTER --- */
         .river-container {
@@ -162,12 +167,9 @@
 
     <div class="logo-root" onclick="toggleFounder()">RECLAIM BY SRK 🌿</div>
     <div class="founder-panel" id="founderPanel">
-        <img src="https://via.placeholder.com/100" style="border-radius:50%; margin-bottom:20px;" alt="SRK">
-        <h2>Founder: SRK</h2>
-        <p><strong>Visionary & Researcher</strong></p>
-        <p class="matter-text">Dedicated to documenting the timeline of human existence and its impact on the cradle of life—our Earth.</p>
-        <hr>
-        <p><em>"The industrial gears must turn, but the rivers must also flow."</em></p>
+        <h2 class="section-title">About Me</h2>
+        <p class="matter-text">As the founder of RECLAIM, I am dedicated to exploring the intricate and often fraught relationship between human civilization and the natural world.</p>
+        <p class="matter-text">My research focuses on how industrialization, while a necessary step for economic survival, has fundamentally altered our planet's ecological systems. This project aims to chronicle that journey.</p>
         <button onclick="toggleFounder()" style="margin-top:20px; cursor:pointer;">Close Profile</button>
     </div>
 
@@ -177,83 +179,76 @@
 
     <div class="book">
         
-        <div class="page" id="p1" style="z-index: 4;">
+        <div class="page" id="p1" style="z-index: 5;">
             <div class="front cover-front">
                 <h1>Human Civilization & The Industrial Scar</h1>
-                <h3>A Global Impact Study</h3>
-                <p>Curated by <strong>SRK</strong></p>
-                <small>Open to Explore History →</small>
+                <h3>A Historical Analysis</h3>
+                <p class="sub-title">An exhaustive report by <strong>SRK</strong></p>
+                <small>Open to Begin the Odyssey →</small>
             </div>
             <div class="back">
-                <h2 class="section-title">The Starting Point</h2>
-                <p class="matter-text">
-                    For 200,000 years, <em>Homo sapiens</em> lived in biological harmony. Human behavior was governed by <strong>Natural Law</strong>. We followed rivers because they were the veins of the earth.
-                </p>
-                <div class="stat-grid">
-                    <div class="stat-card"><strong>Nomadic Era:</strong> Zero Carbon Waste.</div>
-                    <div class="stat-card"><strong>River Worship:</strong> Rivers were seen as Divine Entities.</div>
+                <div class="profile-container">
+                    <img src="image_0.png" class="founder-img" alt="SRK - Founder">
+                    <h2>Founder: SRK</h2>
+                    <p class="sub-title">Environmental Researcher & Visionary</p>
                 </div>
-                <p class="matter-text">Civilization began when we stopped moving and started damming rivers for the first time.</p>
+                <p class="matter-text">For over two decades, SRK has focused his work on documenting the shifting dynamics between nature and the modern industrial machine. His unique approach combines rigorous historical analysis with contemporary climate data to forecast the future.</p>
+                <p><em>"Understanding our past industrial impact is the only way to forge a balanced future."</em></p>
             </div>
         </div>
 
-        <div class="page" id="p2" style="z-index: 3;">
+        <div class="page" id="p2" style="z-index: 4;">
             <div class="front">
-                <h2 class="section-title">The Great Disruption (1760 - Today)</h2>
-                <p class="matter-text">
-                    The Industrial Revolution changed human behavior from <strong>Survival</strong> to <strong>Consumption</strong>. 
-                </p>
-                <ul>
-                    <li><strong>Coal & Steam:</strong> The first massive injection of CO2 into the atmosphere.</li>
-                    <li><strong>Chemical Era:</strong> Rivers became convenient "waste pipes" for factories.</li>
-                    <li><strong>Mass Production:</strong> Nature was no longer a spirit; it became a "Resource."</li>
-                </ul>
-                <p class="highlight" style="color:red;">The impact was immediate: Air quality in cities dropped by 70% in 50 years.</p>
+                <h2 class="section-title">The Dawn of Humanity</h2>
+                <p class="matter-text">For 99% of human history, <em>Homo sapiens</em> lived as nomads, intimately tied to the land. Our behavior was governed not by ambition, but by the natural availability of water. We revered nature as a divine entity—a giver of life, not a resource for profit.</p>
+                <div class="stat-grid">
+                    <div class="stat-card"><strong>Nomadic Era:</strong> Zero Carbon footprint. Humans took only what they needed from the rivers.</div>
+                    <div class="stat-card"><strong>River Worship:</strong> Indigenous cultures globally saw rivers as sacred spirits, a relationship based on respect and fear.</div>
+                </div>
+                <p class="matter-text">Civilization began when we learned to dam rivers, a monumental shift from "Living with Nature" to "Engineering Nature." This established the first organized human-made landscapes.</p>
             </div>
             <div class="back">
-                <h2 class="section-title">Rivers & Water Systems</h2>
-                <p class="matter-text">
-                    From the Thames to the Ganga, industrialization has treated rivers as immortal. However, the chemistry has changed. Heavy metals (Lead, Mercury) now sit in the sediment of every major river on Earth.
-                </p>
-                <div class="stat-card" style="background:#d1d8e0;">
-                    <strong>Global Impact:</strong> Over 40% of the world's rivers are now significantly polluted by industrial runoff.
-                </div>
+                <h2 class="section-title">The Industrial Explosion (1760 - Present)</h2>
+                <p class="matter-text">The Industrial Revolution ruptured our 10,000-year contract with the Earth. This era marked the moment human behavior shifted from <strong>Survival</strong> to aggressive <strong>Consumption</strong>. Natural elements were reimagined as "Raw Materials" for a new global economic order.</p>
+                <ul>
+                    <li><strong>Coal & Steam:</strong> This single combination was the first massive injection of CO2 into the atmosphere. Forests were cleared globally to build the required infrastructure.</li>
+                    <li><strong>Chemical Era:</strong> Rivers became convenient "waste pipes" for the new factories, carrying heavy metals like Lead and Mercury, creating invisible ecological disasters.</li>
+                    <li><strong>Mass Production:</strong> The world's first "Global Supply Chain" was built on resource extraction that often ignored ecological consequences.</li>
+                </ul>
+                <p class="highlight" style="color:red; text-align: center;">By 1900, CO2 levels had risen past pre-industrial norms.</p>
             </div>
         </div>
 
-        <div class="page" id="p3" style="z-index: 2;">
+        <div class="page" id="p3" style="z-index: 3;">
             <div class="front">
                 <h2 class="section-title">Global Warming: The Fever</h2>
-                <p class="matter-text">
-                    Human behavior—specifically the burning of fossil fuels—has wrapped the Earth in a "Heat Blanket." 
-                </p>
+                <p class="matter-text">Human behavior, particularly the relentless burning of fossil fuels, has wrapped the planet in a "Heat Blanket." This isn't just a gradual warming; it’s the systemic disruption of our planet's metabolism.</p>
                 <div class="stat-grid">
-                    <div class="stat-card"><strong>Temp Rise:</strong> +1.2°C since 1880.</div>
-                    <div class="stat-card"><strong>Sea Level:</strong> Rising 3.4mm per year.</div>
+                    <div class="stat-card"><strong>Temp Rise:</strong> +1.2°C rise since 1880, a rate faster than any other warming period in Earth's history.</div>
+                    <div class="stat-card"><strong>Sea Level Rise:</strong> Up 3.4mm per year, threatening coastal cities and human habitations.</div>
                 </div>
-                <p class="matter-text">This isn't just about heat; it’s about the <strong>destruction of seasons</strong>. Winter is shrinking, and the rainy season is becoming unpredictable and violent.</p>
+                <p class="matter-text">This disruption has blurred the traditional concepts of "Seasons." Winter is shrinking, and the rainy season, critical for global agriculture, has become unpredictable and violent.</p>
             </div>
             <div class="back">
-                <h2 class="section-title">The Behavior Shift</h2>
-                <p class="matter-text">
-                    To survive, human behavior must pivot back to "Animism" (respecting nature) while keeping "Modernism" (technology). We call this <strong>Sustainability</strong>.
-                </p>
-                <p><em>SRK Research Note:</em> The next 10 years will define the next 10,000 years of civilization.</p>
+                <h2 class="section-title">Humans and the Final Shift</h2>
+                <p class="matter-text">For 10,000 years, human behavior has been transactional: take from nature, move on. Today, we are facing the physical limits of that behavior. Our future survival depends on transitioning from a "Consuming Civilization" back to a "Keeping Civilization," utilizing our advanced technology to heal the scars of the past.</p>
+                <div class="stat-grid">
+                    <div class="stat-card"><strong>Action Required:</strong> 70% reduction in global carbon emissions by 2050 to avoid irreversible catastrophe.</div>
+                </div>
+                <p><em>SRK Research Note:</em> The next ten years will define the next 10,000 years of civilization.</p>
             </div>
         </div>
 
-        <div class="page" id="p4" style="z-index: 1;">
+        <div class="page" id="p4" style="z-index: 2;">
             <div class="front">
-                <h2 class="section-title">Final Verdict</h2>
-                <p class="matter-text">
-                    Nature does not need humans, but humans cannot exist without nature. Our industrial impact is a temporary scar; whether it heals or becomes a fatal wound depends on our current choices.
-                </p>
+                <h2 class="section-title">Final Verdict: A Question of Balance</h2>
+                <p class="matter-text">Our industrial impact is a definitive mark on Earth’s history. Nature will eventually reclaim everything; whether we find a way to exist in that new balance is the question SRK has explored throughout this archive.</p>
                 <center><strong>Report Compiled by SRK</strong></center>
             </div>
             <div class="back" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
                 <h2>RECLAIM</h2>
-                <p>Restore the Balance.</p>
-                <button onclick="resetBook()" style="padding:10px 20px; cursor:pointer;">Re-Read History</button>
+                <p>Understanding Our past. Restore the Future.</p>
+                <button onclick="resetBook()" style="padding:10px 20px; cursor:pointer; font-weight: bold; background: var(--accent-green); color: white; border: none; border-radius: 4px;">Re-Read History</button>
             </div>
         </div>
 
