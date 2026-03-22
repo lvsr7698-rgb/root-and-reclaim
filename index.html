@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RECLAIM: GLOBAL DATA CENTER | FOUNDER SRK</title>
+    <title>RECLAIM: THE SRK COMMAND CENTER</title>
     <style>
         :root {
             --primary-dark: #05080a;
@@ -14,101 +14,102 @@
         }
 
         body {
-            font-family: 'Consolas', 'Courier New', monospace;
+            font-family: 'Consolas', monospace;
             margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh; overflow-x: hidden; background: var(--primary-dark);
             color: var(--accent-green); transition: 0.5s;
         }
 
-        /* --- EMERGENCY OVERLOAD ALARM --- */
-        body.alarm-active { animation: serverOverload 0.5s infinite; }
-        @keyframes serverOverload { 0% { background: #05080a; } 50% { background: #2a0000; } }
-
         /* --- DYNAMIC BACKGROUNDS --- */
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0; transition: 2s; }
         #bg-night { background: radial-gradient(circle, #0d1117 0%, #000 100%); }
-        #bg-winter { background: #0f172a; border-top: 2px solid var(--tech-blue); }
-        #bg-rain { background: #111; }
-        .grid { position: absolute; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px); background-size: 30px 30px; }
-        .bolt { position: absolute; width: 100%; height: 100%; background: white; opacity: 0; animation: strike 7s infinite; }
-        @keyframes strike { 0%, 95% { opacity: 0; } 97% { opacity: 0.4; } }
+        .moon { position: absolute; top: 40px; right: 40px; width: 60px; height: 60px; background: #f1c40f; border-radius: 50%; box-shadow: 0 0 40px #f1c40f; }
+        
+        #bg-winter { background: #0f172a; }
+        .snow { position: absolute; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/snow.png'); animation: snow 10s linear infinite; }
+        @keyframes snow { from { background-position: 0 0; } to { background-position: 100px 500px; } }
 
-        /* --- LIBRARY LAYOUT --- */
-        .library { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; padding: 100px 20px; z-index: 10; }
-        .book-wrap { position: relative; width: 360px; height: 550px; perspective: 1500px; }
+        #bg-rain { background: #111; }
+        .rain { position: absolute; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/60-lines.png'); animation: rain 0.2s linear infinite; opacity: 0.2; }
+        @keyframes rain { from { background-position: 0 0; } to { background-position: 20px 400px; } }
+        .bolt { position: absolute; width: 100%; height: 100%; background: white; opacity: 0; animation: strike 6s infinite; }
+        @keyframes strike { 0%, 95% { opacity: 0; } 96% { opacity: 0.5; } }
+
+        /* --- SIDEBAR (ABOUT ME) --- */
+        .sidebar-btn { position: fixed; top: 20px; left: 20px; z-index: 100; background: var(--accent-green); color: black; padding: 10px 20px; font-weight: bold; cursor: pointer; border: 2px solid #000; }
+        .sidebar { position: fixed; top: 0; left: -350px; width: 300px; height: 100%; background: white; z-index: 101; transition: 0.5s; padding: 30px; border-right: 8px solid var(--accent-green); color: #111; }
+        .sidebar.active { left: 0; }
+        .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--accent-green); object-fit: cover; margin-bottom: 20px; }
+
+        /* --- THE BOOKS --- */
+        .library { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 100px 20px; z-index: 10; }
+        .book-wrap { position: relative; width: 350px; height: 500px; perspective: 1500px; }
         .page { position: absolute; width: 100%; height: 100%; transform-origin: left; transform-style: preserve-3d; transition: 0.8s; cursor: pointer; }
-        .front, .back { position: absolute; width: 100%; height: 100%; padding: 25px; box-sizing: border-box; backface-visibility: hidden; background: #fff; color: #111; border: 1px solid #333; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        .back { transform: rotateY(180deg); background: #e0e0e0; }
+        .front, .back { position: absolute; width: 100%; height: 100%; padding: 25px; backface-visibility: hidden; background: #fff; color: #111; border: 1px solid #333; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .back { transform: rotateY(180deg); background: #eee; }
         .page.flipped { transform: rotateY(-180deg); }
 
-        /* --- COVERS --- */
         .cover { color: white; text-align: center; display: flex; flex-direction: column; justify-content: center; }
-        .c1 { background: #111; border: 2px solid var(--accent-green); } 
-        .c2 { background: #111; border: 2px solid var(--warning-red); } 
-        .c3 { background: #111; border: 2px solid var(--gold-intel); }
+        .c1 { background: #1a252f; border: 2px solid var(--accent-green); }
+        .c2 { background: #7b241c; border: 2px solid var(--warning-red); }
 
-        /* --- DATA PROCESSING TERMINAL --- */
-        .tech-box { background: #000; color: var(--accent-green); padding: 10px; border-radius: 2px; font-size: 0.7rem; height: 160px; overflow: hidden; border: 1px solid var(--accent-green); position: relative; }
-        .process-log { position: absolute; width: 100%; animation: processing 10s linear infinite; }
-        @keyframes processing { 0% { top: 100%; } 100% { top: -200%; } }
+        /* --- DATA BOX --- */
+        .tech-box { background: #000; color: var(--accent-green); padding: 10px; font-size: 0.7rem; height: 150px; overflow: hidden; position: relative; border: 1px solid var(--accent-green); margin-top: 10px; }
+        .scrolling-text { position: absolute; width: 100%; animation: scrollUp 12s linear infinite; }
+        @keyframes scrollUp { 0% { top: 100%; } 100% { top: -200%; } }
 
-        /* --- CORRUPTION METER (NEW) --- */
-        .meter-wrap { width: 100%; height: 20px; background: #eee; border: 1px solid #333; margin: 10px 0; position: relative; }
-        .meter-fill { height: 100%; background: var(--warning-red); width: 88%; animation: jitter 2s infinite; }
-        @keyframes jitter { 0%, 100% { width: 88%; } 50% { width: 91%; } }
+        /* --- NEWS TICKER --- */
+        .news-footer { position: fixed; bottom: 40px; width: 100%; background: rgba(0,0,0,0.9); color: #fff; padding: 10px 0; z-index: 100; overflow: hidden; border-top: 1px solid var(--accent-green); }
+        .news-track { display: inline-block; white-space: nowrap; padding-left: 100%; animation: news 30s linear infinite; }
+        @keyframes news { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* --- UI NAVIGATION --- */
-        .top-nav { position: fixed; top: 0; width: 100%; padding: 15px; display: flex; justify-content: space-between; z-index: 100; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--accent-green); box-sizing: border-box; font-size: 0.8rem; }
-        .founder-img { width: 95px; height: 95px; border-radius: 50%; border: 3px solid var(--accent-green); display: block; margin: 0 auto 10px; object-fit: cover; filter: grayscale(100%) contrast(120%); }
-        .btn { background: none; border: 1px solid var(--warning-red); color: var(--warning-red); padding: 5px 10px; cursor: pointer; }
-        
-        .section-title { color: var(--accent-green); border-left: 4px solid var(--accent-green); padding-left: 10px; margin-bottom: 10px; font-weight: bold; }
-        .stat-item { font-size: 0.8rem; border-bottom: 1px solid #ccc; padding: 5px 0; }
+        .river { position: fixed; bottom: 0; width: 100%; height: 40px; background: var(--river-blue); z-index: 5; }
     </style>
 </head>
 <body>
 
-    <div class="top-nav">
-        <div>ANALYSIS NODE: <span id="status">ACTIVE</span> | FOUNDER: SRK</div>
-        <button class="btn" onclick="document.body.classList.toggle('alarm-active')">OVERLOAD ALARM 🚨</button>
+    <div class="sidebar-btn" onclick="toggleSidebar()">FOUNDER SRK 🌿</div>
+    <div class="sidebar" id="sidebar">
+        <center>
+            <img src="image_0.png" class="profile-img" alt="Founder SRK">
+            <h2>About Me</h2>
+            <hr>
+        </center>
+        <p>I am <strong>SRK</strong>, the founder of RECLAIM. My mission is to analyze global data and expose the industrial and political damage to our Earth.</p>
+        <p>This center processes real-time intelligence to provide steps for our survival.</p>
+        <button onclick="toggleSidebar()" style="width:100%; cursor:pointer;">Close</button>
     </div>
 
-    <div id="bg-night" class="bg-layer" style="opacity: 1;"><div class="grid"></div></div>
-    <div id="bg-winter" class="bg-layer"></div>
-    <div id="bg-rain" class="bg-layer"><div class="bolt"></div></div>
+    <div id="bg-night" class="bg-layer" style="opacity: 1;"><div class="moon"></div></div>
+    <div id="bg-winter" class="bg-layer"><div class="snow"></div></div>
+    <div id="bg-rain" class="bg-layer"><div class="bolt"></div><div class="rain"></div></div>
 
     <div class="library">
-        
         <div class="book-wrap">
             <div class="page" style="z-index: 3;">
                 <div class="front cover c1">
-                    <h2>RECLAIM.SYS</h2>
-                    <p>Foundation Archive</p>
-                    <small>Founder: SRK</small>
+                    <h2>RECLAIM: VOL I</h2>
+                    <p>Foundation & Profile</p>
                 </div>
                 <div class="back">
-                    <img src="image_0.png" class="founder-img" alt="SRK">
-                    <center><h3>SRK</h3><p style="color:var(--accent-green)">Lead Researcher</p></center>
-                    <p style="font-size:0.8rem;">Analyzing human behavioral patterns from the nomadic start to the 2026 industrial collapse. Our mission is to decode the truth of Earth's damage.</p>
+                    <img src="image_0.png" style="width:100px; border-radius:50%; display:block; margin:0 auto;" alt="SRK">
+                    <center><h3>Founder SRK</h3></center>
+                    <p style="font-size:0.85rem;">Documenting history from nomadic rivers to the 1984 Bhopal Disaster. We must shift from greedy behavior to natural survival.</p>
                 </div>
             </div>
             <div class="page" style="z-index: 2;">
                 <div class="front">
-                    <div class="section-title">Historical Log</div>
-                    <p class="stat-item"><b>Animism:</b> Symbiotic survival [OK]</p>
-                    <p class="stat-item"><b>1760 Industrial:</b> Carbon Injection [THREAT]</p>
-                    <p class="stat-item"><b>1984 Bhopal:</b> Chemical Poisoning [FATAL]</p>
-                    <p class="stat-item"><b>Nomadic Balance:</b> 0% Waste [LOST]</p>
+                    <h4>Historical Damage</h4>
+                    <p style="font-size:0.8rem;"><b>Colonial:</b> Railways stripped forests. <br><b>Nuclear:</b> Permanent radiation. <br><b>Modern:</b> Selfish political lobbying.</p>
                 </div>
-                <div class="back" style="background:#000; color:var(--accent-green);">
-                    <h4>CORE PREVENTION</h4>
-                    <p style="font-size:0.75rem;">
-                        > REBOOT RIVER LAWS<br>
-                        > PURGE NUCLEAR ARMS<br>
-                        > SHUTDOWN OIL SUBSIDIES<br>
-                        > RECLAIM BIODIVERSITY
-                    </p>
+                <div class="back">
+                    <h4>Prevention Steps</h4>
+                    <ul style="font-size:0.8rem;">
+                        <li>Grant Rights to Rivers</li>
+                        <li>Circular Recycling Only</li>
+                        <li>Stop Fossil Fuel Funding</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -116,104 +117,76 @@
         <div class="book-wrap">
             <div class="page" style="z-index: 3;">
                 <div class="front cover c2">
-                    <h2>PULSE.DAT</h2>
-                    <p>Real-Time Industrial Scan</p>
+                    <h2>RECLAIM: VOL II</h2>
+                    <p>Global Intel & News</p>
                 </div>
                 <div class="back">
-                    <div class="section-title">Internet Data Analysis</div>
+                    <h4>Internet Data Scan</h4>
                     <div class="tech-box">
-                        <div class="process-log">
-                            [SCANNING GLOBAL POWER GRIDS...]<br>
+                        <div class="scrolling-text">
+                            [SCANNING GLOBAL CHANNELS...]<br>
                             > CO2 PACKETS: 421.2 PPM<br>
-                            > NUCLEAR THERMAL SCAN: HIGH<br>
-                            > HEAVY BUILDING WEIGHT: CRITICAL<br>
-                            > LPG/OIL CONSUMPTION: 97M BBL/D<br>
-                            > 5G SIGNAL INTERFERENCE: ACTIVE<br>
-                            > ARCTIC ICE THROUGHPUT: -13%<br>
-                            > GLACIAL RETREAT: ALERT<br>
-                            [ANALYSING GLOBAL WARMING PACKETS]
+                            > OIL SHIPMENTS: RECORD HIGH<br>
+                            > 5G INTERFERENCE: BEE ALERTS<br>
+                            > GLACIER MELT: ACCELERATED<br>
+                            > NUCLEAR WASTE: UNSECURED<br>
+                            > URBAN SUBSIDENCE: NYC SINKING
                         </div>
                     </div>
                 </div>
             </div>
             <div class="page" style="z-index: 2;">
                 <div class="front">
-                    <center><h4>SYSTEM LOSS</h4></center>
-                    <div style="background:#111; color:var(--warning-red); padding:10px; font-family:monospace; border:1px solid var(--warning-red);">
-                        TREES LOST: <span id="trees">0</span><br>
-                        CARBON TONS: <span id="co2">0</span>
+                    <h4>Real-Time Loss</h4>
+                    <div style="background:#000; color:var(--warning-red); padding:15px; font-family:monospace;">
+                        Trees Lost: <span id="trees">0</span><br>
+                        CO2 Added: <span id="co2">0</span>
                     </div>
-                    <p style="font-size:0.75rem; margin-top:10px;">Selfish behavior has turned the atmosphere into a dumpster. Heavy buildings are causing cities to sink under their own weight.</p>
                 </div>
                 <div class="back">
-                    <div class="section-title">Scientific News</div>
-                    <p style="font-size:0.75rem;"><b>MARCH 2026:</b> Research confirms that 5G/Mobile networks are disrupting bird navigation paths. Industrial killing of animals has reached 2,500 per second.</p>
+                    <h4>Accountability</h4>
+                    <p style="font-size:0.8rem;">Governments prioritize GDP over life. Top 100 CEOs responsible for 71% of emissions. Intelligence hub scanning for corruption.</p>
                 </div>
             </div>
         </div>
-
-        <div class="book-wrap">
-            <div class="page" style="z-index: 3;">
-                <div class="front cover c3">
-                    <h2>LEDGER.EXE</h2>
-                    <p>Politics & Business Watch</p>
-                </div>
-                <div class="back">
-                    <div class="section-title">Corruption Meter</div>
-                    <small>Industrial Lobbying vs Climate Action</small>
-                    <div class="meter-wrap"><div class="meter-fill"></div></div>
-                    <p style="font-size:0.75rem;">91% of Political promises regarding "Nature Protection" are empty packets. Business tycoons prioritize quarterly profit over biological survival.</p>
-                </div>
-            </div>
-            <div class="page" style="z-index: 2;">
-                <div class="front">
-                    <div class="section-title">Nature's Credit</div>
-                    <p class="stat-item" style="color:var(--accent-green)">+ $50B Nordic Reforestation</p>
-                    <p class="stat-item" style="color:var(--accent-green)">+ 3 Nations Grant River Rights</p>
-                    <p class="stat-item" style="color:var(--accent-green)">+ Open-Source Solar Patents</p>
-                    <p style="font-size:0.75rem; margin-top:10px;">Analyzing positive internet data: Pockets of resistance are forming against industrial greed.</p>
-                </div>
-                <div class="back">
-                    <center><h4>SRK FINAL VERDICT</h4></center>
-                    <p style="font-size:0.8rem;">Governments and Tycoons have damaged the Earth for selfish gain. To Reclaim, we must process the truth, shutdown the pollution model, and reboot our respect for life.</p>
-                    <button onclick="resetBook()" style="cursor:pointer; background:#111; color:var(--accent-green); border:1px solid; padding:5px;">Restart Archive</button>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <div class="news-footer">
+        <div class="news-track">
+            MARCH 2026 NEWS: [SW US HEAT DOME: RECORDS SHATTERED] -- [EL NIÑO RETURNS: ERRATIC WEATHER PATTERNS DETECTED] -- [GREENPEACE VOWS TO FIGHT $345M PIPELINE VERDICT] -- [TRUMP ADMIN TARGETS COLORADO CLIMATE LAB] -- [SRK ARCHIVE: RECLAIM MISSION ACTIVE] -- [SOUTH KOREA RELEASES NEW ESG GUIDELINES]
+        </div>
+    </div>
+
+    <div class="river"></div>
 
     <script>
         const layers = document.querySelectorAll('.bg-layer');
-        let currentIdx = 0;
+        let currentBg = 0;
         let start = Date.now();
 
-        // 10s Background Cycle
+        // Background Cycle
         setInterval(() => {
             layers.forEach(l => l.style.opacity = 0);
-            currentIdx = (currentIdx + 1) % layers.length;
+            currentIdx = (currentBg + 1) % layers.length;
             layers[currentIdx].style.opacity = 1;
+            currentBg = currentIdx;
         }, 10000);
 
-        // Real-time Loss Counter
+        // Counter
         setInterval(() => {
             let s = Math.floor((Date.now() - start) / 1000);
             document.getElementById('trees').innerText = (s * 0.47).toFixed(1);
             document.getElementById('co2').innerText = (s * 1100).toLocaleString();
         }, 1000);
 
-        // Book Logic
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+
         document.querySelectorAll('.page').forEach((p, i) => {
             p.onclick = () => {
                 p.classList.toggle('flipped');
                 p.style.zIndex = p.classList.contains('flipped') ? 0 : (i % 2 === 0 ? 3 : 2);
             };
         });
-
-        function resetBook() {
-            start = Date.now();
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('flipped'));
-        }
     </script>
 </body>
 </html>
