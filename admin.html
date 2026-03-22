@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT | FOUNDER CONTROL v23</title>
+    <style>
+        :root { --nv-green: #00ff41; }
+        body { background: #0a0a0a; color: var(--nv-green); font-family: monospace; padding: 20px; }
+        .panel { border: 2px solid var(--nv-green); padding: 20px; background: #111; max-width: 800px; margin: 0 auto; }
+        .btn { padding: 15px; background: var(--nv-green); color: #000; border: none; font-weight: bold; cursor: pointer; margin-bottom: 10px; width: 100%; text-transform: uppercase; }
+        .btn-blue { background: #3498db; color: #fff; }
+        .card { background: #000; border: 1px solid #333; padding: 20px; margin-top: 20px; border-left: 5px solid var(--nv-green); }
+        textarea { width: 100%; height: 120px; background: #222; color: #fff; border: 1px solid #444; margin: 10px 0; padding: 10px; box-sizing: border-box; }
+        #status { text-align: center; margin-bottom: 10px; font-weight: bold; }
+        #progress { width: 100%; background: #222; height: 10px; margin-bottom: 15px; display: none; }
+        #bar { height: 100%; background: var(--nv-green); width: 0%; transition: 0.1s; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h2>FOUNDER CONTROL CENTER v23</h2>
+        <div id="status">READY</div>
+        <div id="progress"><div id="bar"></div></div>
+        
+        <button class="btn" onclick="addText()">+ CREATE NEW BOOK PAGE</button>
+        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD MUSIC / VIDEO / IMAGE</button>
+        <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
+        
+        <div id="adminList"></div>
+    </div>
+
+    <script>
+        let db;
+        const request = indexedDB.open("RootReclaimDB_v23", 1);
+        request.onupgradeneeded = (e) => { e.target.result.createObjectStore("archive", { keyPath: "id" }); };
+        request.onsuccess = (e) => { db = e.target.result; render(); };
+
+        function handleUpload(e) {
+            const file = e.target.files[0]; if(!file) return;
+            const status = document.getElementById('status');
+            const prog = document.getElementById('progress');
+            const bar = document.getElementById('bar');
+
+            prog.style.display = 'block';
+            status.innerText = "PROCESSING " + file.name.toUpperCase();
+
+            const reader = new FileReader();
+            reader.onprogress = (d) => { if(d.lengthComputable) bar.style.width = (d.loaded/d.total)*100 + '%'; };
+            reader.onload = (ev) => {
+                const entry = { id: Date.now(), content: "Note: " + file.name, file: ev.target.result, fName: file.name, fType: file.type };
+                const tx = db.transaction("archive", "readwrite");
+                tx.objectStore("archive").add(entry);
+                tx.oncomplete = () => {
+                    status.innerText = "UPLOAD SUCCESSFUL";
+                    prog.style.display = 'none';
+                    render();
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function addText() {
+            const entry = { id: Date.now(), content: "Write logs here...", file: null, fName: "", fType: null };
+            const tx = db.transaction("archive", "readwrite");
+            tx.objectStore("archive").add(entry);
+            tx.oncomplete = render;
+        }
+
+        function render() {
+            const list = document.getElementById('adminList');
+            const tx = db.transaction("archive", "readonly");
+            tx.objectStore("archive").getAll().onsuccess = (e) => {
+                list.innerHTML = e.target.result.sort((a,b)=>b.id-a.id).map(p => `
+                    <div class="card">
+                        <strong>${p.fName || 'Text Log'}</strong><br>
+                        <textarea id="edit-${p.id}">${p.content}</textarea><br>
+                        <button class="btn" onclick="save(${p.id})">SAVE TO PUBLIC SITE</button>
+                        <button class="btn" style="background:red; color:#fff;" onclick="del(${p.id})">DELETE PAGE</button>
+                    </div>`).join('');
+            };
+        }
+
+        function save(id) {
+            const tx = db.transaction("archive", "readwrite");
+            const store = tx.objectStore("archive");
+            store.get(id).onsuccess = (e) => {
+                const data = e.target.result;
+                data.content = document.getElementById(`edit-${id}`).value;
+                store.put(data);
+                tx.oncomplete = () => alert("DATA SYNCHRONIZED");
+            };
+        }
+
+        function del(id) { if(confirm("Delete?")) { const tx = db.transaction("archive", "readwrite"); tx.objectStore("archive").delete(id); tx.oncomplete = render; } }
+    </script>
+</body>
+</html>
