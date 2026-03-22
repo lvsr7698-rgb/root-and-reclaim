@@ -3,123 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT and reclaim | Public Archive</title>
+    <title>ROOT | THE RECLAIM BOOK</title>
     <style>
-        :root { --nv-green: #00ff41; --firefly-green: rgba(0, 255, 65, 0.9); --paper: #fdfdfd; }
-        body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; color: #fff; overflow-x: hidden; }
+        :root { --nv-green: #00ff41; --paper: #fdfdfd; }
+        body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; overflow: hidden; height: 100vh; }
         
-        /* BACKGROUND & WATERMARK */
+        /* BACKGROUND & FIREFLIES */
         .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 90%); }
-        .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; opacity: 0.6; filter: drop-shadow(0 0 20px var(--nv-green)); pointer-events: none; }
-        .tree-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; opacity: 0.05; pointer-events: none; }
+        .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 70%; opacity: 0.5; filter: drop-shadow(0 0 20px var(--nv-green)); pointer-events: none; }
+        .firefly { position: absolute; width: 4px; height: 4px; background: var(--nv-green); border-radius: 50%; box-shadow: 0 0 10px 4px var(--nv-green); animation: drift var(--d) infinite ease-in-out; }
+        @keyframes drift { 0%, 100% { transform: translate(0,0); opacity:0; } 50% { transform: translate(var(--x), var(--y)); opacity:1; } }
 
-        /* HEADER & SEARCH */
-        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--nv-green); z-index: 1000; padding: 10px 0; }
-        .search-wrap { display: flex; justify-content: center; gap: 10px; }
-        .search-bar { background: #111; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 8px; width: 250px; outline: none; }
+        /* THE FOUNDER PANEL (STAYING ON TOP) */
+        .founder-info { position: fixed; top: 20px; left: 20px; width: 180px; background: var(--paper); padding: 15px; border-left: 5px solid var(--nv-green); z-index: 1000; box-shadow: 5px 5px 15px #000; color: #111; font-size: 0.7rem; }
 
-        /* FOUNDER PANEL (NO PICTURE) */
-        .founder-panel { position: fixed; top: 120px; left: 15px; width: 200px; background: var(--paper); border: 2px solid #333; padding: 20px; color: #111; z-index: 500; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); border-top: 5px solid var(--nv-green); }
-        .founder-title { font-size: 1.2rem; color: #000; letter-spacing: 2px; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; display: block; }
-
-        /* TABS */
-        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
-        .tab-btn { background: none; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 5px 15px; cursor: pointer; font-size: 0.7rem; }
-        .tab-btn.active { background: var(--nv-green); color: #000; }
-
-        /* BOOK PAGES */
-        .container { margin: 150px auto; width: 90%; max-width: 800px; display: none; }
-        .container.active { display: block; }
-        .paper-sheet { background: var(--paper); color: #111; padding: 60px; margin-bottom: 60px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); border-left: 10px solid #bbb; position: relative; overflow: hidden; }
+        /* THE 3D BOOK ENGINE */
+        .book-container { position: relative; width: 90vw; height: 80vh; margin: 80px auto; perspective: 1500px; }
+        .book { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s; }
         
-        .media-card { background: #111; border: 1px solid #333; padding: 20px; margin-bottom: 25px; text-align: center; border-left: 5px solid var(--nv-green); }
-        .act-btn { background: var(--nv-green); color: #000; border: none; padding: 10px 15px; cursor: pointer; font-weight: bold; margin: 5px; }
+        .page { 
+            position: absolute; width: 50%; height: 100%; right: 0; top: 0; 
+            background: var(--paper); transform-origin: left; transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); 
+            transform-style: preserve-3d; box-shadow: inset 3px 0px 20px rgba(0,0,0,0.1); border-left: 1px solid #ddd;
+            padding: 40px; box-sizing: border-box; color: #111; cursor: pointer;
+        }
+        .page.flipped { transform: rotateY(-180deg); }
+        .page:nth-child(odd) { z-index: 1; }
+
+        /* PAGE CONTENT & WATERMARK */
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; opacity: 0.04; pointer-events: none; }
+        .page-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         
-        /* KISS EMOJI */
-        .kiss-emoji { position: absolute; font-size: 2.5rem; animation: floatUp 1s forwards; pointer-events: none; z-index: 2000; }
+        /* INTERACTION BUTTONS ON EVERY PAGE */
+        .controls { display: flex; justify-content: space-around; border-top: 1px solid #ccc; padding-top: 15px; margin-top: auto; }
+        .btn { background: var(--nv-green); border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; font-size: 0.7rem; border-radius: 3px; }
+
+        .kiss { position: absolute; font-size: 2rem; animation: floatUp 1s forwards; pointer-events: none; }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
+
+        /* SEARCH BAR */
+        .search-area { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+        input { background: #111; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 10px; width: 200px; outline: none; }
     </style>
 </head>
 <body>
     <div class="bg-fixed" id="field"><img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree"></div>
 
-    <header>
-        <div class="search-wrap">
-            <input type="text" id="publicSearch" class="search-bar" placeholder="SEARCH ARCHIVE..." onkeyup="filterPages()">
-        </div>
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="openTab('book', event)">THE BOOK</button>
-            <button class="tab-btn" onclick="openTab('music', event)">MUSIC</button>
-            <button class="tab-btn" onclick="openTab('video', event)">VIDEO</button>
-        </div>
-    </header>
-
-    <div class="founder-panel">
-        <center><span class="founder-title">FOUNDER SRK</span></center>
-        <p style="font-size: 0.75rem; line-height:1.5;">
-            <strong>Mission:</strong> Architect of ROOT. documenting industrial decay and nature's return through reclaim data.
-        </p>
+    <div class="founder-info">
+        <strong>FOUNDER SRK</strong><br><hr>
+        <p>Architect of ROOT. documenting industrial decay and nature's return.</p>
     </div>
 
-    <div id="book" class="container active"></div>
-    <div id="music" class="container"></div>
-    <div id="video" class="container"></div>
+    <div class="search-area">
+        <input type="text" placeholder="SEARCH BOOK..." onkeyup="searchBook(this.value)">
+    </div>
+
+    <div class="book-container">
+        <div class="book" id="theBook">
+            </div>
+    </div>
 
     <script>
-        let db;
-        const request = indexedDB.open("RootReclaimDB_v26", 1);
-        request.onsuccess = (e) => { db = e.target.result; render(); };
-
-        function openTab(name, e) {
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(name).classList.add('active');
-            e.currentTarget.classList.add('active');
+        // FIREFLY GENERATOR
+        const fld = document.getElementById('field');
+        for (let i = 0; i < 30; i++) {
+            let f = document.createElement('div'); f.className = 'firefly';
+            f.style.setProperty('--x', (Math.random() * 400 - 200) + 'px');
+            f.style.setProperty('--y', (Math.random() * -400 - 50) + 'px');
+            f.style.setProperty('--d', (Math.random() * 6 + 4) + 's');
+            f.style.left = Math.random() * 100 + '%'; f.style.top = Math.random() * 100 + '%';
+            fld.appendChild(f);
         }
 
-        function render() {
+        // DATABASE SYNC
+        let db;
+        const request = indexedDB.open("RootReclaimDB_v26", 1); // Using v26 to keep your data
+        request.onsuccess = (e) => { db = e.target.result; loadBook(); };
+
+        function loadBook() {
             const tx = db.transaction("archive", "readonly");
             tx.objectStore("archive").getAll().onsuccess = (e) => {
                 const data = e.target.result.sort((a,b) => b.id - a.id);
-                renderBooks(data.filter(p => !p.fType));
-                renderMedia(data.filter(p => p.fType?.includes('audio')), 'music');
-                renderMedia(data.filter(p => p.fType?.includes('video')), 'video');
+                const book = document.getElementById('theBook');
+                
+                book.innerHTML = data.map((p, index) => `
+                    <div class="page" onclick="this.classList.toggle('flipped')" style="z-index: ${data.length - index}">
+                        <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="watermark">
+                        <div class="page-content">
+                            <div>
+                                <small>ARCHIVE LOG #${data.length - index}</small>
+                                <h3 style="margin: 10px 0;">${p.fName || 'Text Entry'}</h3>
+                                
+                                ${p.fType?.includes('audio') ? `<audio controls src="${p.file}" style="width:100%"></audio>` : ''}
+                                ${p.fType?.includes('video') ? `<video controls src="${p.file}" style="width:100%"></video>` : ''}
+                                ${p.fType?.includes('image') ? `<img src="${p.file}" style="max-width:100%">` : ''}
+                                
+                                <p style="font-size: 0.9rem; line-height:1.6; color:#333;">${p.content}</p>
+                            </div>
+
+                            <div class="controls" onclick="event.stopPropagation()">
+                                <button class="btn" onclick="kiss(event)">❤ LIKE</button>
+                                <button class="btn" onclick="alert('Shared!')">SHARE</button>
+                                <button class="btn" onclick="window.open('${p.file || '#'}')">DOWNLOAD</button>
+                                <button class="btn" onclick="prompt('Comment:')">COMMENT</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
             };
         }
 
-        function renderBooks(items) {
-            document.getElementById('book').innerHTML = items.map(p => `
-                <div class="paper-sheet">
-                    <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="tree-watermark">
-                    <p style="white-space:pre-wrap; font-size:1.1rem; line-height:2.2rem;">${p.content}</p>
-                    <button class="act-btn" onclick="spawnKiss(event)">❤ LIKE</button>
-                    <button class="act-btn" onclick="alert('Shared!')">SHARE</button>
-                </div>`).join('');
-        }
-
-        function renderMedia(items, id) {
-            document.getElementById(id).innerHTML = items.map(p => `
-                <div class="media-card">
-                    <h3>${p.fName || 'Media'}</h3>
-                    ${id === 'music' ? `<audio controls src="${p.file}" style="width:100%"></audio>` : `<video controls src="${p.file}" style="width:100%"></video>`}
-                    <div style="margin-top:10px;">
-                        <button class="act-btn" onclick="spawnKiss(event)">❤ LIKE</button>
-                        <button class="act-btn" onclick="window.open('${p.file}')">DOWNLOAD</button>
-                    </div>
-                </div>`).join('');
-        }
-
-        function filterPages() {
-            let q = document.getElementById('publicSearch').value.toLowerCase();
-            document.querySelectorAll('.paper-sheet, .media-card').forEach(el => {
-                el.style.display = el.innerText.toLowerCase().includes(q) ? 'block' : 'none';
-            });
-        }
-
-        function spawnKiss(e) {
-            const k = document.createElement('div'); k.className = 'kiss-emoji'; k.innerText = '💋';
+        function kiss(e) {
+            const k = document.createElement('div'); k.className = 'kiss'; k.innerText = '💋';
             k.style.left = e.pageX + 'px'; k.style.top = e.pageY + 'px';
             document.body.appendChild(k); setTimeout(() => k.remove(), 1000);
+        }
+
+        function searchBook(q) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.style.opacity = p.innerText.toLowerCase().includes(q.toLowerCase()) ? "1" : "0.1";
+            });
         }
     </script>
 </body>
