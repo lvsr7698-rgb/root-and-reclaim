@@ -3,223 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRK COMMAND: GLOBAL DATA TOWER</title>
+    <title>ROOT and RECLAIM</title>
     <style>
         :root {
-            --matrix-green: #00ff41;
-            --warning-red: #ff3131;
-            --tech-blue: #00d2ff;
+            --nv-green: #00ff41;
             --deep-black: #05080a;
-            --intel-purple: #8e44ad;
+            --sea-blue: #2980b9;
         }
 
-        body {
-            font-family: 'Consolas', monospace;
+        body, html {
             margin: 0; padding: 0;
+            background: #000;
+            font-family: 'Consolas', monospace;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- BACKGROUND: NIGHT VISION BIG TREE --- */
+        .bg-fixed {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 70%);
+            display: flex; justify-content: center; align-items: flex-end;
+        }
+        .night-vision-tree {
+            width: 80%; max-width: 600px; height: auto;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 15px var(--nv-green));
+            animation: sway 8s ease-in-out infinite;
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-1deg); }
+            50% { transform: rotate(1deg); }
+        }
+
+        /* --- HEADER: ROOT AND RECLAIM --- */
+        header {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(0,0,0,0.9);
+            border-bottom: 2px solid var(--nv-green);
+            display: flex; align-items: center;
+            padding: 10px 40px; z-index: 1000;
+            box-sizing: border-box;
+        }
+        .logo-container {
+            width: 50px; height: 50px;
+            border: 2px solid var(--nv-green);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle, #00ff41 0%, #8e44ad 100%); /* Tree/Galaxy Hybrid */
+            box-shadow: 0 0 10px var(--nv-green);
+            font-size: 1.5rem;
+        }
+        .header-text {
+            margin-left: 15px;
+            color: var(--nv-green);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* --- SIDEBAR: TINY FOUNDER BOOK --- */
+        .founder-sidebar {
+            position: fixed; top: 100px; left: 20px;
+            width: 180px; height: 260px;
+            background: #fff; border: 2px solid var(--nv-green);
+            z-index: 500; padding: 15px;
+            color: #111; font-size: 0.8rem;
+            box-shadow: 5px 5px 15px rgba(0,255,65,0.3);
+            border-radius: 2px;
+        }
+        .profile-img {
+            width: 70px; height: 70px;
+            border-radius: 50%; border: 2px solid var(--nv-green);
+            display: block; margin: 0 auto 10px;
+            object-fit: cover;
+        }
+
+        /* --- MAIN CONTENT: UNLIMITED PAGES BOOK (VERTICAL) --- */
+        .tower-container {
             display: flex; flex-direction: column; align-items: center;
-            background: var(--deep-black); color: var(--matrix-green);
-            overflow-x: hidden; transition: background 0.5s;
+            padding: 120px 0 200px 0;
+            gap: 60px;
+        }
+        .book-page {
+            position: relative;
+            width: 380px; height: 500px;
+            background: #fff; color: #111;
+            border: 1px solid #333;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            padding: 40px; box-sizing: border-box;
+            transition: transform 0.3s;
+        }
+        .book-page:hover { transform: scale(1.02); }
+        .page-number {
+            position: absolute; bottom: 15px; right: 20px;
+            font-weight: bold; color: #888;
         }
 
-        /* --- GLOBAL ALARM EFFECT --- */
-        body.alarm-active { animation: alarmPulse 1s infinite; }
-        @keyframes alarmPulse {
-            0%, 100% { background: var(--deep-black); }
-            50% { background: #4d0000; }
+        /* --- FOOTER: WATER FLOWING SEA --- */
+        footer {
+            position: fixed; bottom: 0; width: 100%; height: 60px;
+            background: var(--sea-blue);
+            z-index: 1000; overflow: hidden;
         }
-
-        /* --- 3-PHASE BACKGROUNDS --- */
-        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0; transition: 2s; }
-        #bg-night { background: radial-gradient(circle, #0d1117 0%, #000 100%); }
-        .moon { position: absolute; top: 40px; right: 40px; width: 60px; height: 60px; background: #f1c40f; border-radius: 50%; box-shadow: 0 0 40px #f1c40f; }
-        #bg-winter { background: #0f172a; }
-        .snow { position: absolute; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/snow.png'); animation: snow 15s linear infinite; }
-        #bg-rain { background: #111; }
-        .bolt { position: absolute; width: 100%; height: 100%; background: white; opacity: 0; animation: strike 6s infinite; }
-        @keyframes strike { 0%, 95% { opacity: 0; } 97% { opacity: 0.5; } }
-
-        /* --- TOP NAV & SEARCH --- */
-        .top-nav { position: fixed; top: 0; width: 100%; padding: 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--matrix-green); z-index: 1000; display: flex; justify-content: space-between; box-sizing: border-box; }
-        .btn { background: none; border: 1px solid var(--matrix-green); color: var(--matrix-green); padding: 5px 10px; cursor: pointer; font-weight: bold; }
-        .alarm-btn { border-color: var(--warning-red); color: var(--warning-red); }
-
-        /* --- AI CONSOLE --- */
-        .ai-console {
-            position: fixed; bottom: 60px; right: 20px;
-            width: 320px; height: 450px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 2px solid var(--tech-blue);
-            z-index: 500; display: flex; flex-direction: column;
-            box-shadow: 0 0 20px var(--tech-blue);
+        .sea-wave {
+            width: 200%; height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192V320H0Z"></path></svg>');
+            animation: waveFlow 12s linear infinite;
         }
-        .ai-header { background: var(--tech-blue); color: #000; padding: 8px; font-weight: bold; font-size: 0.8rem; display: flex; justify-content: space-between; }
-        .ai-messages { flex: 1; overflow-y: auto; padding: 10px; font-size: 0.75rem; color: #fff; line-height: 1.4; }
-        .ai-input-area { display: flex; border-top: 1px solid var(--tech-blue); }
-        .ai-input-area input { flex: 1; background: transparent; border: none; color: var(--tech-blue); padding: 12px; outline: none; font-family: 'Consolas', monospace; }
-        .ai-input-area button { background: var(--tech-blue); border: none; padding: 10px 15px; cursor: pointer; font-weight: bold; }
-
-        /* --- VERTICAL BOOKS --- */
-        .library { display: flex; flex-direction: column; align-items: center; gap: 100px; padding: 120px 0; z-index: 10; }
-        .book-wrap { width: 360px; height: 520px; perspective: 1500px; position: relative; }
-        .page { position: absolute; width: 100%; height: 100%; transform-origin: left; transition: 0.8s; cursor: pointer; transform-style: preserve-3d; }
-        .front, .back { position: absolute; width: 100%; height: 100%; padding: 25px; backface-visibility: hidden; background: #fff; color: #000; overflow-y: auto; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .back { transform: rotateY(180deg); background: #eee; }
-        .page.flipped { transform: rotateY(-180deg); }
-        
-        .cover { color: white; text-align: center; display: flex; flex-direction: column; justify-content: center; background: #111; }
-        .c1 { border: 2px solid var(--matrix-green); }
-        .c2 { border: 2px solid var(--warning-red); }
-        .c3 { border: 2px solid var(--intel-purple); }
-
-        .founder-img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--matrix-green); display: block; margin: 0 auto 15px; object-fit: cover; }
-        .tech-box { background: #000; color: var(--matrix-green); padding: 10px; font-size: 0.7rem; border: 1px solid var(--matrix-green); margin-top: 10px; }
-        .river { position: fixed; bottom: 0; width: 100%; height: 40px; background: #3498db; z-index: 5; }
+        @keyframes waveFlow {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
     </style>
 </head>
-<body id="main-body">
+<body>
 
-    <div class="top-nav">
-        <div>CORE: SRK-INTEL-SERVER</div>
-        <button class="btn alarm-btn" onclick="toggleAlarm()">🚨 SYSTEM ALARM</button>
+    <div class="bg-fixed">
+        <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="night-vision-tree" alt="Big Tree Night Vision">
     </div>
 
-    <div id="bg-night" class="bg-layer" style="opacity: 1;"><div class="moon"></div></div>
-    <div id="bg-winter" class="bg-layer"><div class="snow"></div></div>
-    <div id="bg-rain" class="bg-layer"><div class="bolt"></div></div>
+    <header>
+        <div class="logo-container">🌿</div>
+        <div class="header-text">ROOT and reclaim</div>
+    </header>
 
-    <div class="ai-console">
-        <div class="ai-header">
-            <span>SRK INTELLIGENCE CORE v1.0</span>
-            <span style="color:red">● LIVE</span>
-        </div>
-        <div class="ai-messages" id="ai-chat">
-            <div>[SYSTEM]: Intelligence Core initialized. Analyzing industrial damage packets. I am the AI trained by Founder SRK. How can I assist?</div>
-        </div>
-        <div class="ai-input-area">
-            <input type="text" id="ai-input" placeholder="Enter query for SRK AI...">
-            <button onclick="askAI()">SEND</button>
-        </div>
+    <div class="founder-sidebar">
+        <img src="image_0.png" class="profile-img" alt="Founder">
+        <center><strong>FOUNDER</strong></center>
+        <p><strong>About Me:</strong> I am the architect of the Root system, observing the industrial pulse of the planet.</p>
+        <p><i>Mission: RECLAIM</i></p>
     </div>
 
-    <div class="library">
-        <div class="book-wrap">
-            <div class="page">
-                <div class="front cover c1">
-                    <h2>VOL I: RECLAIM</h2>
-                    <p>Foundation & Founder Mission</p>
-                    <small>Founder: SRK</small>
-                </div>
-                <div class="back">
-                    <img src="image_0.png" class="founder-img" alt="SRK">
-                    <center><h3>Founder SRK</h3></center>
-                    <p style="font-size:0.8rem;">I have dedicated my mission to analyzing the industrial scars on Earth. From the 1984 Bhopal tragedy to the current Nuclear threat, we must observe and prevent.</p>
-                </div>
-            </div>
-            <div class="page">
-                <div class="front">
-                    <h4 style="color:var(--accent-green)">Human Damage Log</h4>
-                    <p style="font-size:0.75rem;"><b>Nuclear:</b> Permanent Radiation Zones.<br><b>Oil/LPG:</b> Chemical Poisoning.<br><b>Concrete:</b> Crushing the Earth's Crust.</p>
-                    <div class="tech-box">
-                        > SCANNING BEHAVIORAL DECAY...<br>
-                        > STATUS: CRITICAL<br>
-                        > PREVENTATIVE STEPS: REQUIRED
-                    </div>
-                </div>
-                <div class="back">
-                    <center><h4>The Nomadic Truth</h4></center>
-                    <p style="font-size:0.8rem;">Before the industrial boom, humanity lived in sync with rivers. We must transition from an 'Ownership' mindset back to a 'Caretaker' mindset.</p>
-                </div>
-            </div>
+    <div class="tower-container" id="bookTower">
+        <div class="book-page">
+            <h3>NATURE DATA: LOG 001</h3>
+            <hr>
+            <p>Observing the night vision patterns of the central root system. Initial analysis shows industrial interference in sector 7.</p>
+            <span class="page-number">Page 1</span>
         </div>
 
-        <div class="book-wrap">
-            <div class="page">
-                <div class="front cover c2">
-                    <h2>VOL II: PULSE</h2>
-                    <p>Industrial & Global Warming News</p>
-                </div>
-                <div class="back">
-                    <h4 style="color:var(--warning-red)">Global Warming Update</h4>
-                    <p style="font-size:0.8rem;"><b>Mar 2026:</b> Industrial heat domes detected over urban centers. Sinking cities due to building weight has reached a 10-year high.</p>
-                </div>
-            </div>
+        <div class="book-page">
+            <h3>NATURE DATA: LOG 002</h3>
+            <hr>
+            <p>Scanning global warming packets. Ocean levels rising at Node 44. Carbon concentration in the atmosphere exceeds 420ppm.</p>
+            <span class="page-number">Page 2</span>
         </div>
 
-        <div class="book-wrap">
-            <div class="page">
-                <div class="front cover c3">
-                    <h2>VOL III: LEDGER</h2>
-                    <p>Politicians & Business Watch</p>
-                </div>
-                <div class="back">
-                    <h4>Accountability Ledger</h4>
-                    <p style="font-size:0.8rem;">Tracking the selfish behavior of global leaders. For every broken green promise, the industrial scar grows deeper.</p>
-                    <div class="tech-box" style="border-color:var(--intel-purple); color:var(--intel-purple);">
-                        > LOBBYIST FUNDING: $200M+ DETECTED<br>
-                        > 5G INTERFERENCE: ACTIVE ALERTS
-                    </div>
-                </div>
-            </div>
+        <div class="book-page">
+            <h3>NATURE DATA: LOG 003</h3>
+            <hr>
+            <p>Atmospheric rivers detected. Heavy rainfall expected in the winter sector. Soil nutrition levels dropping by 12% annually.</p>
+            <span class="page-number">Page 3</span>
         </div>
     </div>
 
-    <div class="river"></div>
+    <footer>
+        <div class="sea-wave"></div>
+    </footer>
 
     <script>
-        const layers = document.querySelectorAll('.bg-layer');
-        let currentIdx = 0;
-        const SRK_API_KEY = "0646864887"; // Your integrated API Key
+        // Unlimited Pages Logic: Add new pages as the user scrolls
+        const tower = document.getElementById('bookTower');
+        let pageCount = 3;
 
-        // Background Cycle
-        setInterval(() => {
-            layers.forEach(l => l.style.opacity = 0);
-            currentIdx = (currentIdx + 1) % layers.length;
-            layers[currentIdx].style.opacity = 1;
-        }, 10000);
-
-        // Global Alarm
-        function toggleAlarm() {
-            document.getElementById('main-body').classList.toggle('alarm-active');
-        }
-
-        // Book Flip
-        document.querySelectorAll('.page').forEach(p => {
-            p.onclick = () => p.classList.toggle('flipped');
-        });
-
-        // SRK AI CHAT LOGIC
-        async function askAI() {
-            const input = document.getElementById('ai-input');
-            const chat = document.getElementById('ai-chat');
-            const userText = input.value.trim();
-
-            if (!userText) return;
-
-            // Add user message to chat
-            chat.innerHTML += `<div style="color:var(--tech-blue); margin-bottom:10px;">> USER: ${userText}</div>`;
-            input.value = "";
-            chat.scrollTop = chat.scrollHeight;
-
-            // Display "Thinking"
-            const thinkingId = "think-" + Date.now();
-            chat.innerHTML += `<div id="${thinkingId}" style="color:var(--matrix-green)">> SRK_AI: Analysing internet data...</div>`;
-
-            try {
-                // This simulates the call using your API Key
-                // In a production site, you'd use fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${SRK_API_KEY}`)
-                setTimeout(() => {
-                    document.getElementById(thinkingId).innerHTML = `> SRK_AI: Based on the RECLAIM protocol and live data for "${userText}", I detect high industrial impact. Governments are currently prioritizing selfish profit over this data. We must initiate prevention steps.`;
-                    chat.scrollTop = chat.scrollHeight;
-                }, 1500);
-            } catch (error) {
-                document.getElementById(thinkingId).innerHTML = `> ERROR: Connection to SRK Core lost. Check API connectivity.`;
+        window.onscroll = function() {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                for(let i = 0; i < 2; i++) {
+                    pageCount++;
+                    const newPage = document.createElement('div');
+                    newPage.className = 'book-page';
+                    newPage.innerHTML = `
+                        <h3>NATURE DATA: LOG 00${pageCount}</h3>
+                        <hr>
+                        <p>Real-time analysis active. Scanning internet nodes for industrial damage updates...</p>
+                        <span class="page-number">Page ${pageCount}</span>
+                    `;
+                    tower.appendChild(newPage);
+                }
             }
-        }
-
-        // Handle Enter Key
-        document.getElementById('ai-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') askAI();
-        });
+        };
     </script>
 </body>
 </html>
