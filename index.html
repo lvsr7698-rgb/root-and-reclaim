@@ -30,18 +30,14 @@
             z-index: -1; opacity: 0; transition: opacity 2s ease-in-out;
         }
 
-        /* Night Cycle */
         #bg-night { background: #060b1f; }
         .moon { position: absolute; top: 40px; right: 60px; width: 70px; height: 70px; background: #f1c40f; border-radius: 50%; box-shadow: 0 0 40px #f1c40f; }
-
-        /* Sun Cycle */
+        
         #bg-sun { background: linear-gradient(180deg, #ff9e7d 0%, #2c3e50 100%); }
         .sun { position: absolute; top: 15%; left: 10%; width: 90px; height: 90px; background: #fff200; border-radius: 50%; box-shadow: 0 0 50px orange; }
 
-        /* Winter Cycle */
         #bg-winter { background: #ecf0f1; }
 
-        /* MONSOON CYCLE (Rain & Lightning) */
         #bg-rain { background: #34495e; }
         .rain-canvas {
             position: absolute; width: 100%; height: 100%;
@@ -52,7 +48,7 @@
         .bolt { position: absolute; width: 100%; height: 100%; background: #fff; opacity: 0; animation: lightning 7s infinite; }
         @keyframes lightning { 0%, 95% { opacity: 0; } 96% { opacity: 0.5; } 97% { opacity: 0.1; } 98% { opacity: 0.6; } }
 
-        /* --- LOGO & SIDEBAR (ABOUT FOUNDER) --- */
+        /* --- LOGO & SIDEBAR (FIXED PROFILE) --- */
         .logo-btn {
             position: fixed; top: 20px; left: 20px; z-index: 100;
             background: var(--accent-green); color: white; padding: 12px 20px;
@@ -62,11 +58,19 @@
         .sidebar {
             position: fixed; top: 0; left: -400px; width: 320px; height: 100%;
             background: white; z-index: 101; transition: 0.5s ease-in-out;
-            padding: 40px; box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            padding: 20px; box-shadow: 10px 0 30px rgba(0,0,0,0.5);
             border-right: 10px solid var(--accent-green);
+            display: flex; flex-direction: column; align-items: center;
         }
         .sidebar.active { left: 0; }
-        .sidebar img { width: 150px; height: 150px; border-radius: 50%; border: 5px solid var(--accent-green); object-fit: cover; }
+        
+        /* Fixed Profile Pic in Sidebar */
+        .sidebar-img { 
+            width: 180px; height: 180px; 
+            border-radius: 50%; border: 5px solid var(--accent-green); 
+            object-fit: cover; margin-top: 20px; margin-bottom: 10px;
+            background: #eee;
+        }
 
         /* --- THE RIVER --- */
         .river-flow {
@@ -81,15 +85,24 @@
         @keyframes flow { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         /* --- BOOK STYLING --- */
-        .book-wrap { position: relative; width: 80%; max-width: 800px; height: 550px; perspective: 2000px; z-index: 10; }
+        .book-wrap { position: relative; width: 85%; max-width: 800px; height: 550px; perspective: 2000px; z-index: 10; }
         .page { position: absolute; width: 100%; height: 100%; transform-origin: left; transform-style: preserve-3d; transition: 0.8s; cursor: pointer; }
         .front, .back { position: absolute; width: 100%; height: 100%; padding: 40px; box-sizing: border-box; backface-visibility: hidden; background: white; border: 1px solid #ddd; overflow-y: auto; box-shadow: inset 0 0 40px rgba(0,0,0,0.05); }
         .back { transform: rotateY(180deg); background: #fafafa; }
         .page.flipped { transform: rotateY(-180deg); }
 
         .cover-page { background: var(--primary-dark); color: white; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        
+        /* Profile Image in Book */
+        .book-profile-img {
+            width: 140px; height: 140px;
+            border-radius: 50%; border: 4px solid var(--accent-green);
+            object-fit: cover; margin: 0 auto 15px auto;
+            display: block; background: #eee;
+        }
+
         .title-line { border-left: 5px solid var(--accent-green); padding-left: 15px; margin: 20px 0; color: var(--accent-green); }
-        .text-body { line-height: 1.7; color: #444; font-size: 1.05rem; }
+        .text-body { line-height: 1.7; color: #444; font-size: 1.05rem; text-align: left; }
     </style>
 </head>
 <body>
@@ -101,15 +114,12 @@
 
     <div class="logo-btn" onclick="toggleSidebar()">RECLAIM: FOUNDER SRK 🌿</div>
     <div class="sidebar" id="sidebar">
-        <center>
-            <img src="image_0.png" alt="Founder SRK">
-            <h2 style="margin: 15px 0 5px 0;">SRK</h2>
-            <p style="color: var(--accent-green); font-weight: bold;">FOUNDER</p>
-            <hr>
-        </center>
-        <p class="text-body">I am SRK, the architect behind this report. My work focuses on reclaiming the narrative of our Earth from the shadows of industrial neglect.</p>
-        <p class="text-body">This project is a journey through time, documenting the birth of civilization and the cost of progress.</p>
-        <button onclick="toggleSidebar()" style="width: 100%; padding: 10px; cursor: pointer; margin-top: 20px;">Return to Book</button>
+        <img src="image_0.png" class="sidebar-img" alt="Founder SRK">
+        <h2 style="margin: 5px 0;">SRK</h2>
+        <p style="color: var(--accent-green); font-weight: bold; margin-top: 0;">FOUNDER</p>
+        <hr style="width: 80%;">
+        <p class="text-body" style="padding: 0 10px;">I am SRK, the architect behind this report. My work focuses on reclaiming the narrative of our Earth from the shadows of industrial neglect.</p>
+        <button onclick="toggleSidebar()" style="width: 80%; padding: 10px; cursor: pointer; margin-top: 20px; background: #ddd; border: none;">Return to Book</button>
     </div>
 
     <div class="river-flow"><div class="wave-motion"></div></div>
@@ -118,15 +128,15 @@
         
         <div class="page" style="z-index: 4;">
             <div class="front cover-page">
-                <h1>RECLAIM</h1>
-                <p>Industrial Impact & Nature Report</p>
-                <p>Curated by <strong>Founder SRK</strong></p>
+                <h1 style="font-size: 3rem; margin-bottom: 0;">RECLAIM</h1>
+                <p style="letter-spacing: 2px;">Industrial Impact & Nature Report</p>
+                <p style="margin-top: 50px;">Curated by <strong>Founder SRK</strong></p>
                 <small>Click to Open →</small>
             </div>
             <div class="back">
+                <img src="image_0.png" class="book-profile-img" alt="SRK Profile">
                 <center>
-                    <img src="image_0.png" style="width: 120px; border-radius: 50%; border: 4px solid var(--accent-green);">
-                    <h3>Meet the Founder: SRK</h3>
+                    <h3 style="margin-top: 0;">Meet the Founder: SRK</h3>
                 </center>
                 <p class="text-body">Hello, I am SRK. This archive is my personal analysis of humanity's environmental trajectory. I guide you through the transition from ancient symbiotic living to modern industrial complexity, focusing on the preservation of our rivers and climate.</p>
             </div>
@@ -134,35 +144,35 @@
 
         <div class="page" style="z-index: 3;">
             <div class="front">
-                <h2 class="title-line">The Nomadic Starting Point</h2>
-                <p class="text-body">For 99% of human history, <em>Homo sapiens</em> existed in a state of flow. Humans followed the rivers, respected the seasons, and had zero carbon footprint. Every ancient settlement was a riverside settlement, where the river was life itself.</p>
+                <h2 class="title-line">Nomadic Roots</h2>
+                <p class="text-body">Human civilization began along the riverbanks. For millennia, our behavior was symbiotic. We followed the natural cycle of the Earth. There was zero industrial waste; the river was life, and we protected it.</p>
             </div>
             <div class="back">
-                <h2 class="title-line">Industrial Shift & Impact</h2>
-                <p class="text-body">The 18th century rupture changed everything. Humanity learned to burn the Earth for power, treating natural systems as inputs and waste sinks. Rivers were diverted and polluted, and industrial behavior shifted from gratitude to aggressive consumption.</p>
+                <h2 class="title-line">Industrial Impact</h2>
+                <p class="text-body">The 18th century shifted our behavior from gratitude to ownership. We began extraction at a global scale. This period marks the start of the heavy industrial footprint on our rivers and air.</p>
             </div>
         </div>
 
         <div class="page" style="z-index: 2;">
             <div class="front">
-                <h2 class="title-line">Global Warming & Crisis</h2>
-                <p class="text-body">Human behavior has now heated the atmosphere by over 1.1°C. This is not just heat; it is systemic disruption. Ice caps are melting, and the seasons (including the monsoon, critical for global stability) are becoming unpredictable and violent.</p>
+                <h2 class="title-line">The Climate Crisis</h2>
+                <p class="text-body">Current industrial behavior has raised global temperatures by 1.1°C. This impact has disrupted the monsoon patterns and river levels globally. We are now living in the result of three centuries of neglect.</p>
             </div>
             <div class="back">
-                <h2 class="title-line">Reclaiming Our Behavior</h2>
-                <p class="text-body">From Stone Tools to Carbon Footprints, our journey is at a crossroads. We have the technical means to repair, but do we have the collective will to change? Reclaiming the Earth starts with reclaiming our symbiotic respect for natural systems.</p>
+                <h2 class="title-line">Reclaiming Future</h2>
+                <p class="text-body">SRK's research shows that the only way forward is to "Reclaim" our original respect for the Earth. We must use our industrial intelligence to heal, not just to extract.</p>
             </div>
         </div>
 
         <div class="page" style="z-index: 1;">
             <div class="front" style="text-align:center;">
                 <h2 style="margin-top: 40%;">RECLAIM</h2>
-                <p>The SRK Archive</p>
+                <p>An Archive by SRK</p>
             </div>
             <div class="back" style="text-align:center;">
-                <h2>FINISH</h2>
-                <p>History is still being written.</p>
-                <button onclick="resetBook()">Restart Journey</button>
+                <h2>THE END</h2>
+                <p>Thank you for exploring this report.</p>
+                <button onclick="resetBook()" style="padding: 10px 20px; cursor: pointer; background: var(--accent-green); color: white; border: none; border-radius: 4px;">Restart Journey</button>
             </div>
         </div>
 
