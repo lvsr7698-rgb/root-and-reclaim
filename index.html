@@ -2,72 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ROOT and reclaim | Public Archive</title>
     <style>
-        :root { --nv-green: #00ff41; --firefly-green: rgba(0, 255, 65, 0.9); --paper-color: #fdfdfd; }
-        body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; color: #fff; overflow-x: hidden; }
+        :root { 
+            --nv-green: #00ff41; 
+            --firefly-green: rgba(0, 255, 65, 0.9); 
+            --paper-color: #fdfdfd; 
+            --ink-color: #111;
+            --sea-blue: #2980b9;
+        }
+        body, html { margin: 0; padding: 0; background: #000; font-family: 'Consolas', monospace; color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* --- BACKGROUND: TREE & NEON GREEN FIREFLIES --- */
         .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 100%, rgba(0, 255, 65, 0.2) 0%, #000 90%); }
-        .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; opacity: 0.6; filter: drop-shadow(0 0 20px var(--nv-green)); }
+        .big-tree { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 700px; opacity: 0.6; filter: drop-shadow(0 0 20px var(--nv-green)); pointer-events: none; }
         .firefly { position: absolute; width: 5px; height: 5px; background: var(--firefly-green); border-radius: 50%; box-shadow: 0 0 15px 6px var(--firefly-green); animation: drift var(--d) infinite ease-in-out; }
         @keyframes drift { 0%, 100% { transform: translate(0,0); opacity:0; } 50% { transform: translate(var(--x), var(--y)); opacity:1; } }
 
-        /* PUBLIC FOUNDER PANEL (TOP LEFT) */
-        .founder-panel { position: fixed; top: 100px; left: 20px; width: 230px; background: var(--paper-color); border: 3px solid #333; padding: 20px; color: #111; z-index: 500; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
+        /* --- PUBLIC FOUNDER PANEL (TOP LEFT) --- */
+        .founder-panel { position: fixed; top: 100px; left: 20px; width: 230px; background: var(--paper-color); border: 3px solid #333; padding: 25px; color: #111; z-index: 500; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
         .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--nv-green); display: block; margin: 0 auto 15px; object-fit: cover; }
-        
-        .book-stack { margin: 120px auto 150px 300px; width: 60%; display: flex; flex-direction: column; gap: 70px; }
-        .paper-sheet { background: var(--paper-color); color: #111; padding: 60px; min-height: 600px; position: relative; box-shadow: 3px 3px 15px rgba(0,0,0,0.3), 10px 10px 0px #ddd; border-left: 10px solid #bbb; }
-        .media-node { background: #1a1a1a; color: var(--nv-green); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
-        .btn { background: var(--nv-green); border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .about-text { font-size: 0.85rem; line-height: 1.4; border-top: 1px solid #ccc; padding-top: 10px; margin-top: 10px; }
+
+        /* --- THE PHYSICAL PAPER STACK --- */
+        .book-stack { margin: 120px auto 150px 300px; width: 60%; max-width: 900px; display: flex; flex-direction: column; gap: 80px; }
+        .paper-sheet { 
+            background: var(--paper-color); 
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px); 
+            background-size: 100% 2.2rem; 
+            color: var(--ink-color); 
+            padding: 70px 60px; 
+            min-height: 700px; 
+            position: relative; 
+            box-shadow: 3px 3px 15px rgba(0,0,0,0.3), 10px 10px 0px #ddd; 
+            border-left: 10px solid #bbb; 
+        }
+
+        /* --- MEDIA NODES --- */
+        .media-node { background: #1a1a1a; color: var(--nv-green); padding: 25px; border-radius: 8px; margin: 25px 0; text-align: center; border: 2px solid #000; }
+        img, video { max-width: 100%; border: 1px solid #000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .btn { background: var(--nv-green); color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; font-family: inherit; margin-top: 10px; }
+
+        footer { position: fixed; bottom: 0; width: 100%; height: 45px; background: var(--sea-blue); z-index: 1000; }
+        .sea { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,213.3C960,224,1056,192,1152,165.3C1248,139,1344,117,1392,106.7L1440,96V320H0Z"></path></svg>'); animation: flow 12s linear infinite; }
+        @keyframes flow { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
+
     <div class="bg-fixed" id="field"><img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree"></div>
     
     <div class="founder-panel">
-        <img src="image_0.png" class="profile-img">
+        <img src="image_0.png" class="profile-img" alt="Founder Profile">
         <center><strong>FOUNDER SRK</strong></center>
-        <p style="font-size: 0.8rem; margin-top: 10px; border-top: 1px solid #ccc; padding-top: 10px;">
-            <strong>About Me:</strong> Architect of the Root system. I document industrial decay and the resilience of nature. This archive is an unlimited record of reclaim data.
-        </p>
+        <div class="about-text">
+            <strong>About Me:</strong> Architect of the ROOT system. I document the resilience of nature and the decay of industrial structures. This archive contains unlimited reclaim data packets.
+        </div>
     </div>
 
-    <div class="book-stack" id="bookStack"></div>
+    <div class="book-stack" id="bookStack">
+        </div>
+
+    <footer><div class="sea"></div></footer>
 
     <script>
-        // FIREFLIES
+        // GREEN FIREFLY ANIMATION
         const fld = document.getElementById('field');
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 45; i++) {
             let f = document.createElement('div'); f.className = 'firefly';
-            f.style.setProperty('--x', (Math.random() * 400 - 200) + 'px');
-            f.style.setProperty('--y', (Math.random() * -400 - 50) + 'px');
+            f.style.setProperty('--x', (Math.random() * 500 - 250) + 'px');
+            f.style.setProperty('--y', (Math.random() * -500 - 50) + 'px');
             f.style.setProperty('--d', (Math.random() * 6 + 4) + 's');
             f.style.left = Math.random() * 100 + '%'; f.style.top = Math.random() * 100 + '%';
             fld.appendChild(f);
         }
 
-        // DATABASE LOAD
+        // DATABASE CONNECTION (v19)
         let db;
-        const request = indexedDB.open("RootReclaimDB", 1);
-        request.onsuccess = (e) => { db = e.target.result; render(); };
+        const dbName = "RootReclaimDB_v19";
 
-        function render() {
+        const request = indexedDB.open(dbName, 1);
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            renderPublicArchive();
+        };
+
+        function renderPublicArchive() {
             const stack = document.getElementById('bookStack');
-            const tx = db.transaction("pages", "readonly");
-            tx.objectStore("pages").getAll().onsuccess = (e) => {
-                const pages = e.target.result.sort((a,b) => a.id - b.id);
+            const tx = db.transaction("archive", "readonly");
+            tx.objectStore("archive").getAll().onsuccess = (e) => {
+                const pages = e.target.result.sort((a,b) => b.id - a.id);
+                if(pages.length === 0) {
+                    stack.innerHTML = '<div class="paper-sheet"><h2>ARCHIVE EMPTY</h2><p>Awaiting data packets from Founder SRK...</p></div>';
+                    return;
+                }
                 stack.innerHTML = pages.map((p, i) => `
                     <div class="paper-sheet">
-                        <h2>LOG ENTRY: ${i+1}</h2>
-                        ${p.fileType?.includes('audio') ? `<div class="media-node"><audio controls src="${p.file}" style="width:100%"></audio></div>` : ''}
-                        ${p.fileType?.includes('video') ? `<div class="media-node"><video controls src="${p.file}" style="width:100%"></video></div>` : ''}
-                        ${p.fileType?.includes('image') ? `<img src="${p.file}" style="max-width:100%; border:2px solid #000;">` : ''}
-                        <div style="font-size:1.1rem; line-height:2.2rem; white-space:pre-wrap; margin-top:20px;">${p.content}</div>
-                        <button class="btn" onclick="dl('${p.file}','${p.fileName}')">DOWNLOAD DATA</button>
+                        <h2>LOG ENTRY PAGE ${pages.length - i}</h2>
+                        
+                        ${renderPublicMedia(p)}
+
+                        <div style="font-size:1.15rem; line-height:2.2rem; white-space:pre-wrap; margin-top:20px; color:#111;">${p.content}</div>
+                        
+                        <div style="margin-top:40px; border-top:1px dashed #ccc; padding-top:20px;">
+                            <button class="btn" onclick="dlFile('${p.file}','${p.fName}')">DOWNLOAD DATA PACKET</button>
+                        </div>
                     </div>`).join('');
             };
         }
-        function dl(s, n) { const a = document.createElement('a'); a.href = s; a.download = n; a.click(); }
+
+        function renderPublicMedia(p) {
+            if(!p.file) return '';
+            if(p.fType.includes('audio')) {
+                return `<div class="media-node"><strong>🎵 AUDIO LOG: ${p.fName}</strong><br><audio controls src="${p.file}" style="width:100%; margin-top:10px;"></audio></div>`;
+            }
+            if(p.fType.includes('video')) {
+                return `<div class="media-node"><video controls src="${p.file}" style="width:100%"></video></div>`;
+            }
+            if(p.fType.includes('image')) {
+                return `<img src="${p.file}" style="margin:20px 0; display:block;">`;
+            }
+            return `<div class="media-node"><strong>📄 ATTACHMENT: ${p.fName}</strong></div>`;
+        }
+
+        function dlFile(src, name) {
+            const a = document.createElement('a'); a.href = src; a.download = name; a.click();
+        }
     </script>
 </body>
 </html>
