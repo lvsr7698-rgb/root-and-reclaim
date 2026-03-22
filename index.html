@@ -58,14 +58,14 @@
         /* --- FULL VIEW BOOK --- */
         .book-container {
             margin: 120px 40px 100px 250px; 
-            background: rgba(255, 255, 255, 0.07); 
+            background: rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(5px); 
             color: #fff; padding: 50px;
             border-radius: 10px; border: 1px solid rgba(0, 255, 65, 0.2);
             min-height: 85vh; position: relative;
         }
 
-        .saved-page { border-bottom: 1px solid rgba(0, 255, 65, 0.2); padding: 80px 0; position: relative; }
+        .saved-page { border-bottom: 1px solid rgba(0, 255, 65, 0.2); padding: 60px 0; position: relative; }
         .watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 300px; height: 300px; border-radius: 50%;
@@ -73,25 +73,22 @@
             opacity: 0.06; pointer-events: none;
         }
 
-        /* AUDIO NODE STYLING */
-        .audio-node {
-            background: rgba(0,0,0,0.8);
-            border: 1px solid var(--nv-green);
-            padding: 20px;
-            margin: 20px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            border-radius: 5px;
-        }
-        .audio-controls { display: flex; gap: 10px; align-items: center; }
-        .audio-btn { background: var(--nv-green); color: #000; border: none; padding: 5px 15px; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
+        /* LIVE EDITOR & MUSIC NODE */
+        .editor-area { width: 100%; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid var(--nv-green); padding: 15px; font-family: inherit; margin-top: 10px; min-height: 100px; display: block; }
         
-        .page-actions { position: absolute; top: 20px; right: 0; z-index: 10; }
-        .action-btn { background: #000; color: var(--nv-green); border: 1px solid var(--nv-green); padding: 5px 12px; cursor: pointer; font-size: 0.7rem; margin-left: 10px; }
+        .audio-node {
+            background: rgba(0,0,0,0.8); border: 2px solid var(--nv-green);
+            padding: 20px; margin: 20px 0; border-radius: 5px; text-align: center;
+        }
+        .audio-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .audio-btn { background: var(--nv-green); color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
+        .audio-btn.dl { background: var(--sea-blue); color: #fff; }
+
+        .page-actions { position: absolute; top: 20px; right: 0; z-index: 10; display: flex; gap: 10px; }
+        .action-btn { background: #000; color: var(--nv-green); border: 1px solid var(--nv-green); padding: 5px 12px; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
         
         .archive-img { max-width: 80%; display: block; margin: 20px auto; border: 2px solid var(--nv-green); }
-        .page-content { position: relative; z-index: 2; font-size: 1.2rem; line-height: 1.8; text-shadow: 1px 1px 2px #000; }
+        .page-content-display { font-size: 1.2rem; line-height: 1.8; text-shadow: 1px 1px 2px #000; white-space: pre-wrap; margin-top: 15px; }
 
         footer { position: fixed; bottom: 0; width: 100%; height: 40px; background: var(--sea-blue); z-index: 1000; overflow: hidden; }
         .sea-layer { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,192L48,176C96,160,192,128,288,144C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,181.3C1248,192,1344,160,1392,144L1440,128V320H0Z"></path></svg>'); animation: wave 12s linear infinite; }
@@ -112,22 +109,22 @@
         <img src="image_0.png" class="profile-img" alt="Founder">
         <center><strong>FOUNDER SRK</strong></center>
         
-        <button class="control-btn" onclick="addNewPage()">+ New Page</button>
-        <button class="control-btn" style="background:var(--sea-blue)" onclick="document.getElementById('importFile').click()">Import File/Image</button>
+        <button class="control-btn" onclick="addNewPage()">+ New Empty Page</button>
+        <button class="control-btn" style="background:var(--sea-blue)" onclick="document.getElementById('importFile').click()">Import Image/JSON</button>
         <button class="control-btn" style="background:var(--firefly-gold); color:#000;" onclick="document.getElementById('importMusic').click()">🎵 Import Music</button>
         
         <input type="file" id="importFile" style="display:none" onchange="handleImport(event)" accept="image/*,.json,.txt">
         <input type="file" id="importMusic" style="display:none" onchange="handleMusicImport(event)" accept="audio/*">
         
         <button class="control-btn" onclick="exportPDF()">Export PDF</button>
-        <button class="control-btn" onclick="exportJSON()">Backup Ledger</button>
-        <button class="control-btn" style="background:#c0392b" onclick="resetBook()">Reset All</button>
+        <button class="control-btn" onclick="exportJSON()">Master Backup</button>
+        <button class="control-btn" style="background:#c0392b" onclick="resetBook()">Reset Archive</button>
     </div>
 
     <div class="book-container" id="captureArea">
         <div class="book-header">
             <h1 style="margin:0;">INFINITE ARCHIVE</h1>
-            <span id="pageCounter" style="color:var(--nv-green);">PAGES: 0</span>
+            <span id="pageCounter" style="color:var(--nv-green); font-weight:bold;">PAGES: 0</span>
         </div>
         <div class="pages-list" id="ledgerList"></div>
     </div>
@@ -150,24 +147,25 @@
         }
 
         // DATA CORE
-        let archive = JSON.parse(localStorage.getItem('srk_v7_archive')) || [];
+        let archive = JSON.parse(localStorage.getItem('srk_master_v8')) || [];
         if (archive.length === 0) addNewPage(false);
 
         function addNewPage(shouldUpdate = true) {
             archive.push({ 
                 id: Date.now() + Math.random(), 
                 content: "", 
+                isEditing: true,
                 image: null, 
                 audio: null,
                 audioName: null,
-                timestamp: "UNINITIALIZED", 
+                timestamp: "NEW PAGE", 
                 pageNumber: archive.length + 1 
             });
             if(shouldUpdate) updateStorage();
         }
 
         function updateStorage() {
-            localStorage.setItem('srk_v7_archive', JSON.stringify(archive));
+            localStorage.setItem('srk_master_v8', JSON.stringify(archive));
             renderLedger();
         }
 
@@ -177,13 +175,14 @@
             list.innerHTML = ''; 
 
             archive.forEach((item) => {
-                const isInit = item.content !== "" || item.image !== null || item.audio !== null;
-                
                 list.innerHTML += `
                     <div class="saved-page">
                         <div class="watermark"></div>
                         <div class="page-actions">
-                            <button class="action-btn" onclick="writePage(${item.id})">EDIT</button>
+                            ${item.isEditing ? 
+                                `<button class="action-btn" onclick="savePage(${item.id})">SAVE PAGE</button>` : 
+                                `<button class="action-btn" onclick="editPage(${item.id})">EDIT DATA</button>`
+                            }
                             <button class="action-btn" style="color:red; border-color:red;" onclick="deletePage(${item.id})">DELETE PAGE</button>
                         </div>
                         <h2 style="color:var(--nv-green);">Page ${item.pageNumber}</h2>
@@ -192,31 +191,45 @@
                         
                         ${item.audio ? `
                             <div class="audio-node">
-                                <strong>🎵 AUDIO LOG: ${item.audioName}</strong>
+                                <strong>🎵 AUDIO PACKET: ${item.audioName}</strong>
                                 <audio id="audio-${item.id}" src="${item.audio}"></audio>
                                 <div class="audio-controls">
                                     <button class="audio-btn" onclick="document.getElementById('audio-${item.id}').play()">PLAY</button>
                                     <button class="audio-btn" onclick="document.getElementById('audio-${item.id}').pause()">PAUSE</button>
-                                    <button class="audio-btn" style="background:#3498db" onclick="downloadAudio('${item.audio}', '${item.audioName}')">DOWNLOAD</button>
+                                    <button class="audio-btn dl" onclick="downloadAudio('${item.audio}', '${item.audioName}')">DOWNLOAD</button>
                                 </div>
                             </div>
                         ` : ''}
 
-                        <div class="page-content" style="white-space: pre-wrap;">${isInit ? item.content : `<em>Ready for analysis...</em>`}</div>
+                        ${item.isEditing ? 
+                            `<textarea class="editor-area" id="edit-${item.id}" placeholder="Write analysis here...">${item.content}</textarea>` :
+                            `<div class="page-content-display">${item.content || "<em>No data recorded.</em>"}</div>`
+                        }
+                        
                         <div style="font-size:0.7rem; color:var(--nv-green); opacity:0.5; margin-top:20px;">SYNC: ${item.timestamp}</div>
                     </div>
                 `;
             });
         }
 
-        function writePage(id) {
+        // CRUD FUNCTIONS
+        function savePage(id) {
             const item = archive.find(i => i.id === id);
-            const val = prompt(`Edit content for Page ${item.pageNumber}:`, item.content);
-            if (val !== null) { item.content = val; item.timestamp = new Date().toLocaleString(); updateStorage(); }
+            const textVal = document.getElementById(`edit-${id}`).value;
+            item.content = textVal;
+            item.isEditing = false;
+            item.timestamp = new Date().toLocaleString();
+            updateStorage();
+        }
+
+        function editPage(id) {
+            const item = archive.find(i => i.id === id);
+            item.isEditing = true;
+            renderLedger();
         }
 
         function deletePage(id) {
-            if(confirm("Permanently delete this entire page?")) {
+            if(confirm("Permanently delete this entire page and its contents?")) {
                 archive = archive.filter(i => i.id !== id);
                 archive.forEach((p, idx) => p.pageNumber = idx + 1);
                 updateStorage();
@@ -226,22 +239,29 @@
         function downloadAudio(src, name) {
             const link = document.createElement('a');
             link.href = src;
-            link.download = name || "audio_log.mp3";
+            link.download = name || "reclaim_audio.mp3";
             link.click();
         }
 
-        // IMPORT LOGIC (GENERAL & MUSIC)
+        // IMPORT FUNCTIONS
         function handleImport(event) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             if (file.type.startsWith('image/')) {
-                reader.onload = e => { archive.push({ id: Date.now(), content: "", image: e.target.result, audio:null, timestamp: new Date().toLocaleString(), pageNumber: archive.length + 1 }); updateStorage(); };
+                reader.onload = e => { 
+                    archive.push({ id: Date.now(), content: "", isEditing: true, image: e.target.result, audio:null, timestamp: "IMAGE IMPORTED", pageNumber: archive.length + 1 }); 
+                    updateStorage(); 
+                };
                 reader.readAsDataURL(file);
             } else {
                 reader.onload = e => {
-                    try { const parsed = JSON.parse(e.target.result); if (Array.isArray(parsed)) archive = parsed; }
-                    catch { archive.push({ id: Date.now(), content: e.target.result, image: null, audio:null, timestamp: new Date().toLocaleString(), pageNumber: archive.length + 1 }); }
+                    try { 
+                        const parsed = JSON.parse(e.target.result); 
+                        if (Array.isArray(parsed)) archive = parsed; 
+                    } catch { 
+                        archive.push({ id: Date.now(), content: e.target.result, isEditing: false, image: null, audio:null, timestamp: "TEXT IMPORTED", pageNumber: archive.length + 1 }); 
+                    }
                     updateStorage();
                 };
                 reader.readAsText(file);
@@ -256,10 +276,11 @@
                 archive.push({ 
                     id: Date.now(), 
                     content: "Music analysis log.", 
+                    isEditing: true,
                     image: null, 
                     audio: e.target.result, 
                     audioName: file.name,
-                    timestamp: new Date().toLocaleString(), 
+                    timestamp: "MUSIC IMPORTED", 
                     pageNumber: archive.length + 1 
                 });
                 updateStorage();
@@ -267,7 +288,7 @@
             reader.readAsDataURL(file);
         }
 
-        function resetBook() { if(confirm("Wipe Archive?")) { localStorage.removeItem('srk_v7_archive'); location.reload(); } }
+        function resetBook() { if(confirm("Wipe entire archive? This cannot be undone.")) { localStorage.removeItem('srk_master_v8'); location.reload(); } }
         function exportPDF() { html2pdf().set({ margin: 0.5, filename: 'SRK_ARCHIVE.pdf', html2canvas: { scale: 2, backgroundColor: '#000000' } }).from(document.getElementById('captureArea')).save(); }
         function exportJSON() { const blob = new Blob([JSON.stringify(archive, null, 2)], { type: "application/json" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "SRK_BACKUP.json"; link.click(); }
 
