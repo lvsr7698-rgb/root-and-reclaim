@@ -18,9 +18,9 @@
         .search-wrap { display: flex; justify-content: center; gap: 10px; }
         .search-bar { background: #111; border: 1px solid var(--nv-green); color: var(--nv-green); padding: 8px; width: 250px; outline: none; }
 
-        /* FOUNDER PROFILE */
-        .founder-panel { position: fixed; below : 120px; left: 15px; width: 200px; background: var(--paper); border: 2px solid #333; padding: 20px; color: #111; z-index: 500; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
-        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--nv-green); display: block; margin: 0 auto 10px; object-fit: cover; }
+        /* FOUNDER PANEL (NO PICTURE) */
+        .founder-panel { position: fixed; top: 120px; left: 15px; width: 200px; background: var(--paper); border: 2px solid #333; padding: 20px; color: #111; z-index: 500; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); border-top: 5px solid var(--nv-green); }
+        .founder-title { font-size: 1.2rem; color: #000; letter-spacing: 2px; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; display: block; }
 
         /* TABS */
         .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
@@ -55,10 +55,9 @@
     </header>
 
     <div class="founder-panel">
-        <img src="image_0.png" class="profile-img">
-        <center><strong>FOUNDER SRK</strong></center>
-        <p style="font-size: 0.7rem; border-top: 1px solid #ccc; padding-top: 10px; margin-top: 10px;">
-            <strong>About Me:</strong> Architect of ROOT. documenting industrial decay and nature's return. Unlimited reclaim data.
+        <center><span class="founder-title">FOUNDER SRK</span></center>
+        <p style="font-size: 0.75rem; line-height:1.5;">
+            <strong>Mission:</strong> Architect of ROOT. documenting industrial decay and nature's return through reclaim data.
         </p>
     </div>
 
@@ -69,7 +68,6 @@
     <script>
         let db;
         const request = indexedDB.open("RootReclaimDB_v26", 1);
-        request.onupgradeneeded = (e) => { e.target.result.createObjectStore("archive", { keyPath: "id" }); };
         request.onsuccess = (e) => { db = e.target.result; render(); };
 
         function openTab(name, e) {
