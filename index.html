@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT and reclaim | SRK LEDGER</title>
+    <title>ROOT and reclaim | INFINITE LEDGER</title>
     <style>
         :root {
             --nv-green: #00ff41;
@@ -63,9 +63,11 @@
         }
         .header-text { margin-left: 15px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* --- FOUNDER PANEL --- */
+        /* --- FOUNDER PANEL (LEFT MIDDLE) --- */
         .founder-panel {
-            position: fixed; top: 100px; left: 20px; width: 220px;
+            position: fixed; top: 50%; left: 20px; 
+            transform: translateY(-50%);
+            width: 220px;
             background: #fff; border: 3px solid var(--nv-green);
             padding: 20px; color: #111; z-index: 500; font-size: 0.85rem;
             box-shadow: 10px 10px 0px rgba(0,255,65,0.2);
@@ -80,40 +82,37 @@
             font-weight: bold; text-transform: uppercase;
         }
         .control-btn:hover { background: var(--nv-green); color: #000; }
+        .filter-input { width: 100%; margin-top: 10px; padding: 5px; border: 1px solid #ccc; font-family: inherit; font-size: 0.7rem; }
 
-        /* --- THE INTERACTIVE LEDGER --- */
+        /* --- THE INFINITE LEDGER --- */
         .book-container {
-            margin: 140px auto 120px auto; width: 90%; max-width: 850px;
+            margin: 140px auto 120px 280px; 
+            width: 60%; max-width: 850px;
             background: #fff; color: #111; padding: 40px;
             box-shadow: 0 0 40px rgba(0,255,65,0.1); border-radius: 2px;
-            min-height: 60vh;
+            min-height: 80vh; position: relative;
         }
         .book-header { border-bottom: 2px solid #222; margin-bottom: 25px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
         
-        .entry-form input, .entry-form textarea {
-            width: 100%; background: #f9f9f9; border: 1px solid #ccc;
-            padding: 12px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; font-size: 1rem;
+        .pages-list { margin-top: 20px; }
+        .saved-page { border-bottom: 1px dashed #ddd; padding: 50px 0; position: relative; background: #fff; min-height: 250px; }
+        
+        /* LOGO WATERMARK */
+        .watermark {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 250px; height: 250px; border-radius: 50%;
+            background: radial-gradient(circle, #00ff41, #8e44ad);
+            opacity: 0.05; pointer-events: none; z-index: 0;
         }
-        .btn-add { 
-            background: #111; color: var(--nv-green); border: none; 
-            padding: 12px 25px; cursor: pointer; font-weight: bold; width: 100%; 
-            letter-spacing: 1px;
-        }
-        .btn-add:hover { background: var(--nv-green); color: #000; }
 
-        /* --- DYNAMIC PAGES --- */
-        .pages-list { margin-top: 40px; }
-        .saved-page {
-            border-bottom: 1px solid #ddd; padding: 30px 0; position: relative;
-        }
-        .page-actions { position: absolute; top: 30px; right: 0; }
-        .action-btn { 
-            background: #eee; border: 1px solid #ccc; padding: 5px 12px; 
-            cursor: pointer; font-size: 0.75rem; margin-left: 10px; font-weight: bold;
-        }
+        .page-actions { position: absolute; top: 20px; right: 0; z-index: 2; }
+        .action-btn { background: #eee; border: 1px solid #ccc; padding: 8px 15px; cursor: pointer; font-size: 0.75rem; margin-left: 10px; font-weight: bold; }
         .action-btn:hover { background: #000; color: #fff; }
 
-        /* --- FOOTER --- */
+        .page-content { position: relative; z-index: 1; padding: 20px 0; line-height: 1.8; color: #222; font-size: 1.1rem; }
+        .page-meta { font-size: 0.7rem; color: #bbb; margin-top: 20px; text-transform: uppercase; }
+
+        /* --- FOOTER: FLOWING SEA --- */
         footer { position: fixed; bottom: 0; width: 100%; height: 50px; background: var(--sea-blue); z-index: 1000; overflow: hidden; }
         .sea-layer { width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a5276" d="M0,192L48,176C96,160,192,128,288,144C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,181.3C1248,192,1344,160,1392,144L1440,128V320H0Z"></path></svg>'); animation: wave 12s linear infinite; }
         @keyframes wave { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -122,7 +121,7 @@
 <body>
 
     <div class="bg-fixed" id="fireflyField">
-        <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree" alt="The Root Tree">
+        <img src="https://raw.githubusercontent.com/orion-pal/environmental-data/master/night_vision_tree.png" class="big-tree" alt="ROOT Tree">
     </div>
 
     <header>
@@ -131,32 +130,31 @@
     </header>
 
     <div class="founder-panel">
-        <img src="image_0.png" class="profile-img" alt="SRK Founder">
+        <img src="image_0.png" class="profile-img" alt="Founder SRK">
         <center><strong>FOUNDER SRK</strong></center>
-        <button class="control-btn" onclick="exportArchive()">Export (.txt)</button>
-        <button class="control-btn" onclick="document.getElementById('importFile').click()">Import (.txt)</button>
-        <input type="file" id="importFile" style="display:none" accept=".txt" onchange="importArchive(event)">
+        <p style="margin-top:10px; border-top:1px solid #eee; padding-top:10px; font-size: 0.7rem;">"Architect of the Root Archive."</p>
+        
+        <button class="control-btn" onclick="addNewPage()">+ Generate New Page</button>
+        <input type="text" id="dateFilter" class="filter-input" placeholder="Filter by date (MM/DD/YYYY)..." onkeyup="renderLedger()">
+        
+        <button class="control-btn" onclick="exportJSON()">Export Archive (.json)</button>
+        <button class="control-btn" onclick="document.getElementById('importFile').click()">Import Archive (.json)</button>
+        <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
+        <button class="control-btn" style="background:#c0392b" onclick="resetBook()">Purge All Data</button>
     </div>
 
     <div class="book-container">
         <div class="book-header">
-            <h2 style="margin:0">SRK LEDGER</h2>
-            <span id="pageTotal" style="font-weight:bold; font-size:0.9rem">PAGES: 0</span>
+            <h2 style="margin:0">SRK UNLIMITED LEDGER</h2>
+            <span id="pageCounter" style="font-weight:bold; font-size:0.9rem">PAGES: 0</span>
         </div>
-
-        <div class="entry-form">
-            <input type="text" id="titleInput" placeholder="SUBJECT / LOG TITLE...">
-            <textarea id="contentInput" rows="5" placeholder="RECLAIM DATA: Write observations here..."></textarea>
-            <button class="btn-add" onclick="saveEntry()">SAVE TO ARCHIVE</button>
-        </div>
-
         <div class="pages-list" id="ledgerList"></div>
     </div>
 
     <footer><div class="sea-layer"></div></footer>
 
     <script>
-        // 1. FIREFLIES
+        // FIREFLIES
         const field = document.getElementById('fireflyField');
         for (let i = 0; i < 50; i++) {
             const ff = document.createElement('div');
@@ -170,77 +168,96 @@
             field.appendChild(ff);
         }
 
-        // 2. LEDGER CORE
-        let archive = JSON.parse(localStorage.getItem('srk_archive')) || [];
+        // INFINITE LEDGER LOGIC
+        let archive = JSON.parse(localStorage.getItem('srk_infinite_ledger')) || [];
+        if (archive.length === 0) addNewPage(false);
 
-        function saveEntry() {
-            const title = document.getElementById('titleInput').value;
-            const content = document.getElementById('contentInput').value;
-            if (!title || !content) return;
-            archive.unshift({ id: Date.now(), title, content, timestamp: new Date().toLocaleString() });
-            updateStorage();
-            document.getElementById('titleInput').value = '';
-            document.getElementById('contentInput').value = '';
+        function addNewPage(shouldUpdate = true) {
+            archive.push({
+                id: Date.now() + Math.random(),
+                title: `LOG ENTRY ${archive.length + 1}`,
+                content: "[EMPTY WATERMARKED PAGE]",
+                timestamp: "UNINITIALIZED",
+                pageNumber: archive.length + 1
+            });
+            if(shouldUpdate) updateStorage();
         }
 
         function updateStorage() {
-            localStorage.setItem('srk_archive', JSON.stringify(archive));
+            localStorage.setItem('srk_infinite_ledger', JSON.stringify(archive));
             renderLedger();
         }
 
         function renderLedger() {
             const list = document.getElementById('ledgerList');
-            document.getElementById('pageTotal').innerText = `PAGES: ${archive.length}`;
-            list.innerHTML = archive.map((item, index) => `
-                <div class="saved-page">
-                    <div class="page-actions">
-                        <button class="action-btn" onclick="editEntry(${item.id})">EDIT</button>
-                        <button class="action-btn" style="color:red" onclick="deleteEntry(${item.id})">DELETE</button>
+            const filter = document.getElementById('dateFilter').value.toLowerCase();
+            document.getElementById('pageCounter').innerText = `PAGES: ${archive.length}`;
+            list.innerHTML = ''; 
+
+            archive.forEach((item) => {
+                const isInit = item.timestamp !== "UNINITIALIZED";
+                if (filter && !item.timestamp.toLowerCase().includes(filter)) return;
+
+                list.innerHTML += `
+                    <div class="saved-page">
+                        <div class="watermark"></div>
+                        <div class="page-actions">
+                            <button class="action-btn" onclick="writePage(${item.id})">${isInit ? 'EDIT DATA' : 'WRITE IN PAGE'}</button>
+                            ${isInit ? `<button class="action-btn" style="color:red" onclick="clearPage(${item.id})">PURGE</button>` : ''}
+                        </div>
+                        <h3 style="margin:0; position:relative; z-index:1;">Page ${item.pageNumber}: ${item.title}</h3>
+                        <div class="page-content" style="white-space: pre-wrap;">${isInit ? item.content : `<span style="color:#ccc">Click 'Write in Page' to fill this entry.</span>`}</div>
+                        <div class="page-meta">SYNCED: ${item.timestamp}</div>
                     </div>
-                    <h3>#${archive.length - index}: ${item.title}</h3>
-                    <p>${item.content}</p>
-                    <div style="font-size:0.7rem; color:#999">LOG_TIME: ${item.timestamp}</div>
-                </div>
-            `).join('');
+                `;
+            });
         }
 
-        function deleteEntry(id) { if(confirm("Delete data?")) { archive = archive.filter(i => i.id !== id); updateStorage(); } }
-        function editEntry(id) {
+        function writePage(id) {
             const item = archive.find(i => i.id === id);
-            const updated = prompt("Edit Data:", item.content);
-            if (updated) { item.content = updated; updateStorage(); }
+            const current = item.timestamp === "UNINITIALIZED" ? "" : item.content;
+            const updated = prompt(`Entry for Page ${item.pageNumber}:`, current);
+            if (updated !== null && updated.trim() !== "") {
+                item.content = updated;
+                item.timestamp = new Date().toLocaleString();
+                updateStorage();
+            }
         }
 
-        // 3. EXPORT / IMPORT
-        function exportArchive() {
-            let data = archive.map(i => `TITLE: ${i.title}\nDATE: ${i.timestamp}\nCONTENT: ${i.content}\n---`).join('\n\n');
-            const blob = new Blob([data], { type: "text/plain" });
+        function clearPage(id) {
+            if(confirm("Clear this page?")) {
+                const item = archive.find(i => i.id === id);
+                item.content = "[EMPTY WATERMARKED PAGE]";
+                item.timestamp = "UNINITIALIZED";
+                updateStorage();
+            }
+        }
+
+        function resetBook() {
+            if(confirm("🚨 Delete ALL pages and data?")) {
+                localStorage.removeItem('srk_infinite_ledger');
+                location.reload();
+            }
+        }
+
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(archive, null, 2)], { type: "application/json" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "SRK_ARCHIVE_DATA.txt";
+            link.download = "SRK_INFINITE_ARCHIVE.json";
             link.click();
         }
 
-        function importArchive(event) {
+        function importJSON(event) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                const lines = e.target.result.split('---');
-                lines.forEach(block => {
-                    const titleMatch = block.match(/TITLE: (.*)/);
-                    const contentMatch = block.match(/CONTENT: ([\s\S]*)/);
-                    if (titleMatch && contentMatch) {
-                        archive.push({
-                            id: Date.now() + Math.random(),
-                            title: titleMatch[1].trim(),
-                            content: contentMatch[1].trim(),
-                            timestamp: new Date().toLocaleString()
-                        });
-                    }
-                });
-                updateStorage();
-                alert("Data packets integrated into the Root Archive.");
+                try {
+                    archive = JSON.parse(e.target.result);
+                    updateStorage();
+                    alert("Infinite Ledger Restored.");
+                } catch (err) { alert("Invalid File."); }
             };
             reader.readAsText(file);
         }
