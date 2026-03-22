@@ -63,9 +63,9 @@
             fld.appendChild(f);
         }
 
-        // DB SYNC v23
+        // DB SYNC v25
         let db;
-        const request = indexedDB.open("RootReclaimDB_v24", 1);
+        const request = indexedDB.open("RootReclaimDB_v25", 1);
         request.onsuccess = (e) => { db = e.target.result; loadArchive(); };
 
         function openTab(name, event) {
