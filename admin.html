@@ -3,74 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | FOUNDER v25 HYBRID</title>
+    <title>ROOT | FOUNDER v26</title>
     <style>
-        :root { --nv-green: #00ff41; --bg: #0a0a0a; }
-        body { background: var(--bg); color: var(--nv-green); font-family: monospace; padding: 15px; margin: 0; }
-        .panel { border: 2px solid var(--nv-green); padding: 15px; background: #111; }
-        
-        .btn { width: 100%; padding: 18px; background: var(--nv-green); color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
-        .btn-blue { background: #3498db; color: #fff; }
-        .btn-purple { background: #8e44ad; color: #fff; }
-
-        .card { background: #000; border: 1px solid #333; padding: 20px; margin-top: 20px; border-left: 8px solid var(--nv-green); }
-        textarea { width: 100%; height: 120px; background: #111; color: #fff; border: 1px solid #444; margin: 10px 0; padding: 10px; box-sizing: border-box; }
-        
-        #status { text-align: center; font-weight: bold; padding: 10px; border: 1px solid #333; margin-bottom: 10px; }
+        body { background: #0a0a0a; color: #00ff41; font-family: monospace; padding: 20px; }
+        .panel { border: 2px solid #00ff41; padding: 20px; background: #111; max-width: 600px; margin: 0 auto; }
+        .btn { width: 100%; padding: 15px; background: #00ff41; color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; }
+        .btn-link { background: #8e44ad; color: #fff; }
+        .card { background: #000; border: 1px solid #333; padding: 15px; margin-top: 15px; border-left: 5px solid #00ff41; }
+        textarea { width: 100%; height: 100px; background: #222; color: #fff; border: 1px solid #444; margin-top: 10px; }
     </style>
 </head>
 <body>
-
     <div class="panel">
-        <h2 style="text-align:center;">FOUNDER COMMAND v25</h2>
-        <div id="status">STATUS: READY</div>
-        
-        <button class="btn" onclick="addTextEntry()">+ CREATE NEW BOOK PAGE</button>
-        <button class="btn btn-purple" onclick="addViaLink()">🔗 ADD VIA LINK (ANY SIZE)</button>
-        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD SMALL FILE (<TB)</button>
-        
+        <h2>FOUNDER COMMAND v26</h2>
+        <button class="btn" onclick="addBookPage()">+ NEW BOOK PAGE</button>
+        <button class="btn btn-link" onclick="addByLink()">🔗 ADD MUSIC/VIDEO VIA LINK (FOR LARGE FILES)</button>
+        <button class="btn" style="background:#3498db; color:#fff;" onclick="document.getElementById('fileIn').click()">📂 UPLOAD SMALL FILE (<5MB)</button>
         <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
-        
         <div id="adminList"></div>
     </div>
 
     <script>
         let db;
-        const DB_NAME = "RootReclaimDB_v25";
-
-        const request = indexedDB.open(DB_NAME, 1);
+        const request = indexedDB.open("RootReclaimDB_v26", 1);
         request.onupgradeneeded = (e) => { e.target.result.createObjectStore("archive", { keyPath: "id" }); };
         request.onsuccess = (e) => { db = e.target.result; render(); };
 
-        // NEW: ADD VIA LINK (SOLVES THE "FILE TOO LARGE" ERROR)
-        function addViaLink() {
-            const url = prompt("Paste the URL of your Music or Video file:");
+        function addByLink() {
+            const url = prompt("Paste Direct Link to Music/Video:");
             if(!url) return;
-            
-            let type = "audio";
-            if(url.includes(".mp4") || url.includes("video")) type = "video";
-
-            const entry = {
-                id: Date.now(),
-                content: "Cloud Data Linked",
-                file: url,
-                fName: "External Media",
-                fType: type,
-                isLink: true
-            };
-
+            const entry = { id: Date.now(), content: "Linked Media", file: url, fName: "Cloud File", fType: url.includes('video') ? 'video' : 'audio' };
             const tx = db.transaction("archive", "readwrite");
             tx.objectStore("archive").add(entry);
             tx.oncomplete = render;
         }
 
         function handleUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
+            const file = e.target.files[0]; if(!file) return;
             const reader = new FileReader();
             reader.onload = (ev) => {
-                const entry = { id: Date.now(), content: "Local Upload", file: ev.target.result, fName: file.name, fType: file.type };
+                const entry = { id: Date.now(), content: "Upload: " + file.name, file: ev.target.result, fName: file.name, fType: file.type };
                 const tx = db.transaction("archive", "readwrite");
                 tx.objectStore("archive").add(entry);
                 tx.oncomplete = render;
@@ -78,45 +50,37 @@
             reader.readAsDataURL(file);
         }
 
-        function render() {
-            const list = document.getElementById('adminList');
-            const tx = db.transaction("archive", "readonly");
-            tx.objectStore("archive").getAll().onsuccess = (e) => {
-                list.innerHTML = e.target.result.sort((a,b) => b.id - a.id).map(p => `
-                    <div class="card">
-                        <strong>${p.fName}</strong>
-                        <textarea id="edit-${p.id}">${p.content}</textarea>
-                        <button class="btn" onclick="updateEntry(${p.id})">SAVE & PUBLISH</button>
-                        <button onclick="deleteEntry(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer;">[DELETE]</button>
-                    </div>`).join('');
-            };
-        }
-
-        function addTextEntry() {
-            const entry = { id: Date.now(), content: "Write logs here...", file: null, fName: "Text Log", fType: null };
+        function addBookPage() {
+            const entry = { id: Date.now(), content: "New log entry...", fType: null };
             const tx = db.transaction("archive", "readwrite");
             tx.objectStore("archive").add(entry);
             tx.oncomplete = render;
         }
 
-        function updateEntry(id) {
-            const tx = db.transaction("archive", "readwrite");
-            const store = tx.objectStore("archive");
-            store.get(id).onsuccess = (e) => {
-                const data = e.target.result;
-                data.content = document.getElementById(`edit-${id}`).value;
-                store.put(data);
-                tx.oncomplete = () => alert("PUBLISHED TO PUBLIC SITE");
+        function render() {
+            const list = document.getElementById('adminList');
+            const tx = db.transaction("archive", "readonly");
+            tx.objectStore("archive").getAll().onsuccess = (e) => {
+                list.innerHTML = e.target.result.sort((a,b)=>b.id-a.id).map(p => `
+                    <div class="card">
+                        <strong>${p.fName || 'Text Log'}</strong><br>
+                        <textarea id="edit-${p.id}">${p.content}</textarea>
+                        <button class="btn" style="margin-top:10px;" onclick="save(${p.id})">SAVE & PUBLISH</button>
+                        <button class="btn" style="background:red; color:#fff;" onclick="del(${p.id})">DELETE</button>
+                    </div>`).join('');
             };
         }
 
-        function deleteEntry(id) {
-            if(confirm("Delete?")) {
-                const tx = db.transaction("archive", "readwrite");
-                tx.objectStore("archive").delete(id);
-                tx.oncomplete = render;
-            }
+        function save(id) {
+            const tx = db.transaction("archive", "readwrite");
+            const store = tx.objectStore("archive");
+            store.get(id).onsuccess = (e) => {
+                const d = e.target.result; d.content = document.getElementById(`edit-${id}`).value;
+                store.put(d); tx.oncomplete = () => alert("PUBLISHED");
+            };
         }
+
+        function del(id) { if(confirm("Delete?")) { const tx = db.transaction("archive", "readwrite"); tx.objectStore("archive").delete(id); tx.oncomplete = render; } }
     </script>
 </body>
 </html>
