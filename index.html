@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Civilization & Nature: The Full Report</title>
+    <title>The Civilization & Nature Archive - SRK</title>
     <style>
         :root {
             --primary-dark: #1a252f;
@@ -12,65 +12,53 @@
             --river-blue: #3498db;
         }
 
-        /* DYNAMIC BACKGROUND SYSTEM */
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            transition: background 3s ease-in-out;
-            animation: skyCycle 60s infinite linear;
+            transition: 2s ease-in-out;
         }
 
-        @keyframes skyCycle {
-            0%, 15% { background: #0c1445; } /* Night: Bright Moon/Dark Clouds */
-            16%, 30% { background: #ffbe76; } /* Early Morning Sunlight */
-            31%, 45% { background: #f0932b; } /* Evening Sunlight */
-            46%, 60% { background: #dff9fb; } /* Winter Season (Pale/Cold) */
-            61%, 75% { background: #95afc0; } /* Rainy Season (Grey/Heavy) */
-            76%, 100% { background: #0c1445; }
-        }
-
-        /* Moon and Clouds Effect (Overlay) */
-        .sky-overlay {
+        /* --- VISUAL BACKGROUND SYSTEM --- */
+        .bg-layer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: -1;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* THE RIVER FOOTER */
-        .river-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: var(--river-blue);
-            overflow: hidden;
-            z-index: 10;
-        }
-        .wave {
-            position: absolute;
-            width: 200%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%232980b9" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,213.3C960,224,1056,192,1152,165.3C1248,139,1344,117,1392,106.7L1440,96V320H1440C1392,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320H0Z"></path></svg>');
-            background-size: 50% 100%;
-            animation: flow 10s infinite linear;
-        }
-        @keyframes flow {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
+        /* 1. Moon & Dark Clouds (Night) */
+        #bg-night { background: #0c1445; opacity: 1; }
+        .moon { width: 100px; height: 100px; background: #f1c40f; border-radius: 50%; box-shadow: 0 0 50px #f1c40f; position: absolute; top: 10%; right: 15%; }
+        .cloud { width: 200px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50px; position: absolute; filter: blur(10px); }
 
-        /* LOGO & RECLAIM SIDEBAR */
+        /* 2. Morning/Evening Sun */
+        #bg-sun { background: linear-gradient(to bottom, #ff7e5f, #feb47b); }
+        .sun { width: 120px; height: 120px; background: #ffcc00; border-radius: 50%; box-shadow: 0 0 80px orange; }
+
+        /* 3. Rainy Season */
+        #bg-rain { background: #4b6584; }
+        .rain-drop { position: absolute; background: rgba(255,255,255,0.3); width: 2px; height: 20px; animation: fall 0.5s infinite linear; }
+        @keyframes fall { to { transform: translateY(100vh); } }
+
+        /* 4. Winter Season */
+        #bg-winter { background: #dff9fb; }
+        .snowflake { position: absolute; color: white; font-size: 20px; animation: snow 5s infinite linear; opacity: 0.8; }
+        @keyframes snow { to { transform: translateY(100vh) rotate(360deg); } }
+
+        /* --- FOUNDER SIDEBAR (RECLAIM) --- */
         .logo-root {
             position: fixed;
             top: 20px;
@@ -78,39 +66,39 @@
             z-index: 100;
             background: var(--accent-green);
             color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
+            padding: 12px 25px;
+            border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             font-weight: bold;
+            box-shadow: 5px 5px 0px var(--primary-dark);
+            transition: 0.3s;
         }
+        .logo-root:hover { transform: scale(1.1); }
 
         .founder-panel {
             position: fixed;
             top: 0;
-            left: -350px;
-            width: 300px;
+            left: -400px;
+            width: 350px;
             height: 100%;
-            background: white;
+            background: var(--paper-white);
             z-index: 99;
-            transition: 0.5s;
-            padding: 40px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.3);
-            border-right: 5px solid var(--accent-green);
+            transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 50px 30px;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
         }
-
         .founder-panel.open { left: 0; }
+        .founder-panel h2 { color: var(--accent-green); border-bottom: 2px solid #eee; padding-bottom: 10px; }
 
-        /* BOOK STYLING (Same as original but with more pages) */
+        /* --- THE BOOK --- */
         .book {
             position: relative;
-            width: 90%;
-            max-width: 800px;
+            width: 85%;
+            max-width: 850px;
             height: 600px;
             perspective: 2000px;
-            z-index: 5;
+            z-index: 10;
         }
-
         .page {
             position: absolute;
             width: 100%;
@@ -122,123 +110,150 @@
             transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
             cursor: pointer;
         }
-
         .front, .back {
             position: absolute;
             width: 100%;
             height: 100%;
-            padding: 40px;
+            padding: 45px;
             box-sizing: border-box;
             backface-visibility: hidden;
             border: 1px solid #bdc3c7;
             background: var(--paper-white);
             overflow-y: auto;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.05);
         }
-
-        .back { transform: rotateY(180deg); background: #f9f9f9; }
+        .back { transform: rotateY(180deg); background: #f4f4f4; }
         .page.flipped { transform: rotateY(-180deg); }
 
-        .cover-front {
-            background: var(--primary-dark);
-            color: white;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+        /* --- CONTENT STYLES --- */
+        .cover-front { background: var(--primary-dark); color: white; text-align: center; }
+        .section-title { color: var(--accent-green); border-left: 4px solid var(--accent-green); padding-left: 10px; margin: 20px 0; }
+        .matter-text { font-size: 1.05em; line-height: 1.6; color: #34495e; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .stat-card { background: #eef2f3; padding: 10px; border-radius: 4px; font-size: 0.9em; }
 
-        .timeline-card { border-left: 5px solid var(--accent-green); padding-left: 15px; margin-bottom: 20px; }
-        .highlight { color: #c0392b; font-weight: bold; }
+        /* --- RIVER FOOTER --- */
+        .river-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--river-blue);
+            z-index: 5;
+        }
+        .water-wave {
+            width: 200%;
+            height: 100%;
+            background: url('https://raw.githubusercontent.com/f7970/images/main/wave.svg');
+            background-repeat: repeat-x;
+            animation: move-wave 6s linear infinite;
+        }
+        @keyframes move-wave { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
     </style>
 </head>
 <body>
 
-    <div class="logo-root" onclick="toggleFounder()">RECLAIM 🌿</div>
+    <div id="bg-night" class="bg-layer"><div class="moon"></div><div class="cloud" style="top:20%; left:10%;"></div></div>
+    <div id="bg-sun" class="bg-layer"><div class="sun"></div></div>
+    <div id="bg-rain" class="bg-layer" id="rain-box"></div>
+    <div id="bg-winter" class="bg-layer" id="snow-box"></div>
+
+    <div class="logo-root" onclick="toggleFounder()">RECLAIM BY SRK 🌿</div>
     <div class="founder-panel" id="founderPanel">
-        <h2>About the Founder</h2>
+        <img src="https://via.placeholder.com/100" style="border-radius:50%; margin-bottom:20px;" alt="SRK">
+        <h2>Founder: SRK</h2>
+        <p><strong>Visionary & Researcher</strong></p>
+        <p class="matter-text">Dedicated to documenting the timeline of human existence and its impact on the cradle of life—our Earth.</p>
         <hr>
-        <p><strong>Name:</strong> [Your Name/Founder]</p>
-        <p><strong>Mission:</strong> To document the intersection of human progress and environmental preservation.</p>
-        <p><strong>Vision:</strong> Reclaiming the balance between industrial might and natural beauty.</p>
-        <button onclick="toggleFounder()">Close Page</button>
+        <p><em>"The industrial gears must turn, but the rivers must also flow."</em></p>
+        <button onclick="toggleFounder()" style="margin-top:20px; cursor:pointer;">Close Profile</button>
     </div>
 
-    <div class="sky-overlay"></div>
-
     <div class="river-container">
-        <div class="wave"></div>
+        <div class="water-wave"></div>
     </div>
 
     <div class="book">
         
-        <div class="page" id="p1" style="z-index: 5;">
+        <div class="page" id="p1" style="z-index: 4;">
             <div class="front cover-front">
-                <h1>The Great Civilization Shift</h1>
-                <h3>From Stone Tools to Carbon Footprints</h3>
-                <p>An Industrial & Nature Odyssey</p>
-                <small>Click to Open →</small>
+                <h1>Human Civilization & The Industrial Scar</h1>
+                <h3>A Global Impact Study</h3>
+                <p>Curated by <strong>SRK</strong></p>
+                <small>Open to Explore History →</small>
             </div>
             <div class="back">
-                <h2>I. The Dawn of Humanity</h2>
-                <p>For 99% of human history, we lived as hunter-gatherers. Our behavior was cyclical, following the seasons and river migrations.</p>
-                <div class="timeline-card">
-                    <strong>10,000 BCE:</strong> The Agricultural Revolution. Humans stopped moving and started controlling nature by diverting rivers for irrigation.
+                <h2 class="section-title">The Starting Point</h2>
+                <p class="matter-text">
+                    For 200,000 years, <em>Homo sapiens</em> lived in biological harmony. Human behavior was governed by <strong>Natural Law</strong>. We followed rivers because they were the veins of the earth.
+                </p>
+                <div class="stat-grid">
+                    <div class="stat-card"><strong>Nomadic Era:</strong> Zero Carbon Waste.</div>
+                    <div class="stat-card"><strong>River Worship:</strong> Rivers were seen as Divine Entities.</div>
                 </div>
+                <p class="matter-text">Civilization began when we stopped moving and started damming rivers for the first time.</p>
             </div>
         </div>
 
-        <div class="page" id="p2" style="z-index: 4;">
+        <div class="page" id="p2" style="z-index: 3;">
             <div class="front">
-                <h2>II. The River Civilizations</h2>
-                <p>Civilization was born on riverbanks (Indus, Nile, Tigris). Rivers were seen as gods—givers of life and purifiers of soul.</p>
+                <h2 class="section-title">The Great Disruption (1760 - Today)</h2>
+                <p class="matter-text">
+                    The Industrial Revolution changed human behavior from <strong>Survival</strong> to <strong>Consumption</strong>. 
+                </p>
                 <ul>
-                    <li><strong>Ancient View:</strong> Rivers are sacred.</li>
-                    <li><strong>Impact:</strong> Minimal pollution; organic waste only.</li>
+                    <li><strong>Coal & Steam:</strong> The first massive injection of CO2 into the atmosphere.</li>
+                    <li><strong>Chemical Era:</strong> Rivers became convenient "waste pipes" for factories.</li>
+                    <li><strong>Mass Production:</strong> Nature was no longer a spirit; it became a "Resource."</li>
                 </ul>
-                <div class="timeline-card">
-                    <strong>The Shift:</strong> As populations grew, human behavior shifted from "Living with Nature" to "Engineering Nature."
-                </div>
+                <p class="highlight" style="color:red;">The impact was immediate: Air quality in cities dropped by 70% in 50 years.</p>
             </div>
             <div class="back">
-                <h2>III. The Industrial Explosion</h2>
-                <p>Starting in 1760, the relationship broke. The steam engine demanded coal. Factories demanded water—not for drinking, but for cooling and waste.</p>
-                <p><span class="highlight">Impact:</span> CO2 levels began their vertical climb. Forests were cleared globally for the first "Global Supply Chain."</p>
+                <h2 class="section-title">Rivers & Water Systems</h2>
+                <p class="matter-text">
+                    From the Thames to the Ganga, industrialization has treated rivers as immortal. However, the chemistry has changed. Heavy metals (Lead, Mercury) now sit in the sediment of every major river on Earth.
+                </p>
+                <div class="stat-card" style="background:#d1d8e0;">
+                    <strong>Global Impact:</strong> Over 40% of the world's rivers are now significantly polluted by industrial runoff.
+                </div>
             </div>
         </div>
 
-        <div class="page" id="p3" style="z-index: 3;">
+        <div class="page" id="p3" style="z-index: 2;">
             <div class="front">
-                <h2>IV. Global Warming & Impact</h2>
-                <p>The 20th century saw a 1.1°C rise in global temperature. This isn't just "heat"; it's the energy unbalancing the planet.</p>
-                <div class="timeline-card">
-                    <strong>Rivers Today:</strong> 80% of urban waste in India enters rivers untreated. Glaciers feeding the Ganga are retreating.
+                <h2 class="section-title">Global Warming: The Fever</h2>
+                <p class="matter-text">
+                    Human behavior—specifically the burning of fossil fuels—has wrapped the Earth in a "Heat Blanket." 
+                </p>
+                <div class="stat-grid">
+                    <div class="stat-card"><strong>Temp Rise:</strong> +1.2°C since 1880.</div>
+                    <div class="stat-card"><strong>Sea Level:</strong> Rising 3.4mm per year.</div>
                 </div>
-                <div class="timeline-card">
-                    <strong>Weather:</strong> "Seasons" have blurred. Monsoons are shorter but more violent.
-                </div>
+                <p class="matter-text">This isn't just about heat; it’s about the <strong>destruction of seasons</strong>. Winter is shrinking, and the rainy season is becoming unpredictable and violent.</p>
             </div>
             <div class="back">
-                <h2>V. Human Behavior Analysis</h2>
-                <p>Modern humans operate on "Instant Gratification." We have transitioned from being <strong>Keepers</strong> of Earth to <strong>Consumers</strong> of Earth.</p>
-                <table style="width:100%; border-collapse: collapse; font-size: 0.8em;">
-                    <tr style="background:#eee;"><td>Era</td><td>Behavior</td><td>Result</td></tr>
-                    <tr><td>Pre-Industrial</td><td>Respect/Fear</td><td>Stability</td></tr>
-                    <tr><td>Industrial</td><td>Dominance</td><td>Wealth/Pollution</td></tr>
-                    <tr><td>Modern</td><td>Anxiety/Repair</td><td>Climate Action</td></tr>
-                </table>
+                <h2 class="section-title">The Behavior Shift</h2>
+                <p class="matter-text">
+                    To survive, human behavior must pivot back to "Animism" (respecting nature) while keeping "Modernism" (technology). We call this <strong>Sustainability</strong>.
+                </p>
+                <p><em>SRK Research Note:</em> The next 10 years will define the next 10,000 years of civilization.</p>
             </div>
         </div>
 
-        <div class="page" id="p4" style="z-index: 2;">
+        <div class="page" id="p4" style="z-index: 1;">
             <div class="front">
-                <h2>Conclusion: Reclaiming Future</h2>
-                <p>The data shows a clear path: Without a shift in behavior toward "Sustainable Industrialization," the rivers that built us will eventually fail us.</p>
-                <p><em>The future depends on what we do in the present.</em></p>
+                <h2 class="section-title">Final Verdict</h2>
+                <p class="matter-text">
+                    Nature does not need humans, but humans cannot exist without nature. Our industrial impact is a temporary scar; whether it heals or becomes a fatal wound depends on our current choices.
+                </p>
+                <center><strong>Report Compiled by SRK</strong></center>
             </div>
             <div class="back" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
-                <h2>THE END</h2>
-                <blockquote>"We do not inherit the Earth from our ancestors; we borrow it from our children."</blockquote>
-                <button onclick="resetBook()">Start Over</button>
+                <h2>RECLAIM</h2>
+                <p>Restore the Balance.</p>
+                <button onclick="resetBook()" style="padding:10px 20px; cursor:pointer;">Re-Read History</button>
             </div>
         </div>
 
@@ -246,7 +261,38 @@
 
     <script>
         const pages = document.querySelectorAll('.page');
-        
+        const bgLayers = document.querySelectorAll('.bg-layer');
+        let currentBg = 0;
+
+        // --- BACKGROUND CYCLE (10 Seconds) ---
+        function cycleBackgrounds() {
+            bgLayers[currentBg].style.opacity = 0;
+            currentBg = (currentBg + 1) % bgLayers.length;
+            bgLayers[currentBg].style.opacity = 1;
+        }
+        setInterval(cycleBackgrounds, 10000);
+
+        // --- GENERATE RAIN & SNOW ---
+        const rainBox = document.getElementById('bg-rain');
+        for(let i=0; i<100; i++){
+            let drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            drop.style.left = Math.random() * 100 + 'vw';
+            drop.style.animationDelay = Math.random() * 2 + 's';
+            rainBox.appendChild(drop);
+        }
+
+        const snowBox = document.getElementById('bg-winter');
+        for(let i=0; i<50; i++){
+            let flake = document.createElement('div');
+            flake.className = 'snowflake';
+            flake.innerHTML = '❄';
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.animationDelay = Math.random() * 5 + 's';
+            snowBox.appendChild(flake);
+        }
+
+        // --- BOOK LOGIC ---
         pages.forEach((page, index) => {
             page.onclick = () => {
                 page.classList.toggle('flipped');
@@ -269,6 +315,5 @@
             document.getElementById('founderPanel').classList.toggle('open');
         }
     </script>
-
 </body>
 </html>
