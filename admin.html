@@ -3,53 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT | FOUNDER COMMAND v33.1</title>
+    <title>ROOT | FOUNDER COMMAND v34</title>
     <style>
         :root { --nv-green: #00ff41; --bg: #050505; }
         body { background: var(--bg); color: var(--nv-green); font-family: 'Consolas', monospace; padding: 15px; margin: 0; }
         .panel { border: 2px solid var(--nv-green); padding: 15px; background: #111; max-width: 800px; margin: 0 auto; }
         
-        /* NOTIFICATION BELL */
-        .notify-box { background: #ff3131; color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 5px; animation: pulse 2s infinite; display: none; text-align: center; font-weight: bold; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-
-        /* ANALYTICS GRID */
+        /* ANALYTICS */
         .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: #000; border: 1px solid var(--nv-green); padding: 15px; height: 180px; overflow-y: auto; font-size: 0.75rem; }
-        .stat-header { border-bottom: 1px solid var(--nv-green); padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; color: #fff; }
+        .stat-box { background: #000; border: 1px solid var(--nv-green); padding: 15px; height: 150px; overflow-y: auto; font-size: 0.75rem; }
+        .stat-header { border-bottom: 1px solid var(--nv-green); padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; color: #fff; text-transform: uppercase; }
+
+        /* UPLOAD PROGRESS */
+        #status { text-align: center; background: #222; padding: 10px; margin-bottom: 10px; font-size: 0.8rem; border: 1px solid #444; }
 
         /* BUTTONS */
-        .btn { width: 100%; padding: 15px; background: var(--nv-green); color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; }
+        .btn { width: 100%; padding: 15px; background: var(--nv-green); color: #000; font-weight: bold; border: none; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
         .btn-blue { background: #3498db; color: #fff; }
         .btn-link { background: #8e44ad; color: #fff; }
         
-        /* CONTENT CARDS */
+        /* CONTENT */
         .card { background: #000; border: 1px solid #333; padding: 15px; margin-top: 15px; border-left: 5px solid var(--nv-green); }
         textarea { width: 100%; height: 80px; background: #111; color: #fff; border: 1px solid #444; margin-top: 10px; padding: 10px; box-sizing: border-box; }
+        .thumb { max-height: 80px; border: 1px solid var(--nv-green); margin-top: 10px; display: block; }
         .log-entry { border-bottom: 1px solid #222; padding: 5px 0; color: #aaa; }
-        .thumb { height: 60px; border: 1px solid var(--nv-green); margin-top: 5px; display: block; }
     </style>
 </head>
 <body>
 
     <div class="panel">
-        <div id="notifyBell" class="notify-box">🔔 NEW PUBLIC INTERACTION DETECTED</div>
         <h2 style="text-align:center; margin-top:0;">FOUNDER COMMAND CENTER</h2>
         
+        <div id="status">SYSTEM: STANDBY</div>
+
         <div class="analytics-grid">
             <div class="stat-box">
-                <div class="stat-header">👤 VISITOR LOGS</div>
-                <div id="visitLogs">Waiting for pulse...</div>
+                <div class="stat-header">👤 VISITORS</div>
+                <div id="visitLogs">Waiting...</div>
             </div>
             <div class="stat-box">
-                <div class="stat-header">💬 PUBLIC COMMENTS</div>
-                <div id="commentLogs">No new messages...</div>
+                <div class="stat-header">💬 COMMENTS</div>
+                <div id="commentLogs">Empty...</div>
             </div>
         </div>
 
         <button class="btn" onclick="addBookPage()">+ NEW BOOK PAGE</button>
-        <button class="btn btn-link" onclick="addByLink()">🔗 ADD MEDIA VIA LINK</button>
-        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD MEDIA (IMAGE/MP3/MP4)</button>
+        <button class="btn btn-link" onclick="addByLink()">🔗 ADD LARGE MEDIA (ANY SIZE LINK)</button>
+        <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">📂 UPLOAD SMALL IMAGE/FILE</button>
         <input type="file" id="fileIn" style="display:none" onchange="handleUpload(event)">
         
         <div id="adminList"></div>
@@ -57,8 +57,9 @@
 
     <script>
         let db;
-        // MUST match the version in your index.html
-        const request = indexedDB.open("RootReclaimDB_v33", 1);
+        const DB_NAME = "RootReclaimDB_v34";
+
+        const request = indexedDB.open(DB_NAME, 1);
 
         request.onupgradeneeded = (e) => {
             let database = e.target.result;
@@ -72,31 +73,94 @@
             render();
         };
 
+        function handleUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const status = document.getElementById('status');
+            status.innerText = "READING: " + file.name;
+            status.style.color = "yellow";
+
+            const reader = new FileReader();
+
+            reader.onerror = () => {
+                status.innerText = "ERROR: FAILED TO READ FILE";
+                status.style.color = "red";
+            };
+
+            reader.onload = (ev) => {
+                const entry = {
+                    id: Date.now(),
+                    content: "Local Attachment",
+                    file: ev.target.result,
+                    fName: file.name,
+                    fType: file.type
+                };
+
+                try {
+                    const tx = db.transaction("archive", "readwrite");
+                    const store = tx.objectStore("archive");
+                    const addReq = store.add(entry);
+
+                    addReq.onsuccess = () => {
+                        status.innerText = "SUCCESS: " + file.name + " STORED";
+                        status.style.color = "#00ff41";
+                        render();
+                    };
+
+                    addReq.onerror = () => {
+                        status.innerText = "CRITICAL: FILE TOO LARGE FOR PHONE MEMORY";
+                        status.style.color = "red";
+                        alert("Your phone blocked this upload because the file is too big. Please use the 'PURPLE LINK' button for large music/videos.");
+                    };
+                } catch (err) {
+                    status.innerText = "CRITICAL: TRANSACTION FAILED";
+                }
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        function addByLink() {
+            const url = prompt("Paste Direct URL (Link) to Music/Video/Image:");
+            if (!url) return;
+            const entry = {
+                id: Date.now(),
+                content: "Linked Media",
+                file: url,
+                fName: "External Link",
+                fType: url.includes('video') ? 'video' : (url.includes('audio') || url.includes('mp3') ? 'audio' : 'image')
+            };
+            const tx = db.transaction("archive", "readwrite");
+            tx.objectStore("archive").add(entry).onsuccess = render;
+        }
+
+        function addBookPage() {
+            const entry = { id: Date.now(), content: "New log entry...", fType: "text/plain" };
+            db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
+        }
+
         function render() {
             const tx = db.transaction("archive", "readonly");
             tx.objectStore("archive").getAll().onsuccess = (e) => {
                 const allData = e.target.result;
                 
-                // 1. UPDATE VISITOR BOX
+                // VISITORS
                 const visits = allData.filter(d => d.dataType === "visit").sort((a,b)=>b.id-a.id);
-                document.getElementById('visitLogs').innerHTML = visits.map(v => `
-                    <div class="log-entry">[${v.time}] ${v.device}</div>`).join('') || "No visits logged.";
+                document.getElementById('visitLogs').innerHTML = visits.map(v => `<div class="log-entry">[${v.time}] ${v.device}</div>`).join('') || "No pulse.";
 
-                // 2. UPDATE COMMENT BOX & NOTIFY BELL
+                // COMMENTS
                 let commentHTML = "";
-                let hasNewComment = false;
                 allData.forEach(p => {
-                    if(p.comments) {
+                    if (p.comments) {
                         p.comments.forEach(c => {
-                            if(c.isNew) hasNewComment = true;
                             commentHTML += `<div class="log-entry"><strong>${p.fName || 'Log'}:</strong> ${c.text}</div>`;
                         });
                     }
                 });
-                document.getElementById('commentLogs').innerHTML = commentHTML || "No comments.";
-                document.getElementById('notifyBell').style.display = hasNewComment ? 'block' : 'none';
+                document.getElementById('commentLogs').innerHTML = commentHTML || "None.";
 
-                // 3. RENDER CONTENT CARDS (Including Image Previews)
+                // CONTENT CARDS
                 const content = allData.filter(p => !p.dataType).sort((a,b)=>b.id-a.id);
                 document.getElementById('adminList').innerHTML = content.map(p => `
                     <div class="card">
@@ -104,31 +168,9 @@
                         ${p.fType?.includes('image') ? `<img src="${p.file}" class="thumb">` : ''}
                         <textarea id="edit-${p.id}">${p.content}</textarea>
                         <button class="btn" style="padding:10px; margin-top:10px;" onclick="save(${p.id})">SAVE & PUBLISH</button>
-                        <button onclick="del(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer; margin-top:10px;">[DELETE]</button>
+                        <button onclick="del(${p.id})" style="background:none; border:none; color:red; width:100%; cursor:pointer; margin-top:10px; font-size:0.7rem;">[DELETE]</button>
                     </div>`).join('');
             };
-        }
-
-        function handleUpload(e) {
-            const file = e.target.files[0]; if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const entry = { id: Date.now(), content: "Attached File", file: ev.target.result, fName: file.name, fType: file.type };
-                db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function addByLink() {
-            const url = prompt("Paste Direct Link:");
-            if(!url) return;
-            const entry = { id: Date.now(), content: "Linked Media", file: url, fName: "Cloud File", fType: url.includes('video') ? 'video' : 'audio' };
-            db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
-        }
-
-        function addBookPage() {
-            const entry = { id: Date.now(), content: "New log entry...", fType: "text/plain" };
-            db.transaction("archive", "readwrite").objectStore("archive").add(entry).onsuccess = render;
         }
 
         function save(id) {
@@ -137,14 +179,14 @@
             store.get(id).onsuccess = (e) => {
                 const data = e.target.result;
                 data.content = document.getElementById(`edit-${id}`).value;
-                if(data.comments) data.comments.forEach(c => c.isNew = false);
+                if (data.comments) data.comments.forEach(c => c.isNew = false);
                 store.put(data);
-                tx.oncomplete = () => { alert("Published & Synced"); render(); };
+                tx.oncomplete = () => { alert("Reclaimed and Published."); render(); };
             };
         }
 
         function del(id) {
-            if(confirm("Delete this?")) {
+            if (confirm("Purge this node?")) {
                 db.transaction("archive", "readwrite").objectStore("archive").delete(id).onsuccess = render;
             }
         }
